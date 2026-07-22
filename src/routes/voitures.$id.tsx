@@ -112,27 +112,15 @@ function CarDetail() {
         </div>
       </section>
 
-      {/* Historique — toujours affiché, avec fallback minimum */}
+      {/* Historique — frise chronologique */}
       <section className="container-page py-8">
-        <h2 className="font-display text-2xl md:text-3xl mb-6">Historique</h2>
-        {detail?.description ? (
-          <div className="prose prose-invert max-w-3xl whitespace-pre-wrap text-foreground/90 leading-relaxed">
-            {detail.description}
-          </div>
-        ) : (
-          <div className="max-w-3xl border-l-2 border-brand/60 pl-5 py-2 text-foreground/80 leading-relaxed">
-            <p>
-              {voiture.modele ?? "Bizzarrini"}
-              {voiture.annee ? ` · ${voiture.annee}` : ""}
-              {voiture.chassis ? ` · châssis ${voiture.chassis}` : ""}.
-            </p>
-            <p className="mt-3 text-sm text-muted-foreground italic">
-              L'historique détaillé de ce châssis est en cours de compilation par le registre.
-              Si vous détenez des documents, photos d'époque ou informations de provenance,
-              contactez l'expert via la page Contact.
-            </p>
-          </div>
-        )}
+        <h2 className="font-display text-2xl md:text-3xl mb-8">Historique</h2>
+        <HistoryTimeline
+          description={detail?.description}
+          modele={voiture.modele}
+          annee={voiture.annee}
+          chassis={voiture.chassis}
+        />
       </section>
 
       {/* Gallery */}
