@@ -39,7 +39,7 @@ function AuthPage() {
         await refreshProfil();
         router.navigate({ to: "/" });
       } else if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -48,6 +48,18 @@ function AuthPage() {
           },
         });
         if (error) throw error;
+        // Notifier l'admin (fire-and-forget). Le trigger DB crée le profil.
+        const userId = data.user?.id;
+        if (userId) {
+          // petit délai pour laisser le trigger insérer la ligne profils
+          setTimeout(() => {
+            fetch("/api/notify-signup", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ profil_id: userId }),
+            }).catch(() => {});
+          }, 1500);
+        }
         setMsg({
           type: "ok",
           text: "Inscription enregistrée. Un administrateur validera votre accès sous peu.",
