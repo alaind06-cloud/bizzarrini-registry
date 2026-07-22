@@ -29,7 +29,7 @@ export const Route = createFileRoute("/api/notify-signup")({
           for (let i = 0; i < 6; i++) {
             const r = await admin
               .from("profils")
-              .select("id, nom, prenom, email, telephone")
+              .select("id, nom, prenom, telephone")
               .eq("id", profil_id)
               .maybeSingle();
             if (r.data) { profil = r.data; pErr = null; break; }
@@ -38,6 +38,13 @@ export const Route = createFileRoute("/api/notify-signup")({
           }
           if (!profil) {
             return Response.json({ error: "Profil introuvable", detail: pErr?.message }, { status: 404 });
+          }
+
+          // L'email n'est pas stocké dans profils ; on le récupère depuis auth.users.
+          const { data: userData, error: userErr } = await admin.auth.admin.getUserById(profil_id);
+          const userEmail = userData?.user?.email ?? null;
+          if (userErr) {
+            console.error("auth.admin.getUserById error", userErr);
           }
 
           const { data: tok, error: tErr } = await admin
