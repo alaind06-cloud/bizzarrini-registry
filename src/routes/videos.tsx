@@ -36,7 +36,7 @@ function VideosPage() {
                 {src ? (
                   <iframe
                     src={src}
-                    title={v.titre ?? "Vidéo"}
+                    title={`Vidéo ${v.id}`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     className="w-full h-full"
@@ -47,7 +47,6 @@ function VideosPage() {
                   </div>
                 )}
               </div>
-              {v.titre && <div className="p-4 text-sm">{v.titre}</div>}
             </article>
           );
         })}
