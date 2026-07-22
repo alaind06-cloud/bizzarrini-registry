@@ -49,9 +49,20 @@ function ContactPage() {
             Pour toute demande d'authentification, d'ajout d'un châssis au registre,
             ou d'expertise sur une Bizzarrini, écrivez-nous.
           </p>
-          <div className="mt-8 text-sm space-y-1 text-muted-foreground">
-            <p><span className="text-foreground">Philippe Olczyk</span></p>
-            <p>Expert Bizzarrini · Registre officiel</p>
+          <div className="mt-10 border-t border-border pt-6 space-y-4 text-sm">
+            <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Expert</p>
+              <p className="mt-1 font-display text-xl">Philippe Olczyk</p>
+              <p className="text-muted-foreground">Registre officiel Bizzarrini</p>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Réponse</p>
+              <p className="mt-1 text-foreground/90">Sous 48 h ouvrées</p>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Objet</p>
+              <p className="mt-1 text-foreground/90">Authentification · Ajout de châssis · Expertise</p>
+            </div>
           </div>
         </div>
 
