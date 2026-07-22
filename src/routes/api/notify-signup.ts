@@ -24,13 +24,20 @@ export const Route = createFileRoute("/api/notify-signup")({
             auth: { persistSession: false, autoRefreshToken: false },
           });
 
-          const { data: profil, error: pErr } = await admin
-            .from("profils")
-            .select("id, nom, prenom, email, telephone")
-            .eq("id", profil_id)
-            .maybeSingle();
-          if (pErr || !profil) {
-            return Response.json({ error: "Profil introuvable" }, { status: 404 });
+          let profil: any = null;
+          let pErr: any = null;
+          for (let i = 0; i < 6; i++) {
+            const r = await admin
+              .from("profils")
+              .select("id, nom, prenom, email, telephone")
+              .eq("id", profil_id)
+              .maybeSingle();
+            if (r.data) { profil = r.data; pErr = null; break; }
+            pErr = r.error;
+            await new Promise((res) => setTimeout(res, 500));
+          }
+          if (!profil) {
+            return Response.json({ error: "Profil introuvable", detail: pErr?.message }, { status: 404 });
           }
 
           const { data: tok, error: tErr } = await admin
