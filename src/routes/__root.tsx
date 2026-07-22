@@ -70,15 +70,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Bizzarrini Register — Registre officiel des Bizzarrini" },
+      { title: "Catalogue — Bizzarrini Register" },
       {
         name: "description",
         content:
-          "Registre chassis-par-chassis des voitures Bizzarrini, authentifié par Philippe Olczyk. Catalogue, historique et documentation des 195 châssis.",
+          "Catalogue complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
       },
       { name: "author", content: "Philippe Olczyk" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Catalogue — Bizzarrini Register" },
+      { name: "twitter:title", content: "Catalogue — Bizzarrini Register" },
+      { property: "og:description", content: "Catalogue complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis." },
+      { name: "twitter:description", content: "Catalogue complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/41b65d5f-c552-4782-a59e-3389f34bce15/id-preview-5f1d0ad3--fc4836e6-1d01-4b29-8f2c-017e1286da53.lovable.app-1784744993309.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/41b65d5f-c552-4782-a59e-3389f34bce15/id-preview-5f1d0ad3--fc4836e6-1d01-4b29-8f2c-017e1286da53.lovable.app-1784744993309.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

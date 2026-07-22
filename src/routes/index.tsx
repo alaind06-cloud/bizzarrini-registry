@@ -12,10 +12,10 @@ export const Route = createFileRoute("/")({
         content:
           "Catalogue complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
       },
-      { property: "og:title", content: "Catalogue Bizzarrini — Registre officiel" },
+      { property: "og:title", content: "Catalogue — Bizzarrini Register" },
       {
         property: "og:description",
-        content: "195 châssis Bizzarrini documentés et authentifiés par Philippe Olczyk.",
+        content: "Catalogue complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
       },
     ],
   }),
