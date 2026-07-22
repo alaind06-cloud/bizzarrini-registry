@@ -1,14 +1,23 @@
 export type Video = {
-  id: string;
+  id: number;
   plateforme: "youtube" | "facebook";
   url: string;
-  titre?: string;
 };
 
-// Placeholders — à remplacer par le fichier définitif (13 vidéos).
 export const videos: Video[] = [
-  { id: "v1", plateforme: "youtube", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", titre: "Vidéo placeholder 1" },
-  { id: "v2", plateforme: "youtube", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", titre: "Vidéo placeholder 2" },
+  { id: 1, plateforme: "youtube", url: "https://www.youtube.com/watch?v=obiNne-NxuE" },
+  { id: 2, plateforme: "facebook", url: "https://www.facebook.com/watch/?v=1476704379088316" },
+  { id: 3, plateforme: "facebook", url: "https://www.facebook.com/watch/?v=1464301007023113" },
+  { id: 4, plateforme: "facebook", url: "https://www.facebook.com/watch/live/?v=1439534849493651" },
+  { id: 5, plateforme: "facebook", url: "https://www.facebook.com/watch/?v=1066598510098907" },
+  { id: 6, plateforme: "facebook", url: "https://www.facebook.com/watch/?v=809682325727146" },
+  { id: 7, plateforme: "youtube", url: "https://www.youtube.com/watch?v=skwpOefYSAw" },
+  { id: 8, plateforme: "youtube", url: "https://www.youtube.com/watch?v=PflbipgeqvM" },
+  { id: 9, plateforme: "youtube", url: "https://www.youtube.com/watch?v=X03kiL5AasI" },
+  { id: 10, plateforme: "youtube", url: "https://www.youtube.com/watch?v=Tb7Emw9w1Y0" },
+  { id: 11, plateforme: "youtube", url: "https://www.youtube.com/watch?v=Y50RDb7q1d8" },
+  { id: 12, plateforme: "youtube", url: "https://www.youtube.com/watch?v=H3163F-AEmo" },
+  { id: 13, plateforme: "youtube", url: "https://www.youtube.com/watch?v=GQ22n_sNu2g" },
 ];
 
 export function toYoutubeEmbed(url: string): string | null {
