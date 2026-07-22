@@ -9,7 +9,7 @@ export const Route = createFileRoute("/api/notify-signup")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const { profil_id } = (await request.json()) as { profil_id?: string };
+          const { profil_id, email } = (await request.json()) as { profil_id?: string; email?: string };
           if (!profil_id) {
             return Response.json({ error: "profil_id requis" }, { status: 400 });
           }
