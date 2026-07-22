@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { supabase, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
+import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/voitures/$id")({
@@ -79,7 +79,7 @@ function CarDetail() {
     );
   }
 
-  const cover = voiture.cover_photo ? `/photos/${voiture.cover_photo}` : null;
+  const cover = photoUrl(voiture.cover_photo);
 
   return (
     <div>
@@ -118,7 +118,7 @@ function CarDetail() {
           <h2 className="font-display text-2xl md:text-3xl mb-6">Galerie · {photos.length} photos</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {photos.map((ph) => {
-              const src = `/photos/${ph.filename}`;
+              const src = photoUrl(ph.filename)!;
               return (
                 <button
                   key={ph.id}

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { supabase, type Voiture } from "@/lib/supabase";
+import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/")({
@@ -184,7 +184,7 @@ function HomePage() {
 }
 
 function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
-  const cover = v.cover_photo ? `/photos/${v.cover_photo}` : null;
+  const cover = photoUrl(v.cover_photo);
   const href = canAccess ? { to: "/voitures/$id", params: { id: v.id } } : { to: "/auth" };
 
   return (
