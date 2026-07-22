@@ -78,15 +78,22 @@ function HomePage() {
 
   const canAccess = !!user && isValide;
 
-  // Hero slideshow: pick 4 covers to rotate through
+  // Hero slideshow: one cover per iconic model
   const heroCovers = useMemo(() => {
-    const withCover = voitures.filter((v) => v.cover_photo);
-    if (withCover.length === 0) return [];
-    const step = Math.max(1, Math.floor(withCover.length / 4));
-    return [0, 1, 2, 3]
-      .map((i) => withCover[(i * step) % withCover.length])
-      .filter(Boolean)
-      .slice(0, 4);
+    const iconicModels = ["ISO GRIFO A3/C", "5300 GT", "P538-002", "AMX/3"];
+    const picks: Voiture[] = [];
+    for (const m of iconicModels) {
+      const match = voitures.find((v) => v.modele === m && v.cover_photo);
+      if (match) picks.push(match);
+    }
+    // Fallback: fill with any covers if some iconic models are missing
+    if (picks.length < 4) {
+      for (const v of voitures) {
+        if (picks.length >= 4) break;
+        if (v.cover_photo && !picks.includes(v)) picks.push(v);
+      }
+    }
+    return picks.slice(0, 4);
   }, [voitures]);
 
   const [heroIdx, setHeroIdx] = useState(0);
