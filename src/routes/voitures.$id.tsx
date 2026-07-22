@@ -79,7 +79,7 @@ function CarDetail() {
     );
   }
 
-  const cover = voiture.cover_photo ? `/photos/${voiture.cover_photo}` : null;
+  const cover = photoUrl(voiture.cover_photo);
 
   return (
     <div>
