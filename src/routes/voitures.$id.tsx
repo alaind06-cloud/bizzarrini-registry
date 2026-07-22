@@ -118,7 +118,7 @@ function CarDetail() {
           <h2 className="font-display text-2xl md:text-3xl mb-6">Galerie · {photos.length} photos</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {photos.map((ph) => {
-              const src = `/photos/${ph.filename}`;
+              const src = photoUrl(ph.filename)!;
               return (
                 <button
                   key={ph.id}
