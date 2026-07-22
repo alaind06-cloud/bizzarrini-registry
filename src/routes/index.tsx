@@ -78,11 +78,49 @@ function HomePage() {
 
   const canAccess = !!user && isValide;
 
+  // Hero slideshow: pick 4 covers to rotate through
+  const heroCovers = useMemo(() => {
+    const withCover = voitures.filter((v) => v.cover_photo);
+    if (withCover.length === 0) return [];
+    const step = Math.max(1, Math.floor(withCover.length / 4));
+    return [0, 1, 2, 3]
+      .map((i) => withCover[(i * step) % withCover.length])
+      .filter(Boolean)
+      .slice(0, 4);
+  }, [voitures]);
+
+  const [heroIdx, setHeroIdx] = useState(0);
+  useEffect(() => {
+    if (heroCovers.length < 2) return;
+    const t = setInterval(() => setHeroIdx((i) => (i + 1) % heroCovers.length), 6000);
+    return () => clearInterval(t);
+  }, [heroCovers.length]);
+
   return (
     <div>
       {/* Hero */}
-      <section className="border-b border-border">
-        <div className="container-page py-16 md:py-24">
+      <section className="relative overflow-hidden border-b border-border bg-background">
+        <div className="absolute inset-0">
+          {heroCovers.map((v, i) => (
+            <div
+              key={v.id}
+              className="absolute inset-0 transition-opacity duration-[1600ms] ease-in-out"
+              style={{ opacity: i === heroIdx ? 1 : 0 }}
+            >
+              <img
+                src={photoUrl(v.cover_photo)!}
+                alt=""
+                aria-hidden
+                className="w-full h-full object-cover hero-kenburns"
+              />
+            </div>
+          ))}
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-brand/10 blur-3xl pointer-events-none" />
+        </div>
+
+        <div className="container-page relative py-24 md:py-36 lg:py-44">
           <p className="text-xs uppercase tracking-[0.4em] text-brand">Registro ufficiale</p>
           <h1 className="mt-4 font-display text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
             Le registre officiel<br />
@@ -99,9 +137,24 @@ function HomePage() {
             </div>
           )}
           {user && !isValide && (
-            <div className="mt-8 inline-flex items-center gap-3 rounded border border-brand/40 bg-brand/10 px-4 py-2 text-sm">
+            <div className="mt-8 inline-flex items-center gap-3 rounded border border-brand/40 bg-brand/10 px-4 py-2 text-sm backdrop-blur">
               <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
               Votre inscription est en attente de validation.
+            </div>
+          )}
+
+          {heroCovers.length > 1 && (
+            <div className="mt-12 flex items-center gap-2">
+              {heroCovers.map((_, i) => (
+                <button
+                  key={i}
+                  aria-label={`Image ${i + 1}`}
+                  onClick={() => setHeroIdx(i)}
+                  className={`h-0.5 transition-all duration-500 ${
+                    i === heroIdx ? "w-10 bg-brand" : "w-6 bg-foreground/30 hover:bg-foreground/60"
+                  }`}
+                />
+              ))}
             </div>
           )}
         </div>
