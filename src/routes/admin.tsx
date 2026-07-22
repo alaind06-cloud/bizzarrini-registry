@@ -101,7 +101,6 @@ function AdminPage() {
             <thead className="text-xs uppercase tracking-widest text-muted-foreground text-left">
               <tr className="border-b border-border">
                 <th className="py-3 pr-4">Nom</th>
-                <th className="py-3 pr-4">Email</th>
                 <th className="py-3 pr-4">Téléphone</th>
                 <th className="py-3 pr-4">Statut</th>
                 <th className="py-3">Actions</th>
@@ -111,7 +110,6 @@ function AdminPage() {
               {profils.map((p) => (
                 <tr key={p.id} className="border-b border-border/60">
                   <td className="py-3 pr-4">{[p.prenom, p.nom].filter(Boolean).join(" ") || "—"}</td>
-                  <td className="py-3 pr-4 font-mono text-xs">{p.email ?? "—"}</td>
                   <td className="py-3 pr-4">{p.telephone ?? "—"}</td>
                   <td className="py-3 pr-4">
                     <span className={`inline-block px-2 py-0.5 text-xs uppercase tracking-wider ${
