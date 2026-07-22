@@ -43,7 +43,12 @@ function HomePage() {
         .select("id, titre, modele, annee, chassis, cover_photo, photo_prefix")
         .order("id", { ascending: true });
       if (error) setErr(error.message);
-      else setVoitures((data as Voiture[]) ?? []);
+      else {
+        const clean = ((data as Voiture[]) ?? []).filter(
+          (v) => (v.titre ?? "").trim().toUpperCase() !== "COVER" && (v.modele ?? "").trim().toUpperCase() !== "COVER",
+        );
+        setVoitures(clean);
+      }
       setLoading(false);
     })();
   }, []);

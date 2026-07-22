@@ -31,12 +31,15 @@ function VideosPage() {
         {videos.map((v) => {
           const src = v.plateforme === "youtube" ? toYoutubeEmbed(v.url) : toFacebookEmbed(v.url);
           return (
-            <article key={v.id} className="bg-card border border-border overflow-hidden">
-              <div className="aspect-video bg-surface-2">
+            <article
+              key={v.id}
+              className="group bg-card border border-border overflow-hidden hover:border-brand/60 transition-colors"
+            >
+              <div className="aspect-video bg-surface-2 relative">
                 {src ? (
                   <iframe
                     src={src}
-                    title={`Vidéo ${v.id}`}
+                    title={v.titre}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     className="w-full h-full"
@@ -46,6 +49,17 @@ function VideosPage() {
                     Format non supporté
                   </div>
                 )}
+              </div>
+              <div className="p-4 border-t border-border flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h2 className="font-display text-lg leading-snug truncate">{v.titre}</h2>
+                  {v.sousTitre && (
+                    <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{v.sousTitre}</p>
+                  )}
+                </div>
+                <span className="shrink-0 text-[10px] uppercase tracking-[0.2em] text-brand border border-brand/40 rounded-sm px-2 py-1">
+                  {v.plateforme === "youtube" ? "YouTube" : "Facebook"}
+                </span>
               </div>
             </article>
           );
