@@ -11,7 +11,7 @@ export const Route = createFileRoute("/api/valider")({
           const { token } = (await request.json()) as { token?: string };
           if (!token) return Response.json({ ok: false, error: "Token manquant" }, { status: 400 });
 
-          const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          const serviceKey = process.env.SERVICE_ROLE_KEY;
           if (!serviceKey) return Response.json({ ok: false, error: "Config serveur" }, { status: 500 });
 
           const admin = createClient(SUPABASE_URL, serviceKey, {

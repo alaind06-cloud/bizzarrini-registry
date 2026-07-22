@@ -14,7 +14,7 @@ export const Route = createFileRoute("/api/notify-signup")({
             return Response.json({ error: "profil_id requis" }, { status: 400 });
           }
 
-          const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          const serviceKey = process.env.SERVICE_ROLE_KEY;
           const resendKey = process.env.RESEND_API_KEY;
           if (!serviceKey || !resendKey) {
             return Response.json({ error: "Secrets non configurés" }, { status: 500 });
