@@ -57,7 +57,7 @@ function AuthPage() {
             const res = await fetch("/api/notify-signup", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ profil_id: userId }),
+              body: JSON.stringify({ profil_id: userId, email }),
             });
             const body = await res.json().catch(() => ({}));
             console.log("[notify-signup]", res.status, body);

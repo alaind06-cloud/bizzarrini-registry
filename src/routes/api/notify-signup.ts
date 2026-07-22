@@ -9,7 +9,7 @@ export const Route = createFileRoute("/api/notify-signup")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const { profil_id } = (await request.json()) as { profil_id?: string };
+          const { profil_id, email } = (await request.json()) as { profil_id?: string; email?: string };
           if (!profil_id) {
             return Response.json({ error: "profil_id requis" }, { status: 400 });
           }
@@ -40,11 +40,15 @@ export const Route = createFileRoute("/api/notify-signup")({
             return Response.json({ error: "Profil introuvable", detail: pErr?.message }, { status: 404 });
           }
 
-          // L'email n'est pas stocké dans profils ; on le récupère depuis auth.users.
-          const { data: userData, error: userErr } = await admin.auth.admin.getUserById(profil_id);
-          const userEmail = userData?.user?.email ?? null;
-          if (userErr) {
-            console.error("auth.admin.getUserById error", userErr);
+          // L'email n'est pas stocké dans profils ; on utilise celui envoyé par le client
+          // ou on le récupère depuis auth.users en fallback.
+          let userEmail = email ?? null;
+          if (!userEmail) {
+            const { data: userData, error: userErr } = await admin.auth.admin.getUserById(profil_id);
+            userEmail = userData?.user?.email ?? null;
+            if (userErr) {
+              console.error("auth.admin.getUserById error", userErr);
+            }
           }
 
           const { data: tok, error: tErr } = await admin
