@@ -48,17 +48,34 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        // Notifier l'admin (fire-and-forget). Le trigger DB crée le profil.
+        // Notifier l'admin. Le trigger DB crée le profil.
         const userId = data.user?.id;
+        console.log("[signup] userId=", userId);
         if (userId) {
-          // petit délai pour laisser le trigger insérer la ligne profils
-          setTimeout(() => {
-            fetch("/api/notify-signup", {
+          await new Promise((r) => setTimeout(r, 2000));
+          try {
+            const res = await fetch("/api/notify-signup", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ profil_id: userId }),
-            }).catch(() => {});
-          }, 1500);
+            });
+            const body = await res.json().catch(() => ({}));
+            console.log("[notify-signup]", res.status, body);
+            if (!res.ok) {
+              setMsg({
+                type: "err",
+                text: `Inscription OK mais notification échouée (${res.status}): ${body?.error ?? body?.detail ?? "erreur"}`,
+              });
+              return;
+            }
+          } catch (err: any) {
+            console.error("[notify-signup] fetch error", err);
+            setMsg({ type: "err", text: `Notification injoignable: ${err?.message ?? err}` });
+            return;
+          }
+        } else {
+          setMsg({ type: "err", text: "Signup réussi mais aucun userId retourné (email confirmation activée ?)." });
+          return;
         }
         setMsg({
           type: "ok",
