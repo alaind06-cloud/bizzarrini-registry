@@ -12,6 +12,9 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   },
 });
 
+export const photoUrl = (filename: string | null | undefined) =>
+  filename ? `${SUPABASE_URL}/storage/v1/object/public/photos/${filename}` : null;
+
 export type Voiture = {
   id: string;
   titre: string;
