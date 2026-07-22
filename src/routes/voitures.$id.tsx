@@ -161,3 +161,130 @@ function CarDetail() {
     </div>
   );
 }
+
+interface TimelineEntry {
+  year: string;
+  events: string[];
+}
+
+function parseHistory(description: string): TimelineEntry[] {
+  const lines = description
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
+
+  const entries: TimelineEntry[] = [];
+  let current: TimelineEntry | null = null;
+
+  for (const line of lines) {
+    // Lines that start with a 4-digit year, optionally followed by ':' or '-' or space
+    const yearMatch = line.match(/^(\d{4})\s*[:\-–]?(?:\s+|$)(.*)/);
+    if (yearMatch) {
+      const [, year, rest] = yearMatch;
+      current = { year, events: rest.trim() ? [rest.trim()] : [] };
+      entries.push(current);
+      continue;
+    }
+
+    // Lines where a year appears early but not at the very start (e.g. "Sold in 1981 for...")
+    const inlineYearMatch = line.match(/^(.*?)\s+(\d{4})\s*[:\-–]?\s*(.*)/);
+    if (inlineYearMatch && entries.find((e) => e.year === inlineYearMatch[2])) {
+      // Attach to existing year if it already exists
+      const existing = entries.find((e) => e.year === inlineYearMatch[2])!;
+      const prefix = inlineYearMatch[1].trim();
+      const suffix = inlineYearMatch[3].trim();
+      const full = [prefix, suffix].filter(Boolean).join(" ").trim();
+      if (full) existing.events.push(full);
+      continue;
+    }
+
+    // Continuation of the current entry
+    if (current) {
+      current.events.push(line);
+    } else {
+      // Preamble before any dated entry
+      current = { year: "", events: [line] };
+      entries.push(current);
+    }
+  }
+
+  // Merge empty-year preamble into the first dated entry if possible
+  if (entries.length > 1 && entries[0].year === "") {
+    const preamble = entries.shift()!;
+    entries[0].events.unshift(...preamble.events);
+  }
+
+  return entries.length > 0 ? entries : [];
+}
+
+function HistoryTimeline({
+  description,
+  modele,
+  annee,
+  chassis,
+}: {
+  description?: string | null;
+  modele?: string | null;
+  annee?: number | null;
+  chassis?: string | null;
+}) {
+  const entries = description?.trim() ? parseHistory(description) : [];
+
+  if (entries.length === 0) {
+    return (
+      <div className="max-w-3xl border-l-2 border-brand/60 pl-5 py-2 text-foreground/80 leading-relaxed">
+        <p>
+          {modele ?? "Bizzarrini"}
+          {annee ? ` · ${annee}` : ""}
+          {chassis ? ` · châssis ${chassis}` : ""}.
+        </p>
+        <p className="mt-3 text-sm text-muted-foreground italic">
+          L'historique détaillé de ce châssis est en cours de compilation par le registre.
+          Si vous détenez des documents, photos d'époque ou informations de provenance,
+          contactez l'expert via la page Contact.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative max-w-4xl">
+      {/* vertical rail */}
+      <div className="absolute left-[15px] top-3 bottom-3 w-px bg-border md:left-[19px]" />
+
+      <div className="space-y-6">
+        {entries.map((entry, idx) => (
+          <div key={idx} className="relative pl-10 md:pl-14">
+            {/* dot */}
+            <div className="absolute left-0 top-1.5 size-8 rounded-full bg-surface-2 border border-border grid place-items-center md:top-1 md:size-10">
+              <div className="size-2.5 rounded-full bg-brand md:size-3" />
+            </div>
+
+            {/* year badge */}
+            {entry.year ? (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-sm bg-brand/10 text-brand font-mono text-sm tracking-wide border border-brand/20">
+                {entry.year}
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-sm bg-surface text-muted-foreground font-mono text-sm tracking-wide border border-border">
+                —
+              </span>
+            )}
+
+            {/* events */}
+            <div className="mt-3 space-y-2">
+              {entry.events.map((event, eidx) => (
+                <p
+                  key={eidx}
+                  className="text-foreground/90 leading-relaxed pl-1 border-l border-border/60"
+                >
+                  {event}
+                </p>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
