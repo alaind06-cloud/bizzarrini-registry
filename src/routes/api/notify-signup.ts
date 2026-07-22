@@ -29,7 +29,7 @@ export const Route = createFileRoute("/api/notify-signup")({
           for (let i = 0; i < 6; i++) {
             const r = await admin
               .from("profils")
-              .select("id, nom, prenom, email, telephone")
+              .select("id, nom, prenom, telephone")
               .eq("id", profil_id)
               .maybeSingle();
             if (r.data) { profil = r.data; pErr = null; break; }
@@ -38,6 +38,13 @@ export const Route = createFileRoute("/api/notify-signup")({
           }
           if (!profil) {
             return Response.json({ error: "Profil introuvable", detail: pErr?.message }, { status: 404 });
+          }
+
+          // L'email n'est pas stocké dans profils ; on le récupère depuis auth.users.
+          const { data: userData, error: userErr } = await admin.auth.admin.getUserById(profil_id);
+          const userEmail = userData?.user?.email ?? null;
+          if (userErr) {
+            console.error("auth.admin.getUserById error", userErr);
           }
 
           const { data: tok, error: tErr } = await admin
@@ -51,7 +58,7 @@ export const Route = createFileRoute("/api/notify-signup")({
 
           const origin = new URL(request.url).origin;
           const link = `${origin}/valider?token=${tok.token}`;
-          const fullName = [profil.prenom, profil.nom].filter(Boolean).join(" ") || profil.email;
+          const fullName = [profil.prenom, profil.nom].filter(Boolean).join(" ") || userEmail;
 
           const html = `
             <div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#111">
@@ -60,7 +67,7 @@ export const Route = createFileRoute("/api/notify-signup")({
               <table style="border-collapse:collapse;margin:16px 0">
                 <tr><td style="padding:4px 12px 4px 0;color:#666">Nom</td><td><b>${profil.nom ?? "—"}</b></td></tr>
                 <tr><td style="padding:4px 12px 4px 0;color:#666">Prénom</td><td><b>${profil.prenom ?? "—"}</b></td></tr>
-                <tr><td style="padding:4px 12px 4px 0;color:#666">Email</td><td><b>${profil.email ?? "—"}</b></td></tr>
+                <tr><td style="padding:4px 12px 4px 0;color:#666">Email</td><td><b>${userEmail ?? "—"}</b></td></tr>
                 <tr><td style="padding:4px 12px 4px 0;color:#666">Téléphone</td><td><b>${profil.telephone ?? "—"}</b></td></tr>
               </table>
               <p style="margin:24px 0">
