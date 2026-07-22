@@ -41,7 +41,7 @@ function HomePage() {
       const { data, error } = await supabase
         .from("voitures")
         .select("id, titre, modele, annee, chassis, cover_photo, photo_prefix")
-        .order("annee", { ascending: true, nullsFirst: false });
+        .order("id", { ascending: true });
       if (error) setErr(error.message);
       else setVoitures((data as Voiture[]) ?? []);
       setLoading(false);
