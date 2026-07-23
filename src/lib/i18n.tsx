@@ -192,6 +192,8 @@ const en: Dict = {
   "home.noResults": "No car matches the filters.",
   "home.prev": "← Previous",
   "home.next": "Next →",
+  "filters.active": "Active filters:",
+  "filters.remove": "Remove filter {label}",
   "card.noPhoto": "No photo",
   "card.membersOnly": "Members only",
 
