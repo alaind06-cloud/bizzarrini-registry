@@ -133,7 +133,7 @@ function CarDetail() {
       {/* Gallery */}
       {photos.length > 0 && (
         <section className="container-page py-12 pb-16">
-          <h2 className="font-display text-2xl md:text-3xl mb-6">Galerie · {photos.length} photos</h2>
+          <h2 className="font-display text-2xl md:text-3xl mb-6">{t("car.gallery")} · {photos.length} {t("car.photos")}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {photos.map((ph) => {
               const src = photoUrl(ph.filename)!;
