@@ -7,13 +7,13 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Catalogue — Bizzarrini Register" },
+      { title: "Bizzarrini Register - Official Chassis Registry & Provenance | Iso Grifo, A3/C, 5300 GT" },
       {
         name: "description",
         content:
           "Catalogue complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
       },
-      { property: "og:title", content: "Catalogue — Bizzarrini Register" },
+      { property: "og:title", content: "Bizzarrini Register - Official Chassis Registry & Provenance | Iso Grifo, A3/C, 5300 GT" },
       {
         property: "og:description",
         content: "Catalogue complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
@@ -198,10 +198,18 @@ function HomePage() {
       <section className="container-page py-10">
         <div className="flex items-baseline justify-between mb-6">
           <h2 className="font-display text-2xl md:text-3xl">
-            {loading ? t("home.loading") : t("home.chassisCount", { n: filtered.length })}
+            {loading ? (
+              <span className="inline-block w-40 h-8 bg-muted rounded animate-pulse" aria-hidden="true" />
+            ) : (
+              t("home.chassisCount", { n: filtered.length })
+            )}
           </h2>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
-            {t("home.pageOf", { p: page, t: totalPages })}
+            {loading ? (
+              <span className="inline-block w-24 h-4 bg-muted rounded animate-pulse" aria-hidden="true" />
+            ) : (
+              t("home.pageOf", { p: page, t: totalPages })
+            )}
           </p>
         </div>
 
@@ -209,10 +217,12 @@ function HomePage() {
           <p className="text-sm text-brand">{t("home.errorLoading", { msg: err })}</p>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {currentItems.map((v) => (
-            <CarCard key={v.id} v={v} canAccess={canAccess} />
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" aria-busy={loading}>
+          {loading
+            ? Array.from({ length: PAGE_SIZE }).map((_, i) => <CarCardSkeleton key={i} />)
+            : currentItems.map((v) => (
+                <CarCard key={v.id} v={v} canAccess={canAccess} />
+              ))}
           {!loading && currentItems.length === 0 && (
             <p className="col-span-full text-center text-muted-foreground py-16">
               {t("home.noResults")}
@@ -220,7 +230,7 @@ function HomePage() {
           )}
         </div>
 
-        {totalPages > 1 && (
+        {!loading && totalPages > 1 && (
           <div className="mt-10 flex items-center justify-center gap-2">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -285,5 +295,18 @@ function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
         {v.chassis && <p className="mt-2 text-xs text-muted-foreground font-mono">#{v.chassis}</p>}
       </div>
     </Link>
+  );
+}
+
+function CarCardSkeleton() {
+  return (
+    <div className="bg-card border border-border overflow-hidden" aria-hidden="true">
+      <div className="aspect-[4/3] bg-surface-2 animate-pulse" />
+      <div className="p-4 space-y-3">
+        <div className="h-3 w-1/3 bg-muted rounded animate-pulse" />
+        <div className="h-5 w-3/4 bg-muted rounded animate-pulse" />
+        <div className="h-3 w-1/2 bg-muted rounded animate-pulse" />
+      </div>
+    </div>
   );
 }
