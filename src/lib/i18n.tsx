@@ -137,7 +137,7 @@ const fr: Dict = {
   "car.notFoundText": "Cette fiche n'existe pas.",
   "car.access.reserved": "Accès réservé",
   "car.access.pending": "Votre inscription est en attente de validation par l'expert.",
-  "car.access.back": "Retour au catalogue",
+  "car.access.back": "Retour au registre",
   "car.loading": "Chargement…",
   "car.history.fallback": "L'historique détaillé de ce châssis est en cours de compilation par le registre. Si vous détenez des documents, photos d'époque ou informations de provenance, contactez l'expert via la page Contact.",
   "car.chassisWord": "châssis",
