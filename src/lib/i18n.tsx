@@ -173,7 +173,7 @@ const en: Dict = {
   "home.title.b": "of",
   "home.lead": "Nearly three decades gathering information on the Bizzarrini model and its history, shared with fellow enthusiasts. We are only interested in the facts, to bring you the most honest Bizzarrini register. Feel free to contribute.",
   "home.cta.request": "Request access",
-  "home.cta.catalog": "Browse catalogue",
+  "home.cta.catalog": "Browse register",
   "home.pending": "Your account is awaiting approval.",
   "home.filter.model": "Model",
   "home.filter.allModels": "All models",
