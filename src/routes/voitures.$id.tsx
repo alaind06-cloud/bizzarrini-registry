@@ -16,6 +16,9 @@ export const Route = createFileRoute("/voitures/$id")({
   component: CarDetail,
 });
 
+type Lang = "en" | "fr" | "it";
+const LANG_KEY = "bz_lang";
+
 function CarDetail() {
   const { id } = Route.useParams();
   const router = useRouter();
@@ -26,6 +29,18 @@ function CarDetail() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lang, setLangState] = useState<Lang>("fr");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = window.localStorage.getItem(LANG_KEY) as Lang | null;
+    if (saved === "en" || saved === "fr" || saved === "it") setLangState(saved);
+  }, []);
+
+  const setLang = (l: Lang) => {
+    setLangState(l);
+    if (typeof window !== "undefined") window.localStorage.setItem(LANG_KEY, l);
+  };
 
   useEffect(() => {
     if (authLoading) return;
