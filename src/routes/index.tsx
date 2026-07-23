@@ -216,7 +216,7 @@ function HomePage() {
         {err && (
           <p className="text-sm text-brand">{t("home.errorLoading", { msg: err })}</p>
         )}
-uge
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" aria-busy={loading}>
           {loading
             ? Array.from({ length: PAGE_SIZE }).map((_, i) => <CarCardSkeleton key={i} />)
@@ -295,5 +295,18 @@ function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
         {v.chassis && <p className="mt-2 text-xs text-muted-foreground font-mono">#{v.chassis}</p>}
       </div>
     </Link>
+  );
+}
+
+function CarCardSkeleton() {
+  return (
+    <div className="bg-card border border-border overflow-hidden" aria-hidden="true">
+      <div className="aspect-[4/3] bg-surface-2 animate-pulse" />
+      <div className="p-4 space-y-3">
+        <div className="h-3 w-1/3 bg-muted rounded animate-pulse" />
+        <div className="h-5 w-3/4 bg-muted rounded animate-pulse" />
+        <div className="h-3 w-1/2 bg-muted rounded animate-pulse" />
+      </div>
+    </div>
   );
 }
