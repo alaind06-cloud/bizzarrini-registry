@@ -11,7 +11,7 @@ export function FilterPills({ pills }: { pills: ActivePill[] }) {
   const { t } = useI18n();
   if (pills.length === 0) return null;
   return (
-    <div className="container-page pb-4 -mt-2 flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <span className="text-xs uppercase tracking-widest text-muted-foreground mr-1">
         {t("filters.active")}
       </span>
