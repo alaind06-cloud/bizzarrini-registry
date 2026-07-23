@@ -52,7 +52,9 @@ function HomePage() {
 
   const [page, setPage] = useState(1);
 
+  useEffect(() => {
     (async () => {
+
       setLoading(true);
       const { data, error } = await supabase
         .from("voitures")
