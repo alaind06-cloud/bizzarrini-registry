@@ -117,7 +117,11 @@ function GiottoPage() {
         </div>
       </section>
 
-      <FilterPills pills={activePills} />
+      {activePills.length > 0 && (
+        <div className="container-page pt-4">
+          <FilterPills pills={activePills} />
+        </div>
+      )}
 
 
 
