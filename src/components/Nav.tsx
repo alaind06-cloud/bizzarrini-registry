@@ -5,21 +5,26 @@ import { useState } from "react";
 
 function LangSwitch({ className = "" }: { className?: string }) {
   const { lang, setLang } = useI18n();
-  const langs: Lang[] = ["fr", "en", "it"];
+  const langs: { code: Lang; label: string }[] = [
+    { code: "fr", label: "FR" },
+    { code: "en", label: "EN" },
+    { code: "it", label: "IT" },
+  ];
   return (
     <div className={`inline-flex rounded-sm border border-border overflow-hidden text-[10px] font-mono uppercase tracking-widest ${className}`}>
-      {langs.map((l) => (
+      {langs.map(({ code, label }) => (
         <button
-          key={l}
-          onClick={() => setLang(l)}
+          key={code}
+          onClick={() => setLang(code)}
           className={`px-2 py-1 transition-colors ${
-            lang === l
+            lang === code
               ? "bg-brand text-brand-foreground"
               : "bg-transparent hover:bg-surface-2 text-muted-foreground hover:text-foreground"
           }`}
-          aria-pressed={lang === l}
+          aria-pressed={lang === code}
+          aria-label={code === "fr" ? "Français" : code === "en" ? "English" : "Italiano"}
         >
-          {l}
+          {label}
         </button>
       ))}
     </div>
