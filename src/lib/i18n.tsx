@@ -24,7 +24,7 @@ const fr: Dict = {
   "home.title.b": "des",
   "home.lead": "Près de trois décennies à rassembler des informations sur les modèles Bizzarrini et leur histoire, partagées avec les passionnés. Seuls les faits nous intéressent, pour vous offrir le registre Bizzarrini le plus honnête possible. N'hésitez pas à contribuer.",
   "home.cta.request": "Demander l'accès",
-  "home.cta.catalog": "Voir le catalogue",
+  "home.cta.catalog": "Voir le registre",
   "home.pending": "Votre inscription est en attente de validation.",
   "home.filter.model": "Modèle",
   "home.filter.allModels": "Tous les modèles",
