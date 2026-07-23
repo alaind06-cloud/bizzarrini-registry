@@ -104,6 +104,10 @@ function AuthPage() {
                   <label className="label-field">Téléphone</label>
                   <input className="field" type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} maxLength={40} />
                 </div>
+                <div>
+                  <label className="label-field">Raison de la demande <span className="text-muted-foreground">(optionnel)</span></label>
+                  <textarea className="field min-h-[80px]" value={raison} onChange={(e) => setRaison(e.target.value)} maxLength={500} placeholder="Propriétaire, passionné, historien…" />
+                </div>
               </>
             )}
 
