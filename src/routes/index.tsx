@@ -1,14 +1,16 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 
-type RegisterSearch = { m?: string };
+type RegisterSearch = { m?: string; d?: string; q?: string };
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): RegisterSearch => ({
     m: typeof search.m === "string" && search.m.trim() ? search.m.trim() : undefined,
+    d: typeof search.d === "string" && search.d.trim() ? search.d.trim() : undefined,
+    q: typeof search.q === "string" && search.q.trim() ? search.q.trim() : undefined,
   }),
   head: () => ({
     meta: [
