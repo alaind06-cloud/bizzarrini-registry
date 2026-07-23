@@ -115,29 +115,11 @@ function CarDetail() {
         </div>
       </section>
 
-      {/* Historique — frise chronologique */}
       <section className="container-page py-8">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-          <h2 className="font-display text-2xl md:text-3xl">
-            {lang === "fr" ? "Historique" : lang === "it" ? "Storia" : "History"}
-          </h2>
-          <div className="inline-flex rounded-sm border border-border overflow-hidden text-xs font-mono uppercase tracking-widest">
-            {(["fr", "en", "it"] as Lang[]).map((l) => (
-              <button
-                key={l}
-                onClick={() => setLang(l)}
-                className={`px-3 py-1.5 transition-colors ${
-                  lang === l
-                    ? "bg-brand text-brand-foreground"
-                    : "bg-surface hover:bg-surface-2 text-muted-foreground hover:text-foreground"
-                }`}
-                aria-pressed={lang === l}
-              >
-                {l}
-              </button>
-            ))}
-          </div>
+          <h2 className="font-display text-2xl md:text-3xl">{t("car.history")}</h2>
         </div>
+
         <HistoryTimeline
           description={pickDescription(detail, lang)}
           modele={voiture.modele}
