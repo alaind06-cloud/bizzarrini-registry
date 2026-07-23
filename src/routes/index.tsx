@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,6 +27,7 @@ const PAGE_SIZE = 24;
 
 function HomePage() {
   const { user, isValide, loading: authLoading } = useAuth();
+  const { t } = useI18n();
   const [voitures, setVoitures] = useState<Voiture[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
@@ -83,7 +85,6 @@ function HomePage() {
 
   const canAccess = !!user && isValide;
 
-  // Hero slideshow: one cover per iconic model
   const heroCovers = useMemo(() => {
     const iconicModels = ["ISO GRIFO A3/C", "5300 GT", "P538-002", "AMX/3"];
     const picks: Voiture[] = [];
@@ -91,7 +92,6 @@ function HomePage() {
       const match = voitures.find((v) => v.modele === m && v.cover_photo);
       if (match) picks.push(match);
     }
-    // Fallback: fill with any covers if some iconic models are missing
     if (picks.length < 4) {
       for (const v of voitures) {
         if (picks.length >= 4) break;
@@ -104,13 +104,12 @@ function HomePage() {
   const [heroIdx, setHeroIdx] = useState(0);
   useEffect(() => {
     if (heroCovers.length < 2) return;
-    const t = setInterval(() => setHeroIdx((i) => (i + 1) % heroCovers.length), 6000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setHeroIdx((i) => (i + 1) % heroCovers.length), 6000);
+    return () => clearInterval(timer);
   }, [heroCovers.length]);
 
   return (
     <div>
-      {/* Hero */}
       <section className="relative overflow-hidden border-b border-border bg-background">
         <div className="absolute inset-0">
           {heroCovers.map((v, i) => (
@@ -133,25 +132,24 @@ function HomePage() {
         </div>
 
         <div className="container-page relative py-24 md:py-36 lg:py-44">
-          <p className="text-xs uppercase tracking-[0.4em] text-brand">Registro ufficiale</p>
+          <p className="text-xs uppercase tracking-[0.4em] text-brand">{t("home.kicker")}</p>
           <h1 className="mt-4 font-display text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
-            Le registre officiel<br />
-            des <span className="text-brand">Bizzarrini</span>.
+            {t("home.title.a")}<br />
+            {t("home.title.b")} <span className="text-brand">Bizzarrini</span>.
           </h1>
           <p className="mt-6 max-w-2xl text-base md:text-lg text-muted-foreground">
-            Chaque châssis authentifié, documenté et archivé par Philippe Olczyk.
-            195 voitures d'exception, galerie complète et historique réservés aux membres validés.
+            {t("home.lead")}
           </p>
           {!authLoading && !user && (
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/auth" className="btn-brand">Demander l'accès</Link>
-              <a href="#catalogue" className="btn-ghost">Voir le catalogue</a>
+              <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
+              <a href="#catalogue" className="btn-ghost">{t("home.cta.catalog")}</a>
             </div>
           )}
           {user && !isValide && (
             <div className="mt-8 inline-flex items-center gap-3 rounded border border-brand/40 bg-brand/10 px-4 py-2 text-sm backdrop-blur">
               <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
-              Votre inscription est en attente de validation.
+              {t("home.pending")}
             </div>
           )}
 
@@ -172,43 +170,41 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Filters */}
       <section id="catalogue" className="border-b border-border bg-surface/40">
         <div className="container-page py-6 grid gap-4 md:grid-cols-[1fr_1fr_2fr] items-end">
           <div>
-            <label className="label-field">Modèle</label>
+            <label className="label-field">{t("home.filter.model")}</label>
             <select className="field" value={modele} onChange={(e) => setModele(e.target.value)}>
-              <option value="all">Tous les modèles</option>
+              <option value="all">{t("home.filter.allModels")}</option>
               {modeles.map((m) => <option key={m} value={m}>{m}</option>)}
             </select>
           </div>
           <div>
-            <label className="label-field">Décennie</label>
+            <label className="label-field">{t("home.filter.decade")}</label>
             <select className="field" value={annee} onChange={(e) => setAnnee(e.target.value)}>
-              <option value="all">Toutes</option>
+              <option value="all">{t("home.filter.allDecades")}</option>
               {decennies.map((d) => <option key={d} value={d}>{d}s</option>)}
             </select>
           </div>
           <div>
-            <label className="label-field">Recherche par châssis</label>
-            <input className="field" placeholder="Ex. B*0222, IA3C…" value={q} onChange={(e) => setQ(e.target.value)} />
+            <label className="label-field">{t("home.filter.search")}</label>
+            <input className="field" placeholder={t("home.filter.searchPlaceholder")} value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
         </div>
       </section>
 
-      {/* Grid */}
       <section className="container-page py-10">
         <div className="flex items-baseline justify-between mb-6">
           <h2 className="font-display text-2xl md:text-3xl">
-            {loading ? "Chargement…" : `${filtered.length} châssis`}
+            {loading ? t("home.loading") : t("home.chassisCount", { n: filtered.length })}
           </h2>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
-            Page {page} / {totalPages}
+            {t("home.pageOf", { p: page, t: totalPages })}
           </p>
         </div>
 
         {err && (
-          <p className="text-sm text-brand">Erreur de chargement : {err}</p>
+          <p className="text-sm text-brand">{t("home.errorLoading", { msg: err })}</p>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -217,7 +213,7 @@ function HomePage() {
           ))}
           {!loading && currentItems.length === 0 && (
             <p className="col-span-full text-center text-muted-foreground py-16">
-              Aucune voiture ne correspond aux filtres.
+              {t("home.noResults")}
             </p>
           )}
         </div>
@@ -229,7 +225,7 @@ function HomePage() {
               disabled={page === 1}
               className="btn-ghost"
             >
-              ← Précédent
+              {t("home.prev")}
             </button>
             <span className="text-sm text-muted-foreground px-3">
               {page} / {totalPages}
@@ -239,7 +235,7 @@ function HomePage() {
               disabled={page === totalPages}
               className="btn-ghost"
             >
-              Suivant →
+              {t("home.next")}
             </button>
           </div>
         )}
@@ -249,6 +245,7 @@ function HomePage() {
 }
 
 function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
+  const { t } = useI18n();
   const cover = photoUrl(v.cover_photo);
   const href = canAccess ? { to: "/voitures/$id", params: { id: v.id } } : { to: "/auth" };
 
@@ -268,13 +265,13 @@ function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
           />
         ) : (
           <div className="w-full h-full grid place-items-center text-muted-foreground text-xs uppercase tracking-widest">
-            No photo
+            {t("card.noPhoto")}
           </div>
         )}
         {!canAccess && (
           <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity">
             <span className="text-xs uppercase tracking-[0.25em] text-foreground bg-background/80 border border-border px-3 py-1.5 rounded">
-              Membres uniquement
+              {t("card.membersOnly")}
             </span>
           </div>
         )}
