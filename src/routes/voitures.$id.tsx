@@ -89,14 +89,14 @@ function CarDetail() {
       <section className="border-b border-border">
         <div className="container-page py-10 md:py-16">
           <Link to="/" className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground">
-            ← Catalogue
+            {t("car.backCatalog")}
           </Link>
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
             <div className="aspect-[3/2] bg-surface-2 overflow-hidden">
               {cover ? (
                 <img src={cover} alt={voiture.titre} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full grid place-items-center text-muted-foreground">Sans photo</div>
+                <div className="w-full h-full grid place-items-center text-muted-foreground">{t("card.noPhoto")}</div>
               )}
             </div>
             <div>
@@ -106,10 +106,11 @@ function CarDetail() {
               <h1 className="mt-3 font-display text-3xl md:text-5xl leading-[1.1]">{voiture.titre}</h1>
               {voiture.chassis && (
                 <p className="mt-4 font-mono text-sm text-muted-foreground">
-                  Châssis · <span className="text-foreground">{voiture.chassis}</span>
+                  {t("car.chassisLabel")} · <span className="text-foreground">{voiture.chassis}</span>
                 </p>
               )}
             </div>
+
           </div>
         </div>
       </section>
