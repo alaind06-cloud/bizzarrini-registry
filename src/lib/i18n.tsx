@@ -15,7 +15,7 @@ const fr: Dict = {
   "nav.signin": "Se connecter",
   "nav.logout": "Déconnexion",
   "nav.menu": "Menu",
-  "footer.rights": "© {year} Bizzarrini Register — Philippe Olczyk",
+  "footer.rights": "© {year} Bizzarrini Register — Lucas Bizzarrini",
   "footer.tagline": "Registre officiel des châssis authentifiés",
 
   // Home
@@ -77,7 +77,7 @@ const fr: Dict = {
   // Books
   "books.kicker": "Bibliographie",
   "books.title": "Livres",
-  "books.lead": "Les ouvrages de référence publiés par Philippe Olczyk sur les grandes voitures de course.",
+  "books.lead": "Les ouvrages de référence publiés par Lucas Bizzarrini sur les grandes voitures de course.",
   "books.buy": "Acheter →",
 
   // Contact
@@ -85,7 +85,7 @@ const fr: Dict = {
   "contact.title": "Contact",
   "contact.lead": "Pour toute demande d'authentification, d'ajout d'un châssis au registre, ou d'expertise sur une Bizzarrini, écrivez-nous.",
   "contact.expert": "Expert",
-  "contact.expertName": "Philippe Olczyk",
+  "contact.expertName": "Lucas Bizzarrini",
   "contact.expertSubtitle": "Registre officiel Bizzarrini",
   "contact.response": "Réponse",
   "contact.responseValue": "Sous 48 h ouvrées",
@@ -165,7 +165,7 @@ const en: Dict = {
   "nav.signin": "Sign in",
   "nav.logout": "Logout",
   "nav.menu": "Menu",
-  "footer.rights": "© {year} Bizzarrini Register — Philippe Olczyk",
+  "footer.rights": "© {year} Bizzarrini Register — Lucas Bizzarrini",
   "footer.tagline": "Authenticated chassis registry",
 
   "home.kicker": "Official register",
@@ -223,14 +223,14 @@ const en: Dict = {
 
   "books.kicker": "Bibliography",
   "books.title": "Books",
-  "books.lead": "Reference works published by Philippe Olczyk on the great racing cars.",
+  "books.lead": "Reference works published by Lucas Bizzarrini on the great racing cars.",
   "books.buy": "Buy →",
 
   "contact.kicker": "Get in touch",
   "contact.title": "Contact",
   "contact.lead": "For authentication requests, adding a chassis to the register, or expertise on a Bizzarrini, please write to us.",
   "contact.expert": "Expert",
-  "contact.expertName": "Philippe Olczyk",
+  "contact.expertName": "Lucas Bizzarrini",
   "contact.expertSubtitle": "Official Bizzarrini Register",
   "contact.response": "Reply",
   "contact.responseValue": "Within 48 business hours",
@@ -307,7 +307,7 @@ const it: Dict = {
   "nav.signin": "Accedi",
   "nav.logout": "Esci",
   "nav.menu": "Menu",
-  "footer.rights": "© {year} Bizzarrini Register — Philippe Olczyk",
+  "footer.rights": "© {year} Bizzarrini Register — Lucas Bizzarrini",
   "footer.tagline": "Registro ufficiale dei telai autenticati",
 
   "home.kicker": "Registro ufficiale",
@@ -365,14 +365,14 @@ const it: Dict = {
 
   "books.kicker": "Bibliografia",
   "books.title": "Libri",
-  "books.lead": "Le opere di riferimento pubblicate da Philippe Olczyk sulle grandi vetture da corsa.",
+  "books.lead": "Le opere di riferimento pubblicate da Lucas Bizzarrini sulle grandi vetture da corsa.",
   "books.buy": "Acquista →",
 
   "contact.kicker": "Scrivici",
   "contact.title": "Contatti",
   "contact.lead": "Per qualsiasi richiesta di autenticazione, aggiunta di un telaio al registro o perizia su una Bizzarrini, scrivici.",
   "contact.expert": "Esperto",
-  "contact.expertName": "Philippe Olczyk",
+  "contact.expertName": "Lucas Bizzarrini",
   "contact.expertSubtitle": "Registro ufficiale Bizzarrini",
   "contact.response": "Risposta",
   "contact.responseValue": "Entro 48 ore lavorative",
