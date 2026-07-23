@@ -98,7 +98,45 @@ function HomePage() {
     });
   }, [voitures, modele, annee, q, modelQuery]);
 
+  const clearM = () =>
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, m: undefined }), replace: true });
+
+  const activePills: ActivePill[] = [];
+  if (modele !== "all") {
+    activePills.push({
+      key: "modele",
+      label: t("home.filter.model"),
+      value: modele,
+      onRemove: () => setModele("all"),
+    });
+  }
+  if (modelQuery) {
+    activePills.push({
+      key: "m",
+      label: t("home.filter.model"),
+      value: modelQuery,
+      onRemove: clearM,
+    });
+  }
+  if (annee !== "all") {
+    activePills.push({
+      key: "annee",
+      label: t("home.filter.decade"),
+      value: `${annee}s`,
+      onRemove: () => setAnnee("all"),
+    });
+  }
+  if (q.trim()) {
+    activePills.push({
+      key: "q",
+      label: t("home.filter.search"),
+      value: q.trim(),
+      onRemove: () => setQ(""),
+    });
+  }
+
   useEffect(() => setPage(1), [modele, annee, q, modelQuery]);
+
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
