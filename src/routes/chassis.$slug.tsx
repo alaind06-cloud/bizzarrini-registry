@@ -110,8 +110,21 @@ function CarDetail() {
     gearbox: t("car.specs.gearbox"),
     bodywork: t("car.specs.bodywork"),
     registration: t("car.specs.registration"),
+    interior: t("car.specs.interior"),
+    engineNumber: t("car.specs.engineNumber"),
+    gearboxNumber: t("car.specs.gearboxNumber"),
+    coachbuilder: t("car.specs.coachbuilder"),
+    condition: t("car.specs.condition"),
   };
-  const specEntries = (Object.keys(specs) as SpecKey[]).filter((k) => specs[k]);
+  // Ordered pairs for a two-column grid (paired for visual balance)
+  const specOrder: SpecKey[] = [
+    "color", "interior",
+    "engineNumber", "gearboxNumber",
+    "coachbuilder", "condition",
+    "engine", "gearbox",
+    "bodywork", "registration",
+  ];
+  const specEntries = specOrder.filter((k) => specs[k]);
 
   return (
     <div>
@@ -122,12 +135,14 @@ function CarDetail() {
             {t("car.backCatalog")}
           </Link>
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
-            <div className="aspect-[3/2] bg-surface-2 overflow-hidden">
-              {cover ? (
-                <img src={cover} alt={voiture.titre} className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full grid place-items-center text-muted-foreground">{t("card.noPhoto")}</div>
-              )}
+            <div className="bg-black border border-white/15 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.9)] p-2 sm:p-3">
+              <div className="aspect-[3/2] bg-black overflow-hidden">
+                {cover ? (
+                  <img src={cover} alt={voiture.titre} className="w-full h-full object-contain" />
+                ) : (
+                  <div className="w-full h-full grid place-items-center text-muted-foreground">{t("card.noPhoto")}</div>
+                )}
+              </div>
             </div>
             <div className="flex flex-col gap-6">
               <div>
@@ -147,11 +162,11 @@ function CarDetail() {
                   <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
                     {t("car.specs.title")}
                   </p>
-                  <dl className="space-y-3">
+                  <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
                     {specEntries.map((key) => (
-                      <div key={key} className="grid grid-cols-[110px_1fr] gap-3 text-sm">
-                        <dt className="text-muted-foreground">{specLabels[key]}</dt>
-                        <dd className="text-foreground/90">{specs[key]}</dd>
+                      <div key={key} className="flex flex-col gap-0.5">
+                        <dt className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">{specLabels[key]}</dt>
+                        <dd className="text-white font-medium">{specs[key]}</dd>
                       </div>
                     ))}
                   </dl>
@@ -231,14 +246,29 @@ function CarDetail() {
   );
 }
 
-type SpecKey = "engine" | "color" | "gearbox" | "bodywork" | "registration";
+type SpecKey =
+  | "engine"
+  | "color"
+  | "gearbox"
+  | "bodywork"
+  | "registration"
+  | "interior"
+  | "engineNumber"
+  | "gearboxNumber"
+  | "coachbuilder"
+  | "condition";
 
 const SPEC_PATTERNS: Record<SpecKey, RegExp[]> = {
   engine: [/^\s*(?:engine|moteur|motore)\s*[:\-–]\s*(.+)$/im],
-  color: [/^\s*(?:colou?r|couleur|colore)\s*[:\-–]\s*(.+)$/im],
+  color: [/^\s*(?:original\s+colou?r|colou?r|couleur(?:\s+d['']origine)?|colore(?:\s+originale)?)\s*[:\-–]\s*(.+)$/im],
   gearbox: [/^\s*(?:gearbox|transmission|boi?te(?:\s+de\s+vitesses?)?|cambio)\s*[:\-–]\s*(.+)$/im],
   bodywork: [/^\s*(?:body(?:work)?|carrosserie|carrozzeria)\s*[:\-–]\s*(.+)$/im],
   registration: [/^\s*(?:reg(?:istration)?|immatriculation|targa)\s*[:\-–]?\s*(.+)$/im],
+  interior: [/^\s*(?:interior|int[ée]rieur|interni)\s*[:\-–]\s*(.+)$/im],
+  engineNumber: [/^\s*(?:engine\s*(?:no\.?|number|n[°º]?)|n[°º]?\s*moteur|motore\s*n[°º]?|n[°º]?\s*motore)\s*[:\-–]?\s*(.+)$/im],
+  gearboxNumber: [/^\s*(?:gearbox\s*(?:no\.?|number|n[°º]?)|n[°º]?\s*bo[îi]te|cambio\s*n[°º]?|n[°º]?\s*cambio)\s*[:\-–]?\s*(.+)$/im],
+  coachbuilder: [/^\s*(?:coachbuilder|carrossier|carrozziere)\s*[:\-–]\s*(.+)$/im],
+  condition: [/^\s*(?:condition|[ée]tat|stato)\s*[:\-–]\s*(.+)$/im],
 };
 
 function extractSpecs(text: string): Partial<Record<SpecKey, string>> {
