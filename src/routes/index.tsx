@@ -247,7 +247,8 @@ function HomePage() {
 function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
   const { t } = useI18n();
   const cover = photoUrl(v.cover_photo);
-  const href = canAccess ? { to: "/voitures/$id", params: { id: v.id } } : { to: "/auth" };
+  const slug = (v.chassis ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug } } : { to: "/auth" };
 
   return (
     <Link
