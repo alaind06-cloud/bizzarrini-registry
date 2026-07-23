@@ -66,7 +66,7 @@ const fr: Dict = {
   "auth.msg.resetOk": "Email de réinitialisation envoyé.",
   "auth.msg.genericErr": "Une erreur est survenue.",
   "auth.footer.note": "Accès soumis à validation par l'expert.",
-  "auth.footer.backCatalog": "Retour au catalogue",
+  "auth.footer.backCatalog": "Retour au registre",
 
   // Videos
   "videos.kicker": "Archives audiovisuelles",
