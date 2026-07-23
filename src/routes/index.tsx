@@ -34,8 +34,6 @@ function HomePage() {
   const { user, isValide, loading: authLoading } = useAuth();
   const { t } = useI18n();
   const { m: modelQuery } = Route.useSearch();
-  const { user, isValide, loading: authLoading } = useAuth();
-  const { t } = useI18n();
   const [voitures, setVoitures] = useState<Voiture[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
