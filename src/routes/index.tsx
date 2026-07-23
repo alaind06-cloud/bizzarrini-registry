@@ -143,7 +143,7 @@ function HomePage() {
           {!authLoading && !user && (
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
-              <a href="#catalogue" className="btn-ghost">{t("home.cta.catalog")}</a>
+              <a href="#registre" className="btn-ghost">{t("home.cta.catalog")}</a>
             </div>
           )}
           {user && !isValide && (
