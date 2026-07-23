@@ -40,6 +40,8 @@ const fr: Dict = {
   "home.noResults": "Aucune voiture ne correspond aux filtres.",
   "home.prev": "← Précédent",
   "home.next": "Suivant →",
+  "filters.active": "Filtres actifs :",
+  "filters.remove": "Retirer le filtre {label}",
   "card.noPhoto": "Sans photo",
   "card.membersOnly": "Membres uniquement",
 
@@ -190,6 +192,8 @@ const en: Dict = {
   "home.noResults": "No car matches the filters.",
   "home.prev": "← Previous",
   "home.next": "Next →",
+  "filters.active": "Active filters:",
+  "filters.remove": "Remove filter {label}",
   "card.noPhoto": "No photo",
   "card.membersOnly": "Members only",
 
@@ -333,6 +337,8 @@ const it: Dict = {
   "home.noResults": "Nessuna vettura corrisponde ai filtri.",
   "home.prev": "← Precedente",
   "home.next": "Successivo →",
+  "filters.active": "Filtri attivi:",
+  "filters.remove": "Rimuovi filtro {label}",
   "card.noPhoto": "Senza foto",
   "card.membersOnly": "Solo membri",
 

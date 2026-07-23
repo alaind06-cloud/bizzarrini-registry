@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useI18n, type Lang } from "@/lib/i18n";
+import { FilterPills, type ActivePill } from "@/components/FilterPills";
 
 const CANONICAL = "https://bizzarrini-registry.lovable.app/giotto-bizzarrini";
 
@@ -86,10 +87,19 @@ export const Route = createFileRoute("/giotto-bizzarrini")({
 function GiottoPage() {
   const { lang, t } = useI18n();
   const { m: currentM, d: currentD, q: currentQ } = Route.useSearch();
+  const navigate = useNavigate({ from: "/giotto-bizzarrini" });
   const backSearch: { m?: string; d?: string; q?: string } = {};
   if (currentM) backSearch.m = currentM;
   if (currentD) backSearch.d = currentD;
   if (currentQ) backSearch.q = currentQ;
+
+  const clear = (key: "m" | "d" | "q") =>
+    navigate({ search: (prev: GiottoSearch) => ({ ...prev, [key]: undefined }), replace: true });
+
+  const activePills: ActivePill[] = [];
+  if (currentM) activePills.push({ key: "m", label: t("home.filter.model"), value: currentM, onRemove: () => clear("m") });
+  if (currentD) activePills.push({ key: "d", label: t("home.filter.decade"), value: `${currentD}s`, onRemove: () => clear("d") });
+  if (currentQ) activePills.push({ key: "q", label: t("home.filter.search"), value: currentQ, onRemove: () => clear("q") });
 
   const content = COPY[lang];
 
@@ -106,6 +116,10 @@ function GiottoPage() {
           </p>
         </div>
       </section>
+
+      <FilterPills pills={activePills} />
+
+
 
       <article className="container-page py-12 md:py-16 grid gap-12 lg:grid-cols-[1fr_320px] items-start">
         <div className="prose-invert max-w-3xl space-y-6 text-foreground/90 leading-relaxed">

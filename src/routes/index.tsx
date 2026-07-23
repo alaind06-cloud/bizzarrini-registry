@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
+import { FilterPills, type ActivePill } from "@/components/FilterPills";
 
 type RegisterSearch = { m?: string; d?: string; q?: string };
 
@@ -97,7 +98,45 @@ function HomePage() {
     });
   }, [voitures, modele, annee, q, modelQuery]);
 
+  const clearM = () =>
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, m: undefined }), replace: true });
+
+  const activePills: ActivePill[] = [];
+  if (modele !== "all") {
+    activePills.push({
+      key: "modele",
+      label: t("home.filter.model"),
+      value: modele,
+      onRemove: () => setModele("all"),
+    });
+  }
+  if (modelQuery) {
+    activePills.push({
+      key: "m",
+      label: t("home.filter.model"),
+      value: modelQuery,
+      onRemove: clearM,
+    });
+  }
+  if (annee !== "all") {
+    activePills.push({
+      key: "annee",
+      label: t("home.filter.decade"),
+      value: `${annee}s`,
+      onRemove: () => setAnnee("all"),
+    });
+  }
+  if (q.trim()) {
+    activePills.push({
+      key: "q",
+      label: t("home.filter.search"),
+      value: q.trim(),
+      onRemove: () => setQ(""),
+    });
+  }
+
   useEffect(() => setPage(1), [modele, annee, q, modelQuery]);
+
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -212,6 +251,7 @@ function HomePage() {
             <input id="filter-search" className="field" placeholder={t("home.filter.searchPlaceholder")} value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
         </div>
+        <FilterPills pills={activePills} />
       </section>
 
       <section className="container-page py-10">
