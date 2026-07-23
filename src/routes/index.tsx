@@ -213,6 +213,7 @@ function HomePage() {
             <input id="filter-search" className="field" placeholder={t("home.filter.searchPlaceholder")} value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
         </div>
+        <FilterPills pills={activePills} />
       </section>
 
       <section className="container-page py-10">
