@@ -27,7 +27,7 @@ function NotFoundComponent() {
             La page recherchée n'existe pas ou a été déplacée.
           </p>
           <div className="mt-6">
-            <Link to="/" className="btn-brand">Retour au catalogue</Link>
+            <Link to="/" className="btn-brand">Retour au registre</Link>
           </div>
         </div>
       </div>
