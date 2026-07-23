@@ -46,9 +46,10 @@ function HomePage() {
   const q = qParam ?? "";
 
   const setAnnee = (v: string) =>
-    navigate({ search: (prev) => ({ ...prev, d: v === "all" ? undefined : v }), replace: true });
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, d: v === "all" ? undefined : v }), replace: true });
   const setQ = (v: string) =>
-    navigate({ search: (prev) => ({ ...prev, q: v.trim() ? v : undefined }), replace: true });
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, q: v.trim() ? v : undefined }), replace: true });
+
 
   const [page, setPage] = useState(1);
 
