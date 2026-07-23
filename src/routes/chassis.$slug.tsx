@@ -181,16 +181,24 @@ function CarDetail() {
         <div className="flex flex-wrap items-center justify-between gap-4 mt-6 md:mt-10 mb-8">
           <h2 className="font-display text-2xl md:text-3xl">{t("car.history")}</h2>
           {description && description.trim() && (
-            <div className="inline-flex border border-border rounded-sm overflow-hidden text-xs">
+            <div
+              role="group"
+              aria-label={t("car.specs.title")}
+              className="inline-flex border border-border rounded-sm overflow-hidden text-xs"
+            >
               <button
+                type="button"
                 onClick={() => setMode("summary")}
-                className={`px-3 py-1.5 uppercase tracking-wider ${mode === "summary" ? "bg-brand text-brand-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                aria-pressed={mode === "summary"}
+                className={`px-3 py-1.5 uppercase tracking-wider focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background ${mode === "summary" ? "bg-brand text-brand-foreground" : "text-foreground/80 hover:text-foreground hover:bg-surface-2"}`}
               >
                 {t("car.timeline.summary")}
               </button>
               <button
+                type="button"
                 onClick={() => setMode("full")}
-                className={`px-3 py-1.5 uppercase tracking-wider border-l border-border ${mode === "full" ? "bg-brand text-brand-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                aria-pressed={mode === "full"}
+                className={`px-3 py-1.5 uppercase tracking-wider border-l border-border focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background ${mode === "full" ? "bg-brand text-brand-foreground" : "text-foreground/80 hover:text-foreground hover:bg-surface-2"}`}
               >
                 {t("car.timeline.full")}
               </button>
