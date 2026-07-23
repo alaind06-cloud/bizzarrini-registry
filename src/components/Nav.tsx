@@ -57,6 +57,7 @@ export function Nav() {
 
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/" className={linkCls} activeProps={{ className: activeCls }} activeOptions={{ exact: true }}>{t("nav.home")}</Link>
+          <Link to="/giotto-bizzarrini" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.giotto")}</Link>
           <Link to="/videos" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.videos")}</Link>
           <Link to="/books" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.books")}</Link>
           <Link to="/contact" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.contact")}</Link>
