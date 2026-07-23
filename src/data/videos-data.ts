@@ -10,7 +10,7 @@ export const videos: Video[] = [
   { id: 1, plateforme: "youtube",  url: "https://www.youtube.com/watch?v=obiNne-NxuE", titre: "BZ 2001 Concept Prototype", sousTitre: "Barry Watkins" },
   { id: 2, plateforme: "facebook", url: "https://www.facebook.com/watch/?v=1476704379088316", titre: "Bizzarrini — Archive #1", sousTitre: "Gentlemen Drivers" },
   { id: 3, plateforme: "facebook", url: "https://www.facebook.com/watch/?v=1464301007023113", titre: "Bizzarrini — Archive #2", sousTitre: "Gentlemen Drivers" },
-  { id: 4, plateforme: "facebook", url: "https://www.facebook.com/watch/live/?v=1439534849493651", titre: "Live — Rassemblement", sousTitre: "Gentlemen Drivers" },
+  
   { id: 5, plateforme: "facebook", url: "https://www.facebook.com/watch/?v=1066598510098907", titre: "Bizzarrini — Archive #3", sousTitre: "Gentlemen Drivers" },
   { id: 6, plateforme: "facebook", url: "https://www.facebook.com/watch/?v=809682325727146", titre: "Bizzarrini Racing History", sousTitre: "Bizzarrini Racing" },
   { id: 7, plateforme: "youtube",  url: "https://www.youtube.com/watch?v=skwpOefYSAw", titre: "1965 Bizzarrini A3/C — A Le Mans Underdog Story", sousTitre: "Petrolicious" },
