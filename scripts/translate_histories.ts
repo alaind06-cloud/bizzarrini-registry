@@ -68,7 +68,22 @@ Rules — apply to every translation:
 Return STRICT JSON, no prose, no code fences:
 {"en":"…","fr":"…","it":"…"}`;
 
-async function translate(text: string): Promise<{ en: string; fr: string; it: string }> {
+const BAD_TAIL = /(?:,|;|:|–|-|\band\b|\bet\b|\bed\b|\bat\b|\bin\b|\bon\b|\bof\b|\bthe\b|\bdans\b|\bau\b|\baux\b|\bde\b|\bdu\b|\bà\b|\bnel\b|\bnella\b|\bdi\b|\bda\b)\s*\.?\s*$/i;
+
+function looksTruncated(src: string, out: string): string | null {
+  const s = out.trim();
+  const srcTrim = src.trim();
+  if (!s) return "empty";
+  if (s.length < Math.floor(srcTrim.length * 0.55))
+    return `too short (${s.length} vs ${srcTrim.length})`;
+  if (BAD_TAIL.test(s)) return `bad tail: "...${s.slice(-40)}"`;
+  // N'exige une ponctuation finale que si la source en a une
+  if (/[.!?»"')\]]\s*$/.test(srcTrim) && !/[.!?»"')\]]\s*$/.test(s))
+    return `no final punctuation: "...${s.slice(-40)}"`;
+  return null;
+}
+
+async function translateOnce(text: string): Promise<{ en: string; fr: string; it: string }> {
   const body = {
     model: "openai/gpt-5.5",
     messages: [
@@ -76,7 +91,7 @@ async function translate(text: string): Promise<{ en: string; fr: string; it: st
       {
         role: "user",
         content:
-          `Translate the following Bizzarrini chassis history.\n` +
+          `Translate the following Bizzarrini chassis history IN FULL — do not truncate, do not summarize.\n` +
           `- "en": polished, native-sounding English (rewrite the French-influenced phrasing).\n` +
           `- "fr": natural French.\n` +
           `- "it": natural Italian.\n\n` +
@@ -84,6 +99,7 @@ async function translate(text: string): Promise<{ en: string; fr: string; it: st
       },
     ],
     response_format: { type: "json_object" },
+    max_completion_tokens: 16000,
   };
 
   const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -96,12 +112,35 @@ async function translate(text: string): Promise<{ en: string; fr: string; it: st
   });
   if (!r.ok) throw new Error(`AI ${r.status}: ${await r.text()}`);
   const j = await r.json();
+  const finish = j.choices?.[0]?.finish_reason;
   const content = j.choices?.[0]?.message?.content ?? "";
+  if (finish && finish !== "stop") throw new Error(`finish_reason=${finish}`);
   const parsed = JSON.parse(content);
   if (!parsed.en || !parsed.fr || !parsed.it) {
     throw new Error(`Réponse incomplète: ${content.slice(0, 200)}`);
   }
   return parsed;
+}
+
+async function translate(text: string): Promise<{ en: string; fr: string; it: string }> {
+  let lastErr = "";
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const t = await translateOnce(text);
+      const issues: string[] = [];
+      const en = looksTruncated(text, t.en); if (en) issues.push(`en: ${en}`);
+      const fr = looksTruncated(text, t.fr); if (fr) issues.push(`fr: ${fr}`);
+      const it = looksTruncated(text, t.it); if (it) issues.push(`it: ${it}`);
+      if (issues.length === 0) return t;
+      lastErr = issues.join(" | ");
+      console.warn(`  attempt ${attempt} rejected → ${lastErr}`);
+    } catch (e) {
+      lastErr = (e as Error).message;
+      console.warn(`  attempt ${attempt} error → ${lastErr}`);
+    }
+    await new Promise((r) => setTimeout(r, 600 * attempt));
+  }
+  throw new Error(`translation failed after 3 attempts: ${lastErr}`);
 }
 
 async function update(voiture_id: number, patch: Record<string, string>) {
