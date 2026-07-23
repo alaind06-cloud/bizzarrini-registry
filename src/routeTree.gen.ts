@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VideosRouteImport } from './routes/videos'
-import { Route as ValiderRouteImport } from './routes/valider'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BooksRouteImport } from './routes/books'
@@ -18,17 +17,11 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VoituresIdRouteImport } from './routes/voitures.$id'
-import { Route as ApiValiderRouteImport } from './routes/api/valider'
 import { Route as ApiNotifySignupRouteImport } from './routes/api/notify-signup'
 
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
   path: '/videos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ValiderRoute = ValiderRouteImport.update({
-  id: '/valider',
-  path: '/valider',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -66,11 +59,6 @@ const VoituresIdRoute = VoituresIdRouteImport.update({
   path: '/voitures/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiValiderRoute = ApiValiderRouteImport.update({
-  id: '/api/valider',
-  path: '/api/valider',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiNotifySignupRoute = ApiNotifySignupRouteImport.update({
   id: '/api/notify-signup',
   path: '/api/notify-signup',
@@ -84,10 +72,8 @@ export interface FileRoutesByFullPath {
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/valider': typeof ValiderRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
-  '/api/valider': typeof ApiValiderRoute
   '/voitures/$id': typeof VoituresIdRoute
 }
 export interface FileRoutesByTo {
@@ -97,10 +83,8 @@ export interface FileRoutesByTo {
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/valider': typeof ValiderRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
-  '/api/valider': typeof ApiValiderRoute
   '/voitures/$id': typeof VoituresIdRoute
 }
 export interface FileRoutesById {
@@ -111,10 +95,8 @@ export interface FileRoutesById {
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/valider': typeof ValiderRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
-  '/api/valider': typeof ApiValiderRoute
   '/voitures/$id': typeof VoituresIdRoute
 }
 export interface FileRouteTypes {
@@ -126,10 +108,8 @@ export interface FileRouteTypes {
     | '/books'
     | '/contact'
     | '/reset-password'
-    | '/valider'
     | '/videos'
     | '/api/notify-signup'
-    | '/api/valider'
     | '/voitures/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -139,10 +119,8 @@ export interface FileRouteTypes {
     | '/books'
     | '/contact'
     | '/reset-password'
-    | '/valider'
     | '/videos'
     | '/api/notify-signup'
-    | '/api/valider'
     | '/voitures/$id'
   id:
     | '__root__'
@@ -152,10 +130,8 @@ export interface FileRouteTypes {
     | '/books'
     | '/contact'
     | '/reset-password'
-    | '/valider'
     | '/videos'
     | '/api/notify-signup'
-    | '/api/valider'
     | '/voitures/$id'
   fileRoutesById: FileRoutesById
 }
@@ -166,10 +142,8 @@ export interface RootRouteChildren {
   BooksRoute: typeof BooksRoute
   ContactRoute: typeof ContactRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
-  ValiderRoute: typeof ValiderRoute
   VideosRoute: typeof VideosRoute
   ApiNotifySignupRoute: typeof ApiNotifySignupRoute
-  ApiValiderRoute: typeof ApiValiderRoute
   VoituresIdRoute: typeof VoituresIdRoute
 }
 
@@ -180,13 +154,6 @@ declare module '@tanstack/react-router' {
       path: '/videos'
       fullPath: '/videos'
       preLoaderRoute: typeof VideosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/valider': {
-      id: '/valider'
-      path: '/valider'
-      fullPath: '/valider'
-      preLoaderRoute: typeof ValiderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -238,13 +205,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VoituresIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/valider': {
-      id: '/api/valider'
-      path: '/api/valider'
-      fullPath: '/api/valider'
-      preLoaderRoute: typeof ApiValiderRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/notify-signup': {
       id: '/api/notify-signup'
       path: '/api/notify-signup'
@@ -262,10 +222,8 @@ const rootRouteChildren: RootRouteChildren = {
   BooksRoute: BooksRoute,
   ContactRoute: ContactRoute,
   ResetPasswordRoute: ResetPasswordRoute,
-  ValiderRoute: ValiderRoute,
   VideosRoute: VideosRoute,
   ApiNotifySignupRoute: ApiNotifySignupRoute,
-  ApiValiderRoute: ApiValiderRoute,
   VoituresIdRoute: VoituresIdRoute,
 }
 export const routeTree = rootRouteImport
