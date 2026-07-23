@@ -231,14 +231,29 @@ function CarDetail() {
   );
 }
 
-type SpecKey = "engine" | "color" | "gearbox" | "bodywork" | "registration";
+type SpecKey =
+  | "engine"
+  | "color"
+  | "gearbox"
+  | "bodywork"
+  | "registration"
+  | "interior"
+  | "engineNumber"
+  | "gearboxNumber"
+  | "coachbuilder"
+  | "condition";
 
 const SPEC_PATTERNS: Record<SpecKey, RegExp[]> = {
   engine: [/^\s*(?:engine|moteur|motore)\s*[:\-–]\s*(.+)$/im],
-  color: [/^\s*(?:colou?r|couleur|colore)\s*[:\-–]\s*(.+)$/im],
+  color: [/^\s*(?:original\s+colou?r|colou?r|couleur(?:\s+d['']origine)?|colore(?:\s+originale)?)\s*[:\-–]\s*(.+)$/im],
   gearbox: [/^\s*(?:gearbox|transmission|boi?te(?:\s+de\s+vitesses?)?|cambio)\s*[:\-–]\s*(.+)$/im],
   bodywork: [/^\s*(?:body(?:work)?|carrosserie|carrozzeria)\s*[:\-–]\s*(.+)$/im],
   registration: [/^\s*(?:reg(?:istration)?|immatriculation|targa)\s*[:\-–]?\s*(.+)$/im],
+  interior: [/^\s*(?:interior|int[ée]rieur|interni)\s*[:\-–]\s*(.+)$/im],
+  engineNumber: [/^\s*(?:engine\s*(?:no\.?|number|n[°º]?)|n[°º]?\s*moteur|motore\s*n[°º]?|n[°º]?\s*motore)\s*[:\-–]?\s*(.+)$/im],
+  gearboxNumber: [/^\s*(?:gearbox\s*(?:no\.?|number|n[°º]?)|n[°º]?\s*bo[îi]te|cambio\s*n[°º]?|n[°º]?\s*cambio)\s*[:\-–]?\s*(.+)$/im],
+  coachbuilder: [/^\s*(?:coachbuilder|carrossier|carrozziere)\s*[:\-–]\s*(.+)$/im],
+  condition: [/^\s*(?:condition|[ée]tat|stato)\s*[:\-–]\s*(.+)$/im],
 };
 
 function extractSpecs(text: string): Partial<Record<SpecKey, string>> {
