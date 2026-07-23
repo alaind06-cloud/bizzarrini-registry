@@ -254,35 +254,46 @@ function parseHistory(description: string): TimelineEntry[] {
   return entries.length > 0 ? entries : [];
 }
 
+function pickDescription(d: VoitureDetail | null, lang: Lang): string | null {
+  if (!d) return null;
+  const primary = lang === "fr" ? d.description_fr : lang === "it" ? d.description_it : d.description_en;
+  return primary ?? d.description_en ?? d.description ?? null;
+}
+
 function HistoryTimeline({
   description,
   modele,
   annee,
   chassis,
+  lang,
 }: {
   description?: string | null;
   modele?: string | null;
   annee?: number | null;
   chassis?: string | null;
+  lang: Lang;
 }) {
   const entries = description?.trim() ? parseHistory(description) : [];
 
   if (entries.length === 0) {
+    const fallback = {
+      fr: "L'historique détaillé de ce châssis est en cours de compilation par le registre. Si vous détenez des documents, photos d'époque ou informations de provenance, contactez l'expert via la page Contact.",
+      en: "The detailed history of this chassis is currently being compiled by the register. If you hold documents, period photographs, or provenance information, please contact the expert via the Contact page.",
+      it: "La storia dettagliata di questo telaio è in fase di compilazione da parte del registro. Se possiedi documenti, fotografie d'epoca o informazioni di provenienza, contatta l'esperto tramite la pagina Contatti.",
+    }[lang];
+    const chassisLabel = lang === "it" ? "telaio" : lang === "en" ? "chassis" : "châssis";
     return (
       <div className="max-w-3xl border-l-2 border-brand/60 pl-5 py-2 text-foreground/80 leading-relaxed">
         <p>
           {modele ?? "Bizzarrini"}
           {annee ? ` · ${annee}` : ""}
-          {chassis ? ` · châssis ${chassis}` : ""}.
+          {chassis ? ` · ${chassisLabel} ${chassis}` : ""}.
         </p>
-        <p className="mt-3 text-sm text-muted-foreground italic">
-          L'historique détaillé de ce châssis est en cours de compilation par le registre.
-          Si vous détenez des documents, photos d'époque ou informations de provenance,
-          contactez l'expert via la page Contact.
-        </p>
+        <p className="mt-3 text-sm text-muted-foreground italic">{fallback}</p>
       </div>
     );
   }
+
 
   return (
     <div className="relative max-w-4xl">
