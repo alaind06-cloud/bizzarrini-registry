@@ -158,9 +158,11 @@ function HomePage() {
               {heroCovers.map((_, i) => (
                 <button
                   key={i}
+                  type="button"
                   aria-label={`Image ${i + 1}`}
+                  aria-current={i === heroIdx ? "true" : undefined}
                   onClick={() => setHeroIdx(i)}
-                  className={`h-0.5 transition-all duration-500 ${
+                  className={`h-1 rounded-sm transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                     i === heroIdx ? "w-10 bg-brand" : "w-6 bg-foreground/30 hover:bg-foreground/60"
                   }`}
                 />
@@ -173,22 +175,22 @@ function HomePage() {
       <section id="catalogue" className="border-b border-border bg-surface/40">
         <div className="container-page py-6 grid gap-4 md:grid-cols-[1fr_1fr_2fr] items-end">
           <div>
-            <label className="label-field">{t("home.filter.model")}</label>
-            <select className="field" value={modele} onChange={(e) => setModele(e.target.value)}>
+            <label htmlFor="filter-model" className="label-field">{t("home.filter.model")}</label>
+            <select id="filter-model" className="field" value={modele} onChange={(e) => setModele(e.target.value)}>
               <option value="all">{t("home.filter.allModels")}</option>
               {modeles.map((m) => <option key={m} value={m}>{m}</option>)}
             </select>
           </div>
           <div>
-            <label className="label-field">{t("home.filter.decade")}</label>
-            <select className="field" value={annee} onChange={(e) => setAnnee(e.target.value)}>
+            <label htmlFor="filter-decade" className="label-field">{t("home.filter.decade")}</label>
+            <select id="filter-decade" className="field" value={annee} onChange={(e) => setAnnee(e.target.value)}>
               <option value="all">{t("home.filter.allDecades")}</option>
               {decennies.map((d) => <option key={d} value={d}>{d}s</option>)}
             </select>
           </div>
           <div>
-            <label className="label-field">{t("home.filter.search")}</label>
-            <input className="field" placeholder={t("home.filter.searchPlaceholder")} value={q} onChange={(e) => setQ(e.target.value)} />
+            <label htmlFor="filter-search" className="label-field">{t("home.filter.search")}</label>
+            <input id="filter-search" className="field" placeholder={t("home.filter.searchPlaceholder")} value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
         </div>
       </section>

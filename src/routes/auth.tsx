@@ -88,36 +88,36 @@ function AuthPage() {
               <>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="label-field">{t("auth.field.prenom")}</label>
-                    <input className="field" value={prenom} onChange={(e) => setPrenom(e.target.value)} required maxLength={80} />
+                    <label htmlFor="auth-prenom" className="label-field">{t("auth.field.prenom")}</label>
+                    <input id="auth-prenom" autoComplete="given-name" className="field" value={prenom} onChange={(e) => setPrenom(e.target.value)} required maxLength={80} />
                   </div>
                   <div>
-                    <label className="label-field">{t("auth.field.nom")}</label>
-                    <input className="field" value={nom} onChange={(e) => setNom(e.target.value)} required maxLength={80} />
+                    <label htmlFor="auth-nom" className="label-field">{t("auth.field.nom")}</label>
+                    <input id="auth-nom" autoComplete="family-name" className="field" value={nom} onChange={(e) => setNom(e.target.value)} required maxLength={80} />
                   </div>
                 </div>
                 <div>
-                  <label className="label-field">{t("auth.field.telephone")}</label>
-                  <input className="field" type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} maxLength={40} />
+                  <label htmlFor="auth-tel" className="label-field">{t("auth.field.telephone")}</label>
+                  <input id="auth-tel" autoComplete="tel" className="field" type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} maxLength={40} />
                 </div>
                 <div>
-                  <label className="label-field">
+                  <label htmlFor="auth-raison" className="label-field">
                     {t("auth.field.raison")} <span className="text-muted-foreground">{t("auth.field.optional")}</span>
                   </label>
-                  <textarea className="field min-h-[80px]" value={raison} onChange={(e) => setRaison(e.target.value)} maxLength={500} placeholder={t("auth.field.raisonPlaceholder")} />
+                  <textarea id="auth-raison" className="field min-h-[80px]" value={raison} onChange={(e) => setRaison(e.target.value)} maxLength={500} placeholder={t("auth.field.raisonPlaceholder")} />
                 </div>
               </>
             )}
 
             <div>
-              <label className="label-field">{t("auth.field.email")}</label>
-              <input className="field" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required maxLength={255} />
+              <label htmlFor="auth-email" className="label-field">{t("auth.field.email")}</label>
+              <input id="auth-email" autoComplete="email" className="field" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required maxLength={255} />
             </div>
 
             {mode !== "forgot" && (
               <div>
-                <label className="label-field">{t("auth.field.password")}</label>
-                <input className="field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} maxLength={128} />
+                <label htmlFor="auth-password" className="label-field">{t("auth.field.password")}</label>
+                <input id="auth-password" autoComplete={mode === "signup" ? "new-password" : "current-password"} className="field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} maxLength={128} />
               </div>
             )}
 
