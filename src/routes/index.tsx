@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
+import { FilterPills, type ActivePill } from "@/components/FilterPills";
 
 type RegisterSearch = { m?: string; d?: string; q?: string };
 
