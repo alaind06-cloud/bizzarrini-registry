@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VideosRouteImport } from './routes/videos'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as GiottoBizzarriniRouteImport } from './routes/giotto-bizzarrini'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BooksRouteImport } from './routes/books'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -28,6 +29,11 @@ const VideosRoute = VideosRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GiottoBizzarriniRoute = GiottoBizzarriniRouteImport.update({
+  id: '/giotto-bizzarrini',
+  path: '/giotto-bizzarrini',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
+  '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
   '/reset-password': typeof ResetPasswordRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
+  '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
   '/reset-password': typeof ResetPasswordRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
+  '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
   '/reset-password': typeof ResetPasswordRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/books'
     | '/contact'
+    | '/giotto-bizzarrini'
     | '/reset-password'
     | '/videos'
     | '/api/notify-signup'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/books'
     | '/contact'
+    | '/giotto-bizzarrini'
     | '/reset-password'
     | '/videos'
     | '/api/notify-signup'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/books'
     | '/contact'
+    | '/giotto-bizzarrini'
     | '/reset-password'
     | '/videos'
     | '/api/notify-signup'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BooksRoute: typeof BooksRoute
   ContactRoute: typeof ContactRoute
+  GiottoBizzarriniRoute: typeof GiottoBizzarriniRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   VideosRoute: typeof VideosRoute
   ApiNotifySignupRoute: typeof ApiNotifySignupRoute
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/giotto-bizzarrini': {
+      id: '/giotto-bizzarrini'
+      path: '/giotto-bizzarrini'
+      fullPath: '/giotto-bizzarrini'
+      preLoaderRoute: typeof GiottoBizzarriniRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -241,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BooksRoute: BooksRoute,
   ContactRoute: ContactRoute,
+  GiottoBizzarriniRoute: GiottoBizzarriniRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   VideosRoute: VideosRoute,
   ApiNotifySignupRoute: ApiNotifySignupRoute,

@@ -4,7 +4,12 @@ import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 
+type RegisterSearch = { m?: string };
+
 export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>): RegisterSearch => ({
+    m: typeof search.m === "string" && search.m.trim() ? search.m.trim() : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Bizzarrini Register - Official Chassis Registry & Provenance | Iso Grifo, A3/C, 5300 GT" },
@@ -28,6 +33,7 @@ const PAGE_SIZE = 24;
 function HomePage() {
   const { user, isValide, loading: authLoading } = useAuth();
   const { t } = useI18n();
+  const { m: modelQuery } = Route.useSearch();
   const [voitures, setVoitures] = useState<Voiture[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
@@ -67,8 +73,10 @@ function HomePage() {
   }, [voitures]);
 
   const filtered = useMemo(() => {
+    const mq = modelQuery?.toLowerCase() ?? "";
     return voitures.filter((v) => {
       if (modele !== "all" && v.modele !== modele) return false;
+      if (mq && !(v.modele ?? "").toLowerCase().includes(mq)) return false;
       if (annee !== "all") {
         const dec = parseInt(annee, 10);
         if (!v.annee || v.annee < dec || v.annee >= dec + 10) return false;
@@ -76,9 +84,9 @@ function HomePage() {
       if (q.trim() && !(v.chassis ?? "").toLowerCase().includes(q.trim().toLowerCase())) return false;
       return true;
     });
-  }, [voitures, modele, annee, q]);
+  }, [voitures, modele, annee, q, modelQuery]);
 
-  useEffect(() => setPage(1), [modele, annee, q]);
+  useEffect(() => setPage(1), [modele, annee, q, modelQuery]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);

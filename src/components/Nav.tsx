@@ -57,6 +57,7 @@ export function Nav() {
 
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/" className={linkCls} activeProps={{ className: activeCls }} activeOptions={{ exact: true }}>{t("nav.home")}</Link>
+          <Link to="/giotto-bizzarrini" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.giotto")}</Link>
           <Link to="/videos" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.videos")}</Link>
           <Link to="/books" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.books")}</Link>
           <Link to="/contact" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.contact")}</Link>
@@ -93,6 +94,7 @@ export function Nav() {
           <div className="container-page flex flex-col gap-1 py-3">
             {[
               { to: "/", label: t("nav.home") },
+              { to: "/giotto-bizzarrini", label: t("nav.giotto") },
               { to: "/videos", label: t("nav.videos") },
               { to: "/books", label: t("nav.books") },
               { to: "/contact", label: t("nav.contact") },
