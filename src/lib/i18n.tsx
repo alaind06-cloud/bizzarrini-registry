@@ -141,6 +141,14 @@ const fr: Dict = {
   "car.loading": "Chargement…",
   "car.history.fallback": "L'historique détaillé de ce châssis est en cours de compilation par le registre. Si vous détenez des documents, photos d'époque ou informations de provenance, contactez l'expert via la page Contact.",
   "car.chassisWord": "châssis",
+  "car.specs.title": "Spécifications",
+  "car.specs.engine": "Moteur",
+  "car.specs.color": "Couleur",
+  "car.specs.gearbox": "Boîte",
+  "car.specs.bodywork": "Carrosserie",
+  "car.specs.registration": "Immatriculation",
+  "car.timeline.summary": "Vue résumée",
+  "car.timeline.full": "Vue complète",
 };
 
 const en: Dict = {
@@ -270,6 +278,14 @@ const en: Dict = {
   "car.loading": "Loading…",
   "car.history.fallback": "The detailed history of this chassis is currently being compiled by the register. If you hold documents, period photographs or provenance information, please contact the expert via the Contact page.",
   "car.chassisWord": "chassis",
+  "car.specs.title": "Specifications",
+  "car.specs.engine": "Engine",
+  "car.specs.color": "Colour",
+  "car.specs.gearbox": "Gearbox",
+  "car.specs.bodywork": "Bodywork",
+  "car.specs.registration": "Registration",
+  "car.timeline.summary": "Summary view",
+  "car.timeline.full": "Full view",
 };
 
 const it: Dict = {
@@ -399,6 +415,14 @@ const it: Dict = {
   "car.loading": "Caricamento…",
   "car.history.fallback": "La storia dettagliata di questo telaio è in fase di compilazione da parte del registro. Se possiedi documenti, fotografie d'epoca o informazioni di provenienza, contatta l'esperto tramite la pagina Contatti.",
   "car.chassisWord": "telaio",
+  "car.specs.title": "Specifiche",
+  "car.specs.engine": "Motore",
+  "car.specs.color": "Colore",
+  "car.specs.gearbox": "Cambio",
+  "car.specs.bodywork": "Carrozzeria",
+  "car.specs.registration": "Targa",
+  "car.timeline.summary": "Vista sintetica",
+  "car.timeline.full": "Vista completa",
 };
 
 const DICTS: Record<Lang, Dict> = { fr, en, it };
