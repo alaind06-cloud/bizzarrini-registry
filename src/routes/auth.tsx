@@ -2,6 +2,7 @@ import { createFileRoute, useRouter, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -19,6 +20,7 @@ function AuthPage() {
   const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const router = useRouter();
   const { refreshProfil } = useAuth();
+  const { t } = useI18n();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,7 +42,7 @@ function AuthPage() {
         await refreshProfil();
         router.navigate({ to: "/" });
       } else if (mode === "signup") {
-        const { data, error } = await supabase.auth.signUp({
+        const { error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -49,41 +51,35 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        // Notifier l'admin. Le trigger DB crée le profil.
-        // Notification email non bloquante — l'inscription réussit quoi qu'il arrive.
         fetch("/api/notify-signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ nom, prenom, email, telephone, raison }),
         }).catch((err) => console.warn("[notify-signup]", err));
-        setMsg({
-          type: "ok",
-          text: "Inscription enregistrée. Un administrateur validera votre accès sous peu.",
-        });
+        setMsg({ type: "ok", text: t("auth.msg.signupOk") });
       } else {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: window.location.origin + "/reset-password",
         });
         if (error) throw error;
-        setMsg({ type: "ok", text: "Email de réinitialisation envoyé." });
+        setMsg({ type: "ok", text: t("auth.msg.resetOk") });
       }
     } catch (e: any) {
-      setMsg({ type: "err", text: e.message ?? "Une erreur est survenue." });
+      setMsg({ type: "err", text: e.message ?? t("auth.msg.genericErr") });
     } finally {
       setBusy(false);
     }
   };
 
+  const title = mode === "login" ? t("auth.title.login") : mode === "signup" ? t("auth.title.signup") : t("auth.title.forgot");
+  const submitLabel = busy ? "…" : mode === "login" ? t("auth.submit.login") : mode === "signup" ? t("auth.submit.signup") : t("auth.submit.forgot");
+
   return (
     <div className="container-page py-12 md:py-20">
       <div className="max-w-md mx-auto">
         <div className="mb-8 text-center">
-          <p className="text-xs uppercase tracking-[0.35em] text-brand">Espace membre</p>
-          <h1 className="mt-3 font-display text-3xl md:text-4xl">
-            {mode === "login" && "Connexion"}
-            {mode === "signup" && "Demande d'accès"}
-            {mode === "forgot" && "Mot de passe oublié"}
-          </h1>
+          <p className="text-xs uppercase tracking-[0.35em] text-brand">{t("auth.kicker")}</p>
+          <h1 className="mt-3 font-display text-3xl md:text-4xl">{title}</h1>
         </div>
 
         <div className="bg-card border border-border p-6 md:p-8">
@@ -92,33 +88,35 @@ function AuthPage() {
               <>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="label-field">Prénom</label>
+                    <label className="label-field">{t("auth.field.prenom")}</label>
                     <input className="field" value={prenom} onChange={(e) => setPrenom(e.target.value)} required maxLength={80} />
                   </div>
                   <div>
-                    <label className="label-field">Nom</label>
+                    <label className="label-field">{t("auth.field.nom")}</label>
                     <input className="field" value={nom} onChange={(e) => setNom(e.target.value)} required maxLength={80} />
                   </div>
                 </div>
                 <div>
-                  <label className="label-field">Téléphone</label>
+                  <label className="label-field">{t("auth.field.telephone")}</label>
                   <input className="field" type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} maxLength={40} />
                 </div>
                 <div>
-                  <label className="label-field">Raison de la demande <span className="text-muted-foreground">(optionnel)</span></label>
-                  <textarea className="field min-h-[80px]" value={raison} onChange={(e) => setRaison(e.target.value)} maxLength={500} placeholder="Propriétaire, passionné, historien…" />
+                  <label className="label-field">
+                    {t("auth.field.raison")} <span className="text-muted-foreground">{t("auth.field.optional")}</span>
+                  </label>
+                  <textarea className="field min-h-[80px]" value={raison} onChange={(e) => setRaison(e.target.value)} maxLength={500} placeholder={t("auth.field.raisonPlaceholder")} />
                 </div>
               </>
             )}
 
             <div>
-              <label className="label-field">Email</label>
+              <label className="label-field">{t("auth.field.email")}</label>
               <input className="field" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required maxLength={255} />
             </div>
 
             {mode !== "forgot" && (
               <div>
-                <label className="label-field">Mot de passe</label>
+                <label className="label-field">{t("auth.field.password")}</label>
                 <input className="field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} maxLength={128} />
               </div>
             )}
@@ -127,37 +125,35 @@ function AuthPage() {
               <p className={`text-sm ${msg.type === "err" ? "text-brand" : "text-foreground"}`}>{msg.text}</p>
             )}
 
-            <button type="submit" disabled={busy} className="btn-brand w-full">
-              {busy ? "…" : mode === "login" ? "Se connecter" : mode === "signup" ? "Créer un compte" : "Envoyer le lien"}
-            </button>
+            <button type="submit" disabled={busy} className="btn-brand w-full">{submitLabel}</button>
           </form>
 
           <div className="mt-6 pt-6 border-t border-border text-sm text-center space-y-2">
             {mode === "login" && (
               <>
-                <p>Pas encore membre ?{" "}
+                <p>{t("auth.notMember")}{" "}
                   <button className="text-brand hover:underline" onClick={() => { setMode("signup"); setMsg(null); }}>
-                    Demander l'accès
+                    {t("auth.requestAccess")}
                   </button>
                 </p>
                 <p>
                   <button className="text-muted-foreground hover:text-foreground" onClick={() => { setMode("forgot"); setMsg(null); }}>
-                    Mot de passe oublié ?
+                    {t("auth.forgotPassword")}
                   </button>
                 </p>
               </>
             )}
             {mode !== "login" && (
               <button className="text-brand hover:underline" onClick={() => { setMode("login"); setMsg(null); }}>
-                ← Retour à la connexion
+                {t("auth.backToLogin")}
               </button>
             )}
           </div>
         </div>
 
         <p className="mt-6 text-xs text-center text-muted-foreground">
-          Accès soumis à validation par l'expert.{" "}
-          <Link to="/" className="underline hover:text-foreground">Retour au catalogue</Link>
+          {t("auth.footer.note")}{" "}
+          <Link to="/" className="underline hover:text-foreground">{t("auth.footer.backCatalog")}</Link>
         </p>
       </div>
     </div>
