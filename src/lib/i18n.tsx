@@ -214,7 +214,7 @@ const en: Dict = {
   "auth.msg.resetOk": "Reset email sent.",
   "auth.msg.genericErr": "An error occurred.",
   "auth.footer.note": "Access subject to approval by the expert.",
-  "auth.footer.backCatalog": "Back to catalogue",
+  "auth.footer.backCatalog": "Back to register",
 
   "videos.kicker": "Audiovisual archives",
   "videos.title": "Videos",
