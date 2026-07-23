@@ -1,14 +1,16 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 
-type RegisterSearch = { m?: string };
+type RegisterSearch = { m?: string; d?: string; q?: string };
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): RegisterSearch => ({
     m: typeof search.m === "string" && search.m.trim() ? search.m.trim() : undefined,
+    d: typeof search.d === "string" && search.d.trim() ? search.d.trim() : undefined,
+    q: typeof search.q === "string" && search.q.trim() ? search.q.trim() : undefined,
   }),
   head: () => ({
     meta: [
@@ -33,18 +35,27 @@ const PAGE_SIZE = 24;
 function HomePage() {
   const { user, isValide, loading: authLoading } = useAuth();
   const { t } = useI18n();
-  const { m: modelQuery } = Route.useSearch();
+  const { m: modelQuery, d: decadeParam, q: qParam } = Route.useSearch();
+  const navigate = useNavigate({ from: "/" });
   const [voitures, setVoitures] = useState<Voiture[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
   const [modele, setModele] = useState<string>("all");
-  const [annee, setAnnee] = useState<string>("all");
-  const [q, setQ] = useState("");
+  const annee = decadeParam ?? "all";
+  const q = qParam ?? "";
+
+  const setAnnee = (v: string) =>
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, d: v === "all" ? undefined : v }), replace: true });
+  const setQ = (v: string) =>
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, q: v.trim() ? v : undefined }), replace: true });
+
+
   const [page, setPage] = useState(1);
 
   useEffect(() => {
     (async () => {
+
       setLoading(true);
       const { data, error } = await supabase
         .from("voitures")
