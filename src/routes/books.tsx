@@ -8,9 +8,9 @@ export const Route = createFileRoute("/books")({
       { title: "Livres — Bizzarrini Register" },
       {
         name: "description",
-        content: "Les 11 ouvrages de référence signés Philippe Olczyk : Bizzarrini, Ferrari, Lancia, Porsche, Ford, Alfa Romeo, De Tomaso.",
+        content: "Les 11 ouvrages de référence signés Lucas Bizzarrini : Bizzarrini, Ferrari, Lancia, Porsche, Ford, Alfa Romeo, De Tomaso.",
       },
-      { property: "og:title", content: "Livres — Philippe Olczyk" },
+      { property: "og:title", content: "Livres — Lucas Bizzarrini" },
       { property: "og:description", content: "Bibliographie de référence sur les voitures de course historiques." },
     ],
   }),
@@ -42,7 +42,7 @@ function BooksPage() {
               </span>
             </div>
             <h2 className="mt-4 font-display text-base leading-snug">{b.titre}</h2>
-            <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">Philippe Olczyk</p>
+            <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">Lucas Bizzarrini</p>
             {b.lienAchat && (
               <a
                 href={b.lienAchat}
