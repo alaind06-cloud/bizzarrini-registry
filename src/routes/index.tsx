@@ -158,9 +158,11 @@ function HomePage() {
               {heroCovers.map((_, i) => (
                 <button
                   key={i}
+                  type="button"
                   aria-label={`Image ${i + 1}`}
+                  aria-current={i === heroIdx ? "true" : undefined}
                   onClick={() => setHeroIdx(i)}
-                  className={`h-0.5 transition-all duration-500 ${
+                  className={`h-1 rounded-sm transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                     i === heroIdx ? "w-10 bg-brand" : "w-6 bg-foreground/30 hover:bg-foreground/60"
                   }`}
                 />
