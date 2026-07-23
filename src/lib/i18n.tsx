@@ -356,7 +356,7 @@ const it: Dict = {
   "auth.msg.resetOk": "Email di reimpostazione inviata.",
   "auth.msg.genericErr": "Si è verificato un errore.",
   "auth.footer.note": "Accesso soggetto a validazione da parte dell'esperto.",
-  "auth.footer.backCatalog": "Torna al catalogo",
+  "auth.footer.backCatalog": "Torna al registro",
 
   "videos.kicker": "Archivi audiovisivi",
   "videos.title": "Video",
