@@ -128,7 +128,7 @@ const fr: Dict = {
   "reset.ok": "Mot de passe mis à jour.",
 
   // Voiture detail
-  "car.backCatalog": "← Catalogue",
+  "car.backCatalog": "← Retour au registre",
   "car.chassisLabel": "Châssis",
   "car.history": "Historique",
   "car.gallery": "Galerie",
@@ -270,7 +270,7 @@ const en: Dict = {
   "reset.submit": "Update",
   "reset.ok": "Password updated.",
 
-  "car.backCatalog": "← Catalogue",
+  "car.backCatalog": "← Back to register",
   "car.chassisLabel": "Chassis",
   "car.history": "History",
   "car.gallery": "Gallery",
@@ -412,7 +412,7 @@ const it: Dict = {
   "reset.submit": "Aggiorna",
   "reset.ok": "Password aggiornata.",
 
-  "car.backCatalog": "← Catalogo",
+  "car.backCatalog": "← Torna al registro",
   "car.chassisLabel": "Telaio",
   "car.history": "Storia",
   "car.gallery": "Galleria",
