@@ -4,7 +4,12 @@ import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 
+type RegisterSearch = { m?: string };
+
 export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>): RegisterSearch => ({
+    m: typeof search.m === "string" && search.m.trim() ? search.m.trim() : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Bizzarrini Register - Official Chassis Registry & Provenance | Iso Grifo, A3/C, 5300 GT" },
