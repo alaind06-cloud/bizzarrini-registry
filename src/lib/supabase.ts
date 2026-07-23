@@ -35,6 +35,9 @@ export type Photo = {
 export type VoitureDetail = {
   voiture_id: string;
   description: string | null;
+  description_en: string | null;
+  description_fr: string | null;
+  description_it: string | null;
 };
 
 export type Profil = {
