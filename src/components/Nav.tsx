@@ -94,6 +94,7 @@ export function Nav() {
           <div className="container-page flex flex-col gap-1 py-3">
             {[
               { to: "/", label: t("nav.home") },
+              { to: "/giotto-bizzarrini", label: t("nav.giotto") },
               { to: "/videos", label: t("nav.videos") },
               { to: "/books", label: t("nav.books") },
               { to: "/contact", label: t("nav.contact") },
