@@ -61,8 +61,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
+const fallbackAuth: AuthCtx = {
+  session: null,
+  user: null,
+  profil: null,
+  loading: true,
+  isValide: false,
+  isAdmin: false,
+  refreshProfil: async () => {},
+  signOut: async () => {},
+};
+
 export function useAuth() {
   const ctx = useContext(Ctx);
-  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
-  return ctx;
+  return ctx ?? fallbackAuth;
 }
