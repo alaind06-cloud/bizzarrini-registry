@@ -73,8 +73,10 @@ function HomePage() {
   }, [voitures]);
 
   const filtered = useMemo(() => {
+    const mq = modelQuery?.toLowerCase() ?? "";
     return voitures.filter((v) => {
       if (modele !== "all" && v.modele !== modele) return false;
+      if (mq && !(v.modele ?? "").toLowerCase().includes(mq)) return false;
       if (annee !== "all") {
         const dec = parseInt(annee, 10);
         if (!v.annee || v.annee < dec || v.annee >= dec + 10) return false;
@@ -82,9 +84,9 @@ function HomePage() {
       if (q.trim() && !(v.chassis ?? "").toLowerCase().includes(q.trim().toLowerCase())) return false;
       return true;
     });
-  }, [voitures, modele, annee, q]);
+  }, [voitures, modele, annee, q, modelQuery]);
 
-  useEffect(() => setPage(1), [modele, annee, q]);
+  useEffect(() => setPage(1), [modele, annee, q, modelQuery]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
