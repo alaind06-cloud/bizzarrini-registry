@@ -85,8 +85,11 @@ export const Route = createFileRoute("/giotto-bizzarrini")({
 
 function GiottoPage() {
   const { lang, t } = useI18n();
-  const { m: currentM } = Route.useSearch();
-  const backSearch = currentM ? { m: currentM } : {};
+  const { m: currentM, d: currentD, q: currentQ } = Route.useSearch();
+  const backSearch: { m?: string; d?: string; q?: string } = {};
+  if (currentM) backSearch.m = currentM;
+  if (currentD) backSearch.d = currentD;
+  if (currentQ) backSearch.q = currentQ;
 
   const content = COPY[lang];
 
