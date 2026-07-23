@@ -17,6 +17,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VoituresIdRouteImport } from './routes/voitures.$id'
+import { Route as ChassisSlugRouteImport } from './routes/chassis.$slug'
 import { Route as ApiNotifySignupRouteImport } from './routes/api/notify-signup'
 
 const VideosRoute = VideosRouteImport.update({
@@ -59,6 +60,11 @@ const VoituresIdRoute = VoituresIdRouteImport.update({
   path: '/voitures/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChassisSlugRoute = ChassisSlugRouteImport.update({
+  id: '/chassis/$slug',
+  path: '/chassis/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiNotifySignupRoute = ApiNotifySignupRouteImport.update({
   id: '/api/notify-signup',
   path: '/api/notify-signup',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
+  '/chassis/$slug': typeof ChassisSlugRoute
   '/voitures/$id': typeof VoituresIdRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
+  '/chassis/$slug': typeof ChassisSlugRoute
   '/voitures/$id': typeof VoituresIdRoute
 }
 export interface FileRoutesById {
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
+  '/chassis/$slug': typeof ChassisSlugRoute
   '/voitures/$id': typeof VoituresIdRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/videos'
     | '/api/notify-signup'
+    | '/chassis/$slug'
     | '/voitures/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/videos'
     | '/api/notify-signup'
+    | '/chassis/$slug'
     | '/voitures/$id'
   id:
     | '__root__'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/videos'
     | '/api/notify-signup'
+    | '/chassis/$slug'
     | '/voitures/$id'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   VideosRoute: typeof VideosRoute
   ApiNotifySignupRoute: typeof ApiNotifySignupRoute
+  ChassisSlugRoute: typeof ChassisSlugRoute
   VoituresIdRoute: typeof VoituresIdRoute
 }
 
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VoituresIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chassis/$slug': {
+      id: '/chassis/$slug'
+      path: '/chassis/$slug'
+      fullPath: '/chassis/$slug'
+      preLoaderRoute: typeof ChassisSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/notify-signup': {
       id: '/api/notify-signup'
       path: '/api/notify-signup'
@@ -224,6 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   VideosRoute: VideosRoute,
   ApiNotifySignupRoute: ApiNotifySignupRoute,
+  ChassisSlugRoute: ChassisSlugRoute,
   VoituresIdRoute: VoituresIdRoute,
 }
 export const routeTree = rootRouteImport
