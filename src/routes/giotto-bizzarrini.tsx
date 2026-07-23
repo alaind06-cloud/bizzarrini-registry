@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useI18n, type Lang } from "@/lib/i18n";
+import { FilterPills, type ActivePill } from "@/components/FilterPills";
 
 const CANONICAL = "https://bizzarrini-registry.lovable.app/giotto-bizzarrini";
 
