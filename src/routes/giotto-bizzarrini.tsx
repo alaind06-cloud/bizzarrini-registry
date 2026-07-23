@@ -46,11 +46,13 @@ const JSONLD = {
   ],
 };
 
-type GiottoSearch = { m?: string };
+type GiottoSearch = { m?: string; d?: string; q?: string };
 
 export const Route = createFileRoute("/giotto-bizzarrini")({
   validateSearch: (search: Record<string, unknown>): GiottoSearch => ({
     m: typeof search.m === "string" && search.m.trim() ? search.m.trim() : undefined,
+    d: typeof search.d === "string" && search.d.trim() ? search.d.trim() : undefined,
+    q: typeof search.q === "string" && search.q.trim() ? search.q.trim() : undefined,
   }),
   head: () => ({
     meta: [
