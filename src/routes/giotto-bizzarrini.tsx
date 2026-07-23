@@ -150,7 +150,7 @@ function GiottoPage() {
             </li>
           </ul>
           <div className="mt-6 pt-6 border-t border-border">
-            <Link to="/" hash="registre" className="btn-brand w-full text-center">
+            <Link to="/" search={backSearch} hash="registre" className="btn-brand w-full text-center">
               {t("home.cta.catalog")}
             </Link>
           </div>
