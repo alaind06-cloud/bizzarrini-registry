@@ -337,6 +337,8 @@ const it: Dict = {
   "home.noResults": "Nessuna vettura corrisponde ai filtri.",
   "home.prev": "← Precedente",
   "home.next": "Successivo →",
+  "filters.active": "Filtri attivi:",
+  "filters.remove": "Rimuovi filtro {label}",
   "card.noPhoto": "Senza foto",
   "card.membersOnly": "Solo membri",
 
