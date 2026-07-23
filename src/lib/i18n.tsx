@@ -22,7 +22,7 @@ const fr: Dict = {
   "home.kicker": "Registro ufficiale",
   "home.title.a": "Le registre officiel",
   "home.title.b": "des",
-  "home.lead": "Chaque châssis authentifié, documenté et archivé par Philippe Olczyk. 195 voitures d'exception, galerie complète et historique réservés aux membres validés.",
+  "home.lead": "Près de trois décennies à rassembler des informations sur les modèles Bizzarrini et leur histoire, partagées avec les passionnés. Seuls les faits nous intéressent, pour vous offrir le registre Bizzarrini le plus honnête possible. N'hésitez pas à contribuer.",
   "home.cta.request": "Demander l'accès",
   "home.cta.catalog": "Voir le catalogue",
   "home.pending": "Votre inscription est en attente de validation.",
