@@ -158,7 +158,7 @@ const en: Dict = {
   "home.kicker": "Official register",
   "home.title.a": "The official register",
   "home.title.b": "of",
-  "home.lead": "Every chassis authenticated, documented and archived by Philippe Olczyk. 195 exceptional cars — full gallery and history reserved for approved members.",
+  "home.lead": "Nearly three decades gathering information on the Bizzarrini model and its history, shared with fellow enthusiasts. We are only interested in the facts, to bring you the most honest Bizzarrini register. Feel free to contribute.",
   "home.cta.request": "Request access",
   "home.cta.catalog": "Browse catalogue",
   "home.pending": "Your account is awaiting approval.",
