@@ -251,7 +251,16 @@ function HomePage() {
             <input id="filter-search" className="field" placeholder={t("home.filter.searchPlaceholder")} value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
         </div>
-        <FilterPills pills={activePills} />
+        <div className="container-page pb-4 flex flex-wrap items-center justify-between gap-3">
+          <FilterPills pills={activePills} />
+          <p
+            className="text-xs uppercase tracking-widest text-muted-foreground ml-auto"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {loading ? "…" : t("home.chassisCount", { n: filtered.length })}
+          </p>
+        </div>
       </section>
 
       <section className="container-page py-10">
