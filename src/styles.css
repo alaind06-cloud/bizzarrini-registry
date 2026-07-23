@@ -166,10 +166,12 @@
   border-radius: var(--radius);
   padding: 0.6rem 0.85rem;
   font-size: 0.9rem;
-  outline: none;
-  transition: border-color 0.15s ease;
-  &:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: border-color 0.15s ease, outline-color 0.15s ease;
+  &:focus-visible {
     border-color: var(--color-brand);
+    outline-color: var(--color-brand);
   }
   &::placeholder {
     color: var(--color-muted-foreground);
