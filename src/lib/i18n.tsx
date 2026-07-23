@@ -1,0 +1,453 @@
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+
+export type Lang = "fr" | "en" | "it";
+const LANG_KEY = "bz_lang";
+
+type Dict = Record<string, string>;
+
+const fr: Dict = {
+  // Nav / footer
+  "nav.home": "Accueil",
+  "nav.videos": "Vidéos",
+  "nav.books": "Livres",
+  "nav.contact": "Contact",
+  "nav.admin": "Admin",
+  "nav.signin": "Se connecter",
+  "nav.logout": "Déconnexion",
+  "nav.menu": "Menu",
+  "footer.rights": "© {year} Bizzarrini Register — Philippe Olczyk",
+  "footer.tagline": "Registre officiel des châssis authentifiés",
+
+  // Home
+  "home.kicker": "Registro ufficiale",
+  "home.title.a": "Le registre officiel",
+  "home.title.b": "des",
+  "home.lead": "Chaque châssis authentifié, documenté et archivé par Philippe Olczyk. 195 voitures d'exception, galerie complète et historique réservés aux membres validés.",
+  "home.cta.request": "Demander l'accès",
+  "home.cta.catalog": "Voir le catalogue",
+  "home.pending": "Votre inscription est en attente de validation.",
+  "home.filter.model": "Modèle",
+  "home.filter.allModels": "Tous les modèles",
+  "home.filter.decade": "Décennie",
+  "home.filter.allDecades": "Toutes",
+  "home.filter.search": "Recherche par châssis",
+  "home.filter.searchPlaceholder": "Ex. B*0222, IA3C…",
+  "home.loading": "Chargement…",
+  "home.chassisCount": "{n} châssis",
+  "home.pageOf": "Page {p} / {t}",
+  "home.errorLoading": "Erreur de chargement : {msg}",
+  "home.noResults": "Aucune voiture ne correspond aux filtres.",
+  "home.prev": "← Précédent",
+  "home.next": "Suivant →",
+  "card.noPhoto": "Sans photo",
+  "card.membersOnly": "Membres uniquement",
+
+  // Auth
+  "auth.kicker": "Espace membre",
+  "auth.title.login": "Connexion",
+  "auth.title.signup": "Demande d'accès",
+  "auth.title.forgot": "Mot de passe oublié",
+  "auth.field.prenom": "Prénom",
+  "auth.field.nom": "Nom",
+  "auth.field.telephone": "Téléphone",
+  "auth.field.raison": "Raison de la demande",
+  "auth.field.optional": "(optionnel)",
+  "auth.field.raisonPlaceholder": "Propriétaire, passionné, historien…",
+  "auth.field.email": "Email",
+  "auth.field.password": "Mot de passe",
+  "auth.submit.login": "Se connecter",
+  "auth.submit.signup": "Créer un compte",
+  "auth.submit.forgot": "Envoyer le lien",
+  "auth.notMember": "Pas encore membre ?",
+  "auth.requestAccess": "Demander l'accès",
+  "auth.forgotPassword": "Mot de passe oublié ?",
+  "auth.backToLogin": "← Retour à la connexion",
+  "auth.msg.signupOk": "Inscription enregistrée. Un administrateur validera votre accès sous peu.",
+  "auth.msg.resetOk": "Email de réinitialisation envoyé.",
+  "auth.msg.genericErr": "Une erreur est survenue.",
+  "auth.footer.note": "Accès soumis à validation par l'expert.",
+  "auth.footer.backCatalog": "Retour au catalogue",
+
+  // Videos
+  "videos.kicker": "Archives audiovisuelles",
+  "videos.title": "Vidéos",
+  "videos.lead": "Sélection de reportages, essais et courses documentant l'histoire des Bizzarrini.",
+  "videos.unsupported": "Format non supporté",
+
+  // Books
+  "books.kicker": "Bibliographie",
+  "books.title": "Livres",
+  "books.lead": "Les ouvrages de référence publiés par Philippe Olczyk sur les grandes voitures de course.",
+  "books.buy": "Acheter →",
+
+  // Contact
+  "contact.kicker": "Nous écrire",
+  "contact.title": "Contact",
+  "contact.lead": "Pour toute demande d'authentification, d'ajout d'un châssis au registre, ou d'expertise sur une Bizzarrini, écrivez-nous.",
+  "contact.expert": "Expert",
+  "contact.expertName": "Philippe Olczyk",
+  "contact.expertSubtitle": "Registre officiel Bizzarrini",
+  "contact.response": "Réponse",
+  "contact.responseValue": "Sous 48 h ouvrées",
+  "contact.subject": "Objet",
+  "contact.subjectValue": "Authentification · Ajout de châssis · Expertise",
+  "contact.sentTitle": "Message envoyé",
+  "contact.sentText": "Nous vous répondrons dans les meilleurs délais.",
+  "contact.field.nom": "Nom",
+  "contact.field.email": "Email",
+  "contact.field.message": "Message",
+  "contact.submit": "Envoyer",
+  "contact.err.nom": "Nom requis",
+  "contact.err.email": "Email invalide",
+  "contact.err.message": "Message trop court",
+
+  // Admin
+  "admin.kicker": "Administration",
+  "admin.title": "Membres",
+  "admin.tab.enAttente": "En attente",
+  "admin.tab.valide": "Validés",
+  "admin.tab.refuse": "Refusés",
+  "admin.empty": "Aucun membre dans cette catégorie.",
+  "admin.col.name": "Nom",
+  "admin.col.phone": "Téléphone",
+  "admin.col.status": "Statut",
+  "admin.col.actions": "Actions",
+  "admin.action.validate": "Valider",
+  "admin.action.refuse": "Refuser",
+  "admin.denied": "Accès refusé",
+  "admin.deniedText": "Cette page est réservée aux administrateurs.",
+  "admin.back": "Retour",
+  "admin.status.en_attente": "En attente",
+  "admin.status.valide": "Validé",
+  "admin.status.refuse": "Refusé",
+
+  // Reset password
+  "reset.title": "Nouveau mot de passe",
+  "reset.field": "Nouveau mot de passe",
+  "reset.submit": "Mettre à jour",
+  "reset.ok": "Mot de passe mis à jour.",
+
+  // Voiture detail
+  "car.backCatalog": "← Catalogue",
+  "car.chassisLabel": "Châssis",
+  "car.history": "Historique",
+  "car.gallery": "Galerie",
+  "car.photos": "photos",
+  "car.notFound": "Voiture introuvable",
+  "car.notFoundText": "Cette fiche n'existe pas.",
+  "car.access.reserved": "Accès réservé",
+  "car.access.pending": "Votre inscription est en attente de validation par l'expert.",
+  "car.access.back": "Retour au catalogue",
+  "car.loading": "Chargement…",
+  "car.history.fallback": "L'historique détaillé de ce châssis est en cours de compilation par le registre. Si vous détenez des documents, photos d'époque ou informations de provenance, contactez l'expert via la page Contact.",
+  "car.chassisWord": "châssis",
+};
+
+const en: Dict = {
+  "nav.home": "Home",
+  "nav.videos": "Videos",
+  "nav.books": "Books",
+  "nav.contact": "Contact",
+  "nav.admin": "Admin",
+  "nav.signin": "Sign in",
+  "nav.logout": "Logout",
+  "nav.menu": "Menu",
+  "footer.rights": "© {year} Bizzarrini Register — Philippe Olczyk",
+  "footer.tagline": "Authenticated chassis registry",
+
+  "home.kicker": "Official register",
+  "home.title.a": "The official register",
+  "home.title.b": "of",
+  "home.lead": "Every chassis authenticated, documented and archived by Philippe Olczyk. 195 exceptional cars — full gallery and history reserved for approved members.",
+  "home.cta.request": "Request access",
+  "home.cta.catalog": "Browse catalogue",
+  "home.pending": "Your account is awaiting approval.",
+  "home.filter.model": "Model",
+  "home.filter.allModels": "All models",
+  "home.filter.decade": "Decade",
+  "home.filter.allDecades": "All",
+  "home.filter.search": "Search by chassis",
+  "home.filter.searchPlaceholder": "e.g. B*0222, IA3C…",
+  "home.loading": "Loading…",
+  "home.chassisCount": "{n} chassis",
+  "home.pageOf": "Page {p} / {t}",
+  "home.errorLoading": "Loading error: {msg}",
+  "home.noResults": "No car matches the filters.",
+  "home.prev": "← Previous",
+  "home.next": "Next →",
+  "card.noPhoto": "No photo",
+  "card.membersOnly": "Members only",
+
+  "auth.kicker": "Member area",
+  "auth.title.login": "Sign in",
+  "auth.title.signup": "Request access",
+  "auth.title.forgot": "Forgot password",
+  "auth.field.prenom": "First name",
+  "auth.field.nom": "Last name",
+  "auth.field.telephone": "Phone",
+  "auth.field.raison": "Reason for request",
+  "auth.field.optional": "(optional)",
+  "auth.field.raisonPlaceholder": "Owner, enthusiast, historian…",
+  "auth.field.email": "Email",
+  "auth.field.password": "Password",
+  "auth.submit.login": "Sign in",
+  "auth.submit.signup": "Create account",
+  "auth.submit.forgot": "Send link",
+  "auth.notMember": "Not a member yet?",
+  "auth.requestAccess": "Request access",
+  "auth.forgotPassword": "Forgot password?",
+  "auth.backToLogin": "← Back to sign in",
+  "auth.msg.signupOk": "Registration recorded. An administrator will validate your access shortly.",
+  "auth.msg.resetOk": "Reset email sent.",
+  "auth.msg.genericErr": "An error occurred.",
+  "auth.footer.note": "Access subject to approval by the expert.",
+  "auth.footer.backCatalog": "Back to catalogue",
+
+  "videos.kicker": "Audiovisual archives",
+  "videos.title": "Videos",
+  "videos.lead": "Selected reports, road tests and races documenting Bizzarrini history.",
+  "videos.unsupported": "Format not supported",
+
+  "books.kicker": "Bibliography",
+  "books.title": "Books",
+  "books.lead": "Reference works published by Philippe Olczyk on the great racing cars.",
+  "books.buy": "Buy →",
+
+  "contact.kicker": "Get in touch",
+  "contact.title": "Contact",
+  "contact.lead": "For authentication requests, adding a chassis to the register, or expertise on a Bizzarrini, please write to us.",
+  "contact.expert": "Expert",
+  "contact.expertName": "Philippe Olczyk",
+  "contact.expertSubtitle": "Official Bizzarrini Register",
+  "contact.response": "Reply",
+  "contact.responseValue": "Within 48 business hours",
+  "contact.subject": "Subject",
+  "contact.subjectValue": "Authentication · Chassis registration · Expertise",
+  "contact.sentTitle": "Message sent",
+  "contact.sentText": "We will get back to you shortly.",
+  "contact.field.nom": "Name",
+  "contact.field.email": "Email",
+  "contact.field.message": "Message",
+  "contact.submit": "Send",
+  "contact.err.nom": "Name required",
+  "contact.err.email": "Invalid email",
+  "contact.err.message": "Message too short",
+
+  "admin.kicker": "Administration",
+  "admin.title": "Members",
+  "admin.tab.enAttente": "Pending",
+  "admin.tab.valide": "Approved",
+  "admin.tab.refuse": "Refused",
+  "admin.empty": "No member in this category.",
+  "admin.col.name": "Name",
+  "admin.col.phone": "Phone",
+  "admin.col.status": "Status",
+  "admin.col.actions": "Actions",
+  "admin.action.validate": "Approve",
+  "admin.action.refuse": "Refuse",
+  "admin.denied": "Access denied",
+  "admin.deniedText": "This page is reserved for administrators.",
+  "admin.back": "Back",
+  "admin.status.en_attente": "Pending",
+  "admin.status.valide": "Approved",
+  "admin.status.refuse": "Refused",
+
+  "reset.title": "New password",
+  "reset.field": "New password",
+  "reset.submit": "Update",
+  "reset.ok": "Password updated.",
+
+  "car.backCatalog": "← Catalogue",
+  "car.chassisLabel": "Chassis",
+  "car.history": "History",
+  "car.gallery": "Gallery",
+  "car.photos": "photos",
+  "car.notFound": "Car not found",
+  "car.notFoundText": "This record does not exist.",
+  "car.access.reserved": "Members only",
+  "car.access.pending": "Your registration is awaiting approval by the expert.",
+  "car.access.back": "Back to catalogue",
+  "car.loading": "Loading…",
+  "car.history.fallback": "The detailed history of this chassis is currently being compiled by the register. If you hold documents, period photographs or provenance information, please contact the expert via the Contact page.",
+  "car.chassisWord": "chassis",
+};
+
+const it: Dict = {
+  "nav.home": "Home",
+  "nav.videos": "Video",
+  "nav.books": "Libri",
+  "nav.contact": "Contatti",
+  "nav.admin": "Admin",
+  "nav.signin": "Accedi",
+  "nav.logout": "Esci",
+  "nav.menu": "Menu",
+  "footer.rights": "© {year} Bizzarrini Register — Philippe Olczyk",
+  "footer.tagline": "Registro ufficiale dei telai autenticati",
+
+  "home.kicker": "Registro ufficiale",
+  "home.title.a": "Il registro ufficiale",
+  "home.title.b": "delle",
+  "home.lead": "Ogni telaio autenticato, documentato e archiviato da Philippe Olczyk. 195 vetture d'eccezione, galleria completa e storia riservate ai membri validati.",
+  "home.cta.request": "Richiedi l'accesso",
+  "home.cta.catalog": "Vedi il catalogo",
+  "home.pending": "La tua iscrizione è in attesa di validazione.",
+  "home.filter.model": "Modello",
+  "home.filter.allModels": "Tutti i modelli",
+  "home.filter.decade": "Decennio",
+  "home.filter.allDecades": "Tutti",
+  "home.filter.search": "Ricerca per telaio",
+  "home.filter.searchPlaceholder": "Es. B*0222, IA3C…",
+  "home.loading": "Caricamento…",
+  "home.chassisCount": "{n} telai",
+  "home.pageOf": "Pagina {p} / {t}",
+  "home.errorLoading": "Errore di caricamento: {msg}",
+  "home.noResults": "Nessuna vettura corrisponde ai filtri.",
+  "home.prev": "← Precedente",
+  "home.next": "Successivo →",
+  "card.noPhoto": "Senza foto",
+  "card.membersOnly": "Solo membri",
+
+  "auth.kicker": "Area membri",
+  "auth.title.login": "Accesso",
+  "auth.title.signup": "Richiesta d'accesso",
+  "auth.title.forgot": "Password dimenticata",
+  "auth.field.prenom": "Nome",
+  "auth.field.nom": "Cognome",
+  "auth.field.telephone": "Telefono",
+  "auth.field.raison": "Motivo della richiesta",
+  "auth.field.optional": "(facoltativo)",
+  "auth.field.raisonPlaceholder": "Proprietario, appassionato, storico…",
+  "auth.field.email": "Email",
+  "auth.field.password": "Password",
+  "auth.submit.login": "Accedi",
+  "auth.submit.signup": "Crea un account",
+  "auth.submit.forgot": "Invia il link",
+  "auth.notMember": "Non sei ancora membro?",
+  "auth.requestAccess": "Richiedi l'accesso",
+  "auth.forgotPassword": "Password dimenticata?",
+  "auth.backToLogin": "← Torna all'accesso",
+  "auth.msg.signupOk": "Iscrizione registrata. Un amministratore convaliderà a breve il tuo accesso.",
+  "auth.msg.resetOk": "Email di reimpostazione inviata.",
+  "auth.msg.genericErr": "Si è verificato un errore.",
+  "auth.footer.note": "Accesso soggetto a validazione da parte dell'esperto.",
+  "auth.footer.backCatalog": "Torna al catalogo",
+
+  "videos.kicker": "Archivi audiovisivi",
+  "videos.title": "Video",
+  "videos.lead": "Selezione di reportage, prove e gare che documentano la storia delle Bizzarrini.",
+  "videos.unsupported": "Formato non supportato",
+
+  "books.kicker": "Bibliografia",
+  "books.title": "Libri",
+  "books.lead": "Le opere di riferimento pubblicate da Philippe Olczyk sulle grandi vetture da corsa.",
+  "books.buy": "Acquista →",
+
+  "contact.kicker": "Scrivici",
+  "contact.title": "Contatti",
+  "contact.lead": "Per qualsiasi richiesta di autenticazione, aggiunta di un telaio al registro o perizia su una Bizzarrini, scrivici.",
+  "contact.expert": "Esperto",
+  "contact.expertName": "Philippe Olczyk",
+  "contact.expertSubtitle": "Registro ufficiale Bizzarrini",
+  "contact.response": "Risposta",
+  "contact.responseValue": "Entro 48 ore lavorative",
+  "contact.subject": "Oggetto",
+  "contact.subjectValue": "Autenticazione · Aggiunta telaio · Perizia",
+  "contact.sentTitle": "Messaggio inviato",
+  "contact.sentText": "Ti risponderemo al più presto.",
+  "contact.field.nom": "Nome",
+  "contact.field.email": "Email",
+  "contact.field.message": "Messaggio",
+  "contact.submit": "Invia",
+  "contact.err.nom": "Nome richiesto",
+  "contact.err.email": "Email non valida",
+  "contact.err.message": "Messaggio troppo breve",
+
+  "admin.kicker": "Amministrazione",
+  "admin.title": "Membri",
+  "admin.tab.enAttente": "In attesa",
+  "admin.tab.valide": "Validati",
+  "admin.tab.refuse": "Rifiutati",
+  "admin.empty": "Nessun membro in questa categoria.",
+  "admin.col.name": "Nome",
+  "admin.col.phone": "Telefono",
+  "admin.col.status": "Stato",
+  "admin.col.actions": "Azioni",
+  "admin.action.validate": "Valida",
+  "admin.action.refuse": "Rifiuta",
+  "admin.denied": "Accesso negato",
+  "admin.deniedText": "Questa pagina è riservata agli amministratori.",
+  "admin.back": "Indietro",
+  "admin.status.en_attente": "In attesa",
+  "admin.status.valide": "Validato",
+  "admin.status.refuse": "Rifiutato",
+
+  "reset.title": "Nuova password",
+  "reset.field": "Nuova password",
+  "reset.submit": "Aggiorna",
+  "reset.ok": "Password aggiornata.",
+
+  "car.backCatalog": "← Catalogo",
+  "car.chassisLabel": "Telaio",
+  "car.history": "Storia",
+  "car.gallery": "Galleria",
+  "car.photos": "foto",
+  "car.notFound": "Vettura non trovata",
+  "car.notFoundText": "Questa scheda non esiste.",
+  "car.access.reserved": "Accesso riservato",
+  "car.access.pending": "La tua iscrizione è in attesa di validazione da parte dell'esperto.",
+  "car.access.back": "Torna al catalogo",
+  "car.loading": "Caricamento…",
+  "car.history.fallback": "La storia dettagliata di questo telaio è in fase di compilazione da parte del registro. Se possiedi documenti, fotografie d'epoca o informazioni di provenienza, contatta l'esperto tramite la pagina Contatti.",
+  "car.chassisWord": "telaio",
+};
+
+const DICTS: Record<Lang, Dict> = { fr, en, it };
+
+type I18nCtx = {
+  lang: Lang;
+  setLang: (l: Lang) => void;
+  t: (key: string, vars?: Record<string, string | number>) => string;
+};
+
+const Ctx = createContext<I18nCtx | undefined>(undefined);
+
+function format(str: string, vars?: Record<string, string | number>) {
+  if (!vars) return str;
+  return str.replace(/\{(\w+)\}/g, (_, k) => (vars[k] != null ? String(vars[k]) : `{${k}}`));
+}
+
+export function I18nProvider({ children }: { children: ReactNode }) {
+  const [lang, setLangState] = useState<Lang>("fr");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = window.localStorage.getItem(LANG_KEY) as Lang | null;
+    if (saved === "fr" || saved === "en" || saved === "it") setLangState(saved);
+  }, []);
+
+  useEffect(() => {
+    if (typeof document !== "undefined") document.documentElement.lang = lang;
+  }, [lang]);
+
+  const setLang = (l: Lang) => {
+    setLangState(l);
+    if (typeof window !== "undefined") window.localStorage.setItem(LANG_KEY, l);
+  };
+
+  const t = (key: string, vars?: Record<string, string | number>) => {
+    const d = DICTS[lang] ?? fr;
+    return format(d[key] ?? fr[key] ?? key, vars);
+  };
+
+  return <Ctx.Provider value={{ lang, setLang, t }}>{children}</Ctx.Provider>;
+}
+
+const fallback: I18nCtx = {
+  lang: "fr",
+  setLang: () => {},
+  t: (k, vars) => format(fr[k] ?? k, vars),
+};
+
+export function useI18n() {
+  return useContext(Ctx) ?? fallback;
+}
