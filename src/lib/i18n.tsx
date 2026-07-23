@@ -315,7 +315,7 @@ const it: Dict = {
   "home.title.b": "delle",
   "home.lead": "Quasi tre decenni a raccogliere informazioni sui modelli Bizzarrini e sulla loro storia, condivise con gli appassionati. Ci interessano solo i fatti, per offrirvi il registro Bizzarrini più onesto possibile. Sentitevi liberi di contribuire.",
   "home.cta.request": "Richiedi l'accesso",
-  "home.cta.catalog": "Vedi il catalogo",
+  "home.cta.catalog": "Vedi il registro",
   "home.pending": "La tua iscrizione è in attesa di validazione.",
   "home.filter.model": "Modello",
   "home.filter.allModels": "Tutti i modelli",
