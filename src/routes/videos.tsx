@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { videos, toYoutubeEmbed, toFacebookEmbed } from "@/data/videos-data";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/videos")({
   head: () => ({
@@ -17,14 +18,13 @@ export const Route = createFileRoute("/videos")({
 });
 
 function VideosPage() {
+  const { t } = useI18n();
   return (
     <div className="container-page py-12 md:py-16">
       <header className="mb-10 max-w-3xl">
-        <p className="text-xs uppercase tracking-[0.35em] text-brand">Archives audiovisuelles</p>
-        <h1 className="mt-3 font-display text-4xl md:text-5xl">Vidéos</h1>
-        <p className="mt-4 text-muted-foreground">
-          Sélection de reportages, essais et courses documentant l'histoire des Bizzarrini.
-        </p>
+        <p className="text-xs uppercase tracking-[0.35em] text-brand">{t("videos.kicker")}</p>
+        <h1 className="mt-3 font-display text-4xl md:text-5xl">{t("videos.title")}</h1>
+        <p className="mt-4 text-muted-foreground">{t("videos.lead")}</p>
       </header>
 
       <div className="grid gap-8 md:grid-cols-2">
@@ -46,7 +46,7 @@ function VideosPage() {
                   />
                 ) : (
                   <div className="w-full h-full grid place-items-center text-muted-foreground text-sm">
-                    Format non supporté
+                    {t("videos.unsupported")}
                   </div>
                 )}
               </div>

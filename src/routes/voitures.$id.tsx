@@ -2,6 +2,7 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
+import { useI18n, type Lang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/voitures/$id")({
   head: () => ({
@@ -16,31 +17,18 @@ export const Route = createFileRoute("/voitures/$id")({
   component: CarDetail,
 });
 
-type Lang = "en" | "fr" | "it";
-const LANG_KEY = "bz_lang";
-
 function CarDetail() {
   const { id } = Route.useParams();
   const router = useRouter();
   const { user, isValide, loading: authLoading } = useAuth();
+  const { t, lang } = useI18n();
   const [voiture, setVoiture] = useState<Voiture | null>(null);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [detail, setDetail] = useState<VoitureDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<string | null>(null);
-  const [lang, setLangState] = useState<Lang>("fr");
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const saved = window.localStorage.getItem(LANG_KEY) as Lang | null;
-    if (saved === "en" || saved === "fr" || saved === "it") setLangState(saved);
-  }, []);
-
-  const setLang = (l: Lang) => {
-    setLangState(l);
-    if (typeof window !== "undefined") window.localStorage.setItem(LANG_KEY, l);
-  };
 
   useEffect(() => {
     if (authLoading) return;
@@ -69,17 +57,15 @@ function CarDetail() {
   }, [id, user, isValide, authLoading, router]);
 
   if (authLoading || (user && isValide && loading)) {
-    return <div className="container-page py-20 text-center text-muted-foreground">Chargement…</div>;
+    return <div className="container-page py-20 text-center text-muted-foreground">{t("car.loading")}</div>;
   }
 
   if (user && !isValide) {
     return (
       <div className="container-page py-20 text-center">
-        <h1 className="font-display text-3xl">Accès réservé</h1>
-        <p className="mt-3 text-muted-foreground">
-          Votre inscription est en attente de validation par l'expert.
-        </p>
-        <Link to="/" className="btn-ghost mt-6 inline-flex">Retour au catalogue</Link>
+        <h1 className="font-display text-3xl">{t("car.access.reserved")}</h1>
+        <p className="mt-3 text-muted-foreground">{t("car.access.pending")}</p>
+        <Link to="/" className="btn-ghost mt-6 inline-flex">{t("car.access.back")}</Link>
       </div>
     );
   }
@@ -87,12 +73,13 @@ function CarDetail() {
   if (err || !voiture) {
     return (
       <div className="container-page py-20 text-center">
-        <h1 className="font-display text-2xl">Voiture introuvable</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{err ?? "Cette fiche n'existe pas."}</p>
-        <Link to="/" className="btn-ghost mt-6 inline-flex">Retour au catalogue</Link>
+        <h1 className="font-display text-2xl">{t("car.notFound")}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{err ?? t("car.notFoundText")}</p>
+        <Link to="/" className="btn-ghost mt-6 inline-flex">{t("car.access.back")}</Link>
       </div>
     );
   }
+
 
   const cover = photoUrl(voiture.cover_photo);
 
@@ -102,14 +89,14 @@ function CarDetail() {
       <section className="border-b border-border">
         <div className="container-page py-10 md:py-16">
           <Link to="/" className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground">
-            ← Catalogue
+            {t("car.backCatalog")}
           </Link>
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
             <div className="aspect-[3/2] bg-surface-2 overflow-hidden">
               {cover ? (
                 <img src={cover} alt={voiture.titre} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full grid place-items-center text-muted-foreground">Sans photo</div>
+                <div className="w-full h-full grid place-items-center text-muted-foreground">{t("card.noPhoto")}</div>
               )}
             </div>
             <div>
@@ -119,37 +106,20 @@ function CarDetail() {
               <h1 className="mt-3 font-display text-3xl md:text-5xl leading-[1.1]">{voiture.titre}</h1>
               {voiture.chassis && (
                 <p className="mt-4 font-mono text-sm text-muted-foreground">
-                  Châssis · <span className="text-foreground">{voiture.chassis}</span>
+                  {t("car.chassisLabel")} · <span className="text-foreground">{voiture.chassis}</span>
                 </p>
               )}
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* Historique — frise chronologique */}
       <section className="container-page py-8">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-          <h2 className="font-display text-2xl md:text-3xl">
-            {lang === "fr" ? "Historique" : lang === "it" ? "Storia" : "History"}
-          </h2>
-          <div className="inline-flex rounded-sm border border-border overflow-hidden text-xs font-mono uppercase tracking-widest">
-            {(["fr", "en", "it"] as Lang[]).map((l) => (
-              <button
-                key={l}
-                onClick={() => setLang(l)}
-                className={`px-3 py-1.5 transition-colors ${
-                  lang === l
-                    ? "bg-brand text-brand-foreground"
-                    : "bg-surface hover:bg-surface-2 text-muted-foreground hover:text-foreground"
-                }`}
-                aria-pressed={lang === l}
-              >
-                {l}
-              </button>
-            ))}
-          </div>
+          <h2 className="font-display text-2xl md:text-3xl">{t("car.history")}</h2>
         </div>
+
         <HistoryTimeline
           description={pickDescription(detail, lang)}
           modele={voiture.modele}
@@ -163,7 +133,7 @@ function CarDetail() {
       {/* Gallery */}
       {photos.length > 0 && (
         <section className="container-page py-12 pb-16">
-          <h2 className="font-display text-2xl md:text-3xl mb-6">Galerie · {photos.length} photos</h2>
+          <h2 className="font-display text-2xl md:text-3xl mb-6">{t("car.gallery")} · {photos.length} {t("car.photos")}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {photos.map((ph) => {
               const src = photoUrl(ph.filename)!;
@@ -273,15 +243,11 @@ function HistoryTimeline({
   chassis?: string | null;
   lang: Lang;
 }) {
+  const { t } = useI18n();
   const entries = description?.trim() ? parseHistory(description) : [];
 
   if (entries.length === 0) {
-    const fallback = {
-      fr: "L'historique détaillé de ce châssis est en cours de compilation par le registre. Si vous détenez des documents, photos d'époque ou informations de provenance, contactez l'expert via la page Contact.",
-      en: "The detailed history of this chassis is currently being compiled by the register. If you hold documents, period photographs, or provenance information, please contact the expert via the Contact page.",
-      it: "La storia dettagliata di questo telaio è in fase di compilazione da parte del registro. Se possiedi documenti, fotografie d'epoca o informazioni di provenienza, contatta l'esperto tramite la pagina Contatti.",
-    }[lang];
-    const chassisLabel = lang === "it" ? "telaio" : lang === "en" ? "chassis" : "châssis";
+    const chassisLabel = t("car.chassisWord");
     return (
       <div className="max-w-3xl border-l-2 border-brand/60 pl-5 py-2 text-foreground/80 leading-relaxed">
         <p>
@@ -289,10 +255,12 @@ function HistoryTimeline({
           {annee ? ` · ${annee}` : ""}
           {chassis ? ` · ${chassisLabel} ${chassis}` : ""}.
         </p>
-        <p className="mt-3 text-sm text-muted-foreground italic">{fallback}</p>
+        <p className="mt-3 text-sm text-muted-foreground italic">{t("car.history.fallback")}</p>
       </div>
     );
   }
+  void lang;
+
 
 
   return (

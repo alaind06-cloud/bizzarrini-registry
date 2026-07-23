@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { books } from "@/data/books-data";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/books")({
   head: () => ({
@@ -17,14 +18,13 @@ export const Route = createFileRoute("/books")({
 });
 
 function BooksPage() {
+  const { t } = useI18n();
   return (
     <div className="container-page py-12 md:py-16">
       <header className="mb-10 max-w-3xl">
-        <p className="text-xs uppercase tracking-[0.35em] text-brand">Bibliographie</p>
-        <h1 className="mt-3 font-display text-4xl md:text-5xl">Livres</h1>
-        <p className="mt-4 text-muted-foreground">
-          Les ouvrages de référence publiés par Philippe Olczyk sur les grandes voitures de course.
-        </p>
+        <p className="text-xs uppercase tracking-[0.35em] text-brand">{t("books.kicker")}</p>
+        <h1 className="mt-3 font-display text-4xl md:text-5xl">{t("books.title")}</h1>
+        <p className="mt-4 text-muted-foreground">{t("books.lead")}</p>
       </header>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10">
@@ -50,7 +50,7 @@ function BooksPage() {
                 rel="noopener noreferrer"
                 className="mt-2 inline-block text-xs uppercase tracking-widest text-brand hover:underline"
               >
-                Acheter →
+                {t("books.buy")}
               </a>
             )}
           </article>

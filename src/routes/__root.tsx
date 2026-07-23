@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/lib/auth";
+import { I18nProvider } from "@/lib/i18n";
 import { Nav, Footer } from "@/components/Nav";
 
 function NotFoundComponent() {
@@ -121,15 +122,17 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <div className="min-h-screen flex flex-col">
-          <Nav />
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <Footer />
-        </div>
-      </AuthProvider>
+      <I18nProvider>
+        <AuthProvider>
+          <div className="min-h-screen flex flex-col">
+            <Nav />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <Footer />
+          </div>
+        </AuthProvider>
+      </I18nProvider>
     </QueryClientProvider>
   );
 }

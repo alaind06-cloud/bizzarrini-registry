@@ -2,6 +2,7 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase, type Profil } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/admin")({
 
 function AdminPage() {
   const { user, isAdmin, loading: authLoading } = useAuth();
+  const { t } = useI18n();
   const router = useRouter();
   const [profils, setProfils] = useState<Profil[]>([]);
   const [tab, setTab] = useState<"en_attente" | "valide" | "refuse">("en_attente");
@@ -51,59 +53,59 @@ function AdminPage() {
   };
 
   if (authLoading) {
-    return <div className="container-page py-20 text-center text-muted-foreground">Chargement…</div>;
+    return <div className="container-page py-20 text-center text-muted-foreground">{t("home.loading")}</div>;
   }
 
   if (!isAdmin) {
     return (
       <div className="container-page py-20 text-center">
-        <h1 className="font-display text-3xl">Accès refusé</h1>
-        <p className="mt-3 text-muted-foreground">Cette page est réservée aux administrateurs.</p>
-        <Link to="/" className="btn-ghost mt-6 inline-flex">Retour</Link>
+        <h1 className="font-display text-3xl">{t("admin.denied")}</h1>
+        <p className="mt-3 text-muted-foreground">{t("admin.deniedText")}</p>
+        <Link to="/" className="btn-ghost mt-6 inline-flex">{t("admin.back")}</Link>
       </div>
     );
   }
 
   const tabs: { k: Profil["statut"]; label: string }[] = [
-    { k: "en_attente", label: "En attente" },
-    { k: "valide", label: "Validés" },
-    { k: "refuse", label: "Refusés" },
+    { k: "en_attente", label: t("admin.tab.enAttente") },
+    { k: "valide", label: t("admin.tab.valide") },
+    { k: "refuse", label: t("admin.tab.refuse") },
   ];
 
   return (
     <div className="container-page py-12">
       <header className="mb-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-brand">Administration</p>
-        <h1 className="mt-3 font-display text-4xl">Membres</h1>
+        <p className="text-xs uppercase tracking-[0.35em] text-brand">{t("admin.kicker")}</p>
+        <h1 className="mt-3 font-display text-4xl">{t("admin.title")}</h1>
       </header>
 
       <div className="flex gap-2 mb-6 border-b border-border">
-        {tabs.map((t) => (
+        {tabs.map((tb) => (
           <button
-            key={t.k}
-            onClick={() => setTab(t.k)}
+            key={tb.k}
+            onClick={() => setTab(tb.k)}
             className={`px-4 py-2.5 text-sm uppercase tracking-wider transition-colors border-b-2 -mb-px ${
-              tab === t.k ? "border-brand text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
+              tab === tb.k ? "border-brand text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
-            {t.label}
+            {tb.label}
           </button>
         ))}
       </div>
 
       {loading ? (
-        <p className="text-muted-foreground">Chargement…</p>
+        <p className="text-muted-foreground">{t("home.loading")}</p>
       ) : profils.length === 0 ? (
-        <p className="text-muted-foreground py-12 text-center">Aucun membre dans cette catégorie.</p>
+        <p className="text-muted-foreground py-12 text-center">{t("admin.empty")}</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="text-xs uppercase tracking-widest text-muted-foreground text-left">
               <tr className="border-b border-border">
-                <th className="py-3 pr-4">Nom</th>
-                <th className="py-3 pr-4">Téléphone</th>
-                <th className="py-3 pr-4">Statut</th>
-                <th className="py-3">Actions</th>
+                <th className="py-3 pr-4">{t("admin.col.name")}</th>
+                <th className="py-3 pr-4">{t("admin.col.phone")}</th>
+                <th className="py-3 pr-4">{t("admin.col.status")}</th>
+                <th className="py-3">{t("admin.col.actions")}</th>
               </tr>
             </thead>
             <tbody>
@@ -116,17 +118,17 @@ function AdminPage() {
                       p.statut === "valide" ? "bg-brand/20 text-brand" :
                       p.statut === "refuse" ? "bg-muted text-muted-foreground" :
                       "bg-gold/20 text-gold"
-                    }`}>{p.statut}</span>
+                    }`}>{t(`admin.status.${p.statut}`)}</span>
                   </td>
                   <td className="py-3 space-x-2">
                     {p.statut !== "valide" && (
                       <button disabled={busy === p.id} onClick={() => updateStatut(p.id, "valide")} className="btn-brand !py-1.5 !px-3 !text-xs">
-                        Valider
+                        {t("admin.action.validate")}
                       </button>
                     )}
                     {p.statut !== "refuse" && (
                       <button disabled={busy === p.id} onClick={() => updateStatut(p.id, "refuse")} className="btn-ghost !py-1.5 !px-3 !text-xs">
-                        Refuser
+                        {t("admin.action.refuse")}
                       </button>
                     )}
                   </td>
