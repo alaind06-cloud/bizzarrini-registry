@@ -172,7 +172,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section id="catalogue" className="border-b border-border bg-surface/40">
+      <section id="registre" className="border-b border-border bg-surface/40">
         <div className="container-page py-6 grid gap-4 md:grid-cols-[1fr_1fr_2fr] items-end">
           <div>
             <label htmlFor="filter-model" className="label-field">{t("home.filter.model")}</label>
