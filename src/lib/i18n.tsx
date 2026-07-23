@@ -77,7 +77,7 @@ const fr: Dict = {
   // Books
   "books.kicker": "Bibliographie",
   "books.title": "Livres",
-  "books.lead": "Les ouvrages de référence publiés par Lucas Bizzarrini sur les grandes voitures de course.",
+  "books.lead": "Les ouvrages de référence publiés par Philippe Olczyk sur les grandes voitures de course.",
   "books.buy": "Acheter →",
 
   // Contact
@@ -223,7 +223,7 @@ const en: Dict = {
 
   "books.kicker": "Bibliography",
   "books.title": "Books",
-  "books.lead": "Reference works published by Lucas Bizzarrini on the great racing cars.",
+  "books.lead": "Reference works published by Philippe Olczyk on the great racing cars.",
   "books.buy": "Buy →",
 
   "contact.kicker": "Get in touch",
@@ -365,7 +365,7 @@ const it: Dict = {
 
   "books.kicker": "Bibliografia",
   "books.title": "Libri",
-  "books.lead": "Le opere di riferimento pubblicate da Lucas Bizzarrini sulle grandi vetture da corsa.",
+  "books.lead": "Le opere di riferimento pubblicate da Philippe Olczyk sulle grandi vetture da corsa.",
   "books.buy": "Acquista →",
 
   "contact.kicker": "Scrivici",
