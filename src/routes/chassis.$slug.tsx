@@ -266,18 +266,62 @@ type SpecKey =
   | "coachbuilder"
   | "condition";
 
+// Two families per key:
+//  - labelled line: "Colour: red", "Interior: black leather"
+//  - inline prose:  "Engine # 447 F 0815 RE.", 'Reg. no.: "SNK 899M"'
 const SPEC_PATTERNS: Record<SpecKey, RegExp[]> = {
   engine: [/^\s*(?:engine|moteur|motore)\s*[:\-–]\s*(.+)$/im],
-  color: [/^\s*(?:original\s+colou?r|colou?r|couleur(?:\s+d['']origine)?|colore(?:\s+originale)?)\s*[:\-–]\s*(.+)$/im],
+  color: [
+    /^\s*(?:original\s+colou?r|colou?r|couleur(?:\s+d['']origine)?|colore(?:\s+originale)?)\s*[:\-–]\s*(.+)$/im,
+    /\brepainted\s+((?:in\s+)?[a-zà-ÿ][\w'’\- ]{2,30})/i,
+  ],
   gearbox: [/^\s*(?:gearbox|transmission|boi?te(?:\s+de\s+vitesses?)?|cambio)\s*[:\-–]\s*(.+)$/im],
-  bodywork: [/^\s*(?:body(?:work)?|carrosserie|carrozzeria)\s*[:\-–]\s*(.+)$/im],
-  registration: [/^\s*(?:reg(?:istration)?|immatriculation|targa)\s*[:\-–]?\s*(.+)$/im],
-  interior: [/^\s*(?:interior|int[ée]rieur|interni)\s*[:\-–]\s*(.+)$/im],
-  engineNumber: [/^\s*(?:engine\s*(?:no\.?|number|n[°º]?)|n[°º]?\s*moteur|motore\s*n[°º]?|n[°º]?\s*motore)\s*[:\-–]?\s*(.+)$/im],
-  gearboxNumber: [/^\s*(?:gearbox\s*(?:no\.?|number|n[°º]?)|n[°º]?\s*bo[îi]te|cambio\s*n[°º]?|n[°º]?\s*cambio)\s*[:\-–]?\s*(.+)$/im],
-  coachbuilder: [/^\s*(?:coachbuilder|carrossier|carrozziere)\s*[:\-–]\s*(.+)$/im],
+  bodywork: [
+    /^\s*(?:body(?:work)?|carrosserie|carrozzeria)\s*[:\-–]\s*(.+)$/im,
+    /\b(alloy|aluminium|aluminum|steel|fibreglass|fiberglass|polyester)\s+bodywork\b/i,
+  ],
+  registration: [
+    /^\s*(?:reg(?:istration)?|immatriculation|targa)\s*[:\-–]?\s*(.+)$/im,
+    /\breg(?:istration)?\.?\s*(?:no\.?|number|n[°º])?\s*[:\-–]?\s*["“”'‘’]([^"“”'‘’\n]{2,30})["“”'‘’]/i,
+  ],
+  interior: [
+    /^\s*(?:interior|int[ée]rieur|interni)\s*[:\-–]\s*(.+)$/im,
+    /\b(?:interior|int[ée]rieur|interni|trim|upholstery)\s+(?:in\s+)?([a-zà-ÿ][\w'’\- ]{2,30})/i,
+  ],
+  engineNumber: [
+    /^\s*(?:engine\s*(?:no\.?|number|n[°º]?)|n[°º]?\s*moteur|motore\s*n[°º]?|n[°º]?\s*motore)\s*[:\-–]?\s*(.+)$/im,
+    /\bengine\s*(?:#|no\.?|number|n[°º])\s*[:\-–]?\s*([A-Z0-9][A-Z0-9 */]{2,30})/i,
+  ],
+  gearboxNumber: [
+    /^\s*(?:gearbox\s*(?:no\.?|number|n[°º]?)|n[°º]?\s*bo[îi]te|cambio\s*n[°º]?|n[°º]?\s*cambio)\s*[:\-–]?\s*(.+)$/im,
+    /\bgearbox\s*(?:#|no\.?|number|n[°º])\s*[:\-–]?\s*([A-Z0-9][A-Z0-9 */]{2,30})/i,
+  ],
+  coachbuilder: [
+    /^\s*(?:coachbuilder|carrossier|carrozziere)\s*[:\-–]\s*(.+)$/im,
+    /\b(?:body\s+by|coachwork\s+by|carrosserie\s+(?:de|par)|carrozzeria\s+di)\s+([A-Z][\w'’\-.& ]{2,40})/,
+  ],
   condition: [/^\s*(?:condition|[ée]tat|stato)\s*[:\-–]\s*(.+)$/im],
 };
+
+// Prose-only heuristics that write into `condition` when nothing better matched.
+const CONDITION_HINTS: Array<[RegExp, string]> = [
+  [/\bcompletely\s+restored\b/i, "Restauré"],
+  [/\bfully\s+restored\b/i, "Restauré"],
+  [/\bconcours\s+restoration\b/i, "Restauré (concours)"],
+  [/\bframe[- ]off\s+restoration\b/i, "Restauré (frame-off)"],
+  [/\bmatching[- ]numbers\b/i, "Matching numbers"],
+  [/\boriginal\s+(?:condition|specification|specs?)\b/i, "D'origine"],
+  [/\bunrestored\b/i, "D'origine"],
+];
+
+function cleanValue(raw: string): string {
+  let v = raw.trim();
+  // Cut at sentence break or common connectors that leak into inline matches.
+  v = v.split(/(?:\.\s|\s[-–—]\s|;|\bReg\b|\bregistration\b)/i)[0];
+  // Strip surrounding quotes and trailing punctuation.
+  v = v.replace(/^["“”'‘’(]+/, "").replace(/["“”'‘’).,;:\s]+$/g, "");
+  return v.trim();
+}
 
 function extractSpecs(text: string): Partial<Record<SpecKey, string>> {
   const out: Partial<Record<SpecKey, string>> = {};
@@ -285,13 +329,23 @@ function extractSpecs(text: string): Partial<Record<SpecKey, string>> {
     for (const re of SPEC_PATTERNS[key]) {
       const m = text.match(re);
       if (m && m[1]) {
-        out[key] = m[1].trim().replace(/[.\s]+$/, "");
-        break;
+        const cleaned = cleanValue(m[1]);
+        if (cleaned.length >= 2 && cleaned.length <= 80) {
+          out[key] = cleaned;
+          break;
+        }
       }
+    }
+  }
+  if (!out.condition) {
+    for (const [re, label] of CONDITION_HINTS) {
+      if (re.test(text)) { out.condition = label; break; }
     }
   }
   return out;
 }
+
+
 
 interface TimelineEvent {
   key?: string;
