@@ -40,6 +40,8 @@ const fr: Dict = {
   "home.noResults": "Aucune voiture ne correspond aux filtres.",
   "home.prev": "← Précédent",
   "home.next": "Suivant →",
+  "filters.active": "Filtres actifs :",
+  "filters.remove": "Retirer le filtre {label}",
   "card.noPhoto": "Sans photo",
   "card.membersOnly": "Membres uniquement",
 
