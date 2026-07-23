@@ -35,17 +35,23 @@ const PAGE_SIZE = 24;
 function HomePage() {
   const { user, isValide, loading: authLoading } = useAuth();
   const { t } = useI18n();
-  const { m: modelQuery } = Route.useSearch();
+  const { m: modelQuery, d: decadeParam, q: qParam } = Route.useSearch();
+  const navigate = useNavigate({ from: "/" });
   const [voitures, setVoitures] = useState<Voiture[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
   const [modele, setModele] = useState<string>("all");
-  const [annee, setAnnee] = useState<string>("all");
-  const [q, setQ] = useState("");
+  const annee = decadeParam ?? "all";
+  const q = qParam ?? "";
+
+  const setAnnee = (v: string) =>
+    navigate({ search: (prev) => ({ ...prev, d: v === "all" ? undefined : v }), replace: true });
+  const setQ = (v: string) =>
+    navigate({ search: (prev) => ({ ...prev, q: v.trim() ? v : undefined }), replace: true });
+
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
     (async () => {
       setLoading(true);
       const { data, error } = await supabase
