@@ -287,7 +287,7 @@ const it: Dict = {
   "home.kicker": "Registro ufficiale",
   "home.title.a": "Il registro ufficiale",
   "home.title.b": "delle",
-  "home.lead": "Ogni telaio autenticato, documentato e archiviato da Philippe Olczyk. 195 vetture d'eccezione, galleria completa e storia riservate ai membri validati.",
+  "home.lead": "Quasi tre decenni a raccogliere informazioni sui modelli Bizzarrini e sulla loro storia, condivise con gli appassionati. Ci interessano solo i fatti, per offrirvi il registro Bizzarrini più onesto possibile. Sentitevi liberi di contribuire.",
   "home.cta.request": "Richiedi l'accesso",
   "home.cta.catalog": "Vedi il catalogo",
   "home.pending": "La tua iscrizione è in attesa di validazione.",
