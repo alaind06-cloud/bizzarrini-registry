@@ -83,6 +83,8 @@ export const Route = createFileRoute("/giotto-bizzarrini")({
 
 function GiottoPage() {
   const { lang, t } = useI18n();
+  const { m: currentM } = Route.useSearch();
+  const backSearch = currentM ? { m: currentM } : {};
 
   const content = COPY[lang];
 
