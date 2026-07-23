@@ -16,6 +16,9 @@ export const Route = createFileRoute("/voitures/$id")({
   component: CarDetail,
 });
 
+type Lang = "en" | "fr" | "it";
+const LANG_KEY = "bz_lang";
+
 function CarDetail() {
   const { id } = Route.useParams();
   const router = useRouter();
@@ -26,6 +29,18 @@ function CarDetail() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lang, setLangState] = useState<Lang>("fr");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = window.localStorage.getItem(LANG_KEY) as Lang | null;
+    if (saved === "en" || saved === "fr" || saved === "it") setLangState(saved);
+  }, []);
+
+  const setLang = (l: Lang) => {
+    setLangState(l);
+    if (typeof window !== "undefined") window.localStorage.setItem(LANG_KEY, l);
+  };
 
   useEffect(() => {
     if (authLoading) return;
@@ -114,14 +129,36 @@ function CarDetail() {
 
       {/* Historique — frise chronologique */}
       <section className="container-page py-8">
-        <h2 className="font-display text-2xl md:text-3xl mb-8">Historique</h2>
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <h2 className="font-display text-2xl md:text-3xl">
+            {lang === "fr" ? "Historique" : lang === "it" ? "Storia" : "History"}
+          </h2>
+          <div className="inline-flex rounded-sm border border-border overflow-hidden text-xs font-mono uppercase tracking-widest">
+            {(["fr", "en", "it"] as Lang[]).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                className={`px-3 py-1.5 transition-colors ${
+                  lang === l
+                    ? "bg-brand text-brand-foreground"
+                    : "bg-surface hover:bg-surface-2 text-muted-foreground hover:text-foreground"
+                }`}
+                aria-pressed={lang === l}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+        </div>
         <HistoryTimeline
-          description={detail?.description}
+          description={pickDescription(detail, lang)}
           modele={voiture.modele}
           annee={voiture.annee}
           chassis={voiture.chassis}
+          lang={lang}
         />
       </section>
+
 
       {/* Gallery */}
       {photos.length > 0 && (
@@ -217,35 +254,46 @@ function parseHistory(description: string): TimelineEntry[] {
   return entries.length > 0 ? entries : [];
 }
 
+function pickDescription(d: VoitureDetail | null, lang: Lang): string | null {
+  if (!d) return null;
+  const primary = lang === "fr" ? d.description_fr : lang === "it" ? d.description_it : d.description_en;
+  return primary ?? d.description_en ?? d.description ?? null;
+}
+
 function HistoryTimeline({
   description,
   modele,
   annee,
   chassis,
+  lang,
 }: {
   description?: string | null;
   modele?: string | null;
   annee?: number | null;
   chassis?: string | null;
+  lang: Lang;
 }) {
   const entries = description?.trim() ? parseHistory(description) : [];
 
   if (entries.length === 0) {
+    const fallback = {
+      fr: "L'historique détaillé de ce châssis est en cours de compilation par le registre. Si vous détenez des documents, photos d'époque ou informations de provenance, contactez l'expert via la page Contact.",
+      en: "The detailed history of this chassis is currently being compiled by the register. If you hold documents, period photographs, or provenance information, please contact the expert via the Contact page.",
+      it: "La storia dettagliata di questo telaio è in fase di compilazione da parte del registro. Se possiedi documenti, fotografie d'epoca o informazioni di provenienza, contatta l'esperto tramite la pagina Contatti.",
+    }[lang];
+    const chassisLabel = lang === "it" ? "telaio" : lang === "en" ? "chassis" : "châssis";
     return (
       <div className="max-w-3xl border-l-2 border-brand/60 pl-5 py-2 text-foreground/80 leading-relaxed">
         <p>
           {modele ?? "Bizzarrini"}
           {annee ? ` · ${annee}` : ""}
-          {chassis ? ` · châssis ${chassis}` : ""}.
+          {chassis ? ` · ${chassisLabel} ${chassis}` : ""}.
         </p>
-        <p className="mt-3 text-sm text-muted-foreground italic">
-          L'historique détaillé de ce châssis est en cours de compilation par le registre.
-          Si vous détenez des documents, photos d'époque ou informations de provenance,
-          contactez l'expert via la page Contact.
-        </p>
+        <p className="mt-3 text-sm text-muted-foreground italic">{fallback}</p>
       </div>
     );
   }
+
 
   return (
     <div className="relative max-w-4xl">
