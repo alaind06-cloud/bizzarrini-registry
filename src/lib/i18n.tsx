@@ -279,7 +279,7 @@ const en: Dict = {
   "car.notFoundText": "This record does not exist.",
   "car.access.reserved": "Members only",
   "car.access.pending": "Your registration is awaiting approval by the expert.",
-  "car.access.back": "Back to catalogue",
+  "car.access.back": "Back to register",
   "car.loading": "Loading…",
   "car.history.fallback": "The detailed history of this chassis is currently being compiled by the register. If you hold documents, period photographs or provenance information, please contact the expert via the Contact page.",
   "car.chassisWord": "chassis",
