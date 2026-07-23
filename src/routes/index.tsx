@@ -11,12 +11,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Catalogue complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
+          "Registre complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
       },
       { property: "og:title", content: "Bizzarrini Register - Official Chassis Registry & Provenance | Iso Grifo, A3/C, 5300 GT" },
       {
         property: "og:description",
-        content: "Catalogue complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
+        content: "Registre complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
       },
     ],
   }),
@@ -143,7 +143,7 @@ function HomePage() {
           {!authLoading && !user && (
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
-              <a href="#catalogue" className="btn-ghost">{t("home.cta.catalog")}</a>
+              <a href="#registre" className="btn-ghost">{t("home.cta.catalog")}</a>
             </div>
           )}
           {user && !isValide && (
@@ -172,7 +172,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section id="catalogue" className="border-b border-border bg-surface/40">
+      <section id="registre" className="border-b border-border bg-surface/40">
         <div className="container-page py-6 grid gap-4 md:grid-cols-[1fr_1fr_2fr] items-end">
           <div>
             <label htmlFor="filter-model" className="label-field">{t("home.filter.model")}</label>
