@@ -57,17 +57,15 @@ function CarDetail() {
   }, [id, user, isValide, authLoading, router]);
 
   if (authLoading || (user && isValide && loading)) {
-    return <div className="container-page py-20 text-center text-muted-foreground">Chargement…</div>;
+    return <div className="container-page py-20 text-center text-muted-foreground">{t("car.loading")}</div>;
   }
 
   if (user && !isValide) {
     return (
       <div className="container-page py-20 text-center">
-        <h1 className="font-display text-3xl">Accès réservé</h1>
-        <p className="mt-3 text-muted-foreground">
-          Votre inscription est en attente de validation par l'expert.
-        </p>
-        <Link to="/" className="btn-ghost mt-6 inline-flex">Retour au catalogue</Link>
+        <h1 className="font-display text-3xl">{t("car.access.reserved")}</h1>
+        <p className="mt-3 text-muted-foreground">{t("car.access.pending")}</p>
+        <Link to="/" className="btn-ghost mt-6 inline-flex">{t("car.access.back")}</Link>
       </div>
     );
   }
@@ -75,12 +73,13 @@ function CarDetail() {
   if (err || !voiture) {
     return (
       <div className="container-page py-20 text-center">
-        <h1 className="font-display text-2xl">Voiture introuvable</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{err ?? "Cette fiche n'existe pas."}</p>
-        <Link to="/" className="btn-ghost mt-6 inline-flex">Retour au catalogue</Link>
+        <h1 className="font-display text-2xl">{t("car.notFound")}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{err ?? t("car.notFoundText")}</p>
+        <Link to="/" className="btn-ghost mt-6 inline-flex">{t("car.access.back")}</Link>
       </div>
     );
   }
+
 
   const cover = photoUrl(voiture.cover_photo);
 
