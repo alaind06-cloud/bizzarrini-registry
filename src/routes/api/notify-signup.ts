@@ -1,7 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = "https://rbrkzrtrlvihpjugksnb.supabase.co";
 const ADMIN_EMAIL = "alaind06@gmail.com";
 
 export const Route = createFileRoute("/api/notify-signup")({
@@ -9,76 +7,36 @@ export const Route = createFileRoute("/api/notify-signup")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const { profil_id, email } = (await request.json()) as { profil_id?: string; email?: string };
-          if (!profil_id) {
-            return Response.json({ error: "profil_id requis" }, { status: 400 });
-          }
+          const { nom, prenom, email, telephone, raison } = (await request.json()) as {
+            nom?: string;
+            prenom?: string;
+            email?: string;
+            telephone?: string;
+            raison?: string;
+          };
 
-          const serviceKey = process.env.SERVICE_ROLE_KEY;
           const resendKey = process.env.RESEND_API_KEY;
-          if (!serviceKey || !resendKey) {
-            return Response.json({ error: "Secrets non configurés" }, { status: 500 });
+          if (!resendKey) {
+            // Non bloquant : on log et on renvoie ok pour ne pas casser l'inscription.
+            console.warn("[notify-signup] RESEND_API_KEY manquant, email non envoyé");
+            return Response.json({ ok: true, emailed: false, reason: "no_resend_key" });
           }
 
-          const admin = createClient(SUPABASE_URL, serviceKey, {
-            auth: { persistSession: false, autoRefreshToken: false },
-          });
-
-          let profil: any = null;
-          let pErr: any = null;
-          for (let i = 0; i < 6; i++) {
-            const r = await admin
-              .from("profils")
-              .select("id, nom, prenom, telephone")
-              .eq("id", profil_id)
-              .maybeSingle();
-            if (r.data) { profil = r.data; pErr = null; break; }
-            pErr = r.error;
-            await new Promise((res) => setTimeout(res, 500));
-          }
-          if (!profil) {
-            return Response.json({ error: "Profil introuvable", detail: pErr?.message }, { status: 404 });
-          }
-
-          // L'email n'est pas stocké dans profils ; on utilise celui envoyé par le client
-          // ou on le récupère depuis auth.users en fallback.
-          let userEmail = email ?? null;
-          if (!userEmail) {
-            const { data: userData, error: userErr } = await admin.auth.admin.getUserById(profil_id);
-            userEmail = userData?.user?.email ?? null;
-            if (userErr) {
-              console.error("auth.admin.getUserById error", userErr);
-            }
-          }
-
-          const { data: tok, error: tErr } = await admin
-            .from("validation_tokens")
-            .insert({ profil_id })
-            .select("token")
-            .single();
-          if (tErr || !tok) {
-            return Response.json({ error: tErr?.message ?? "Token" }, { status: 500 });
-          }
-
-          const origin = new URL(request.url).origin;
-          const link = `${origin}/valider?token=${tok.token}`;
-          const fullName = [profil.prenom, profil.nom].filter(Boolean).join(" ") || userEmail;
+          const fullName = [prenom, nom].filter(Boolean).join(" ") || email || "Inconnu";
+          const esc = (s?: string | null) =>
+            (s ?? "—").replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" })[c]!);
 
           const html = `
             <div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#111">
               <h2 style="font-family:'Playfair Display',Georgia,serif;margin:0 0 16px">Nouvelle demande d'accès</h2>
-              <p>Une nouvelle inscription est en attente de validation :</p>
               <table style="border-collapse:collapse;margin:16px 0">
-                <tr><td style="padding:4px 12px 4px 0;color:#666">Nom</td><td><b>${profil.nom ?? "—"}</b></td></tr>
-                <tr><td style="padding:4px 12px 4px 0;color:#666">Prénom</td><td><b>${profil.prenom ?? "—"}</b></td></tr>
-                <tr><td style="padding:4px 12px 4px 0;color:#666">Email</td><td><b>${userEmail ?? "—"}</b></td></tr>
-                <tr><td style="padding:4px 12px 4px 0;color:#666">Téléphone</td><td><b>${profil.telephone ?? "—"}</b></td></tr>
+                <tr><td style="padding:4px 12px 4px 0;color:#666">Prénom</td><td><b>${esc(prenom)}</b></td></tr>
+                <tr><td style="padding:4px 12px 4px 0;color:#666">Nom</td><td><b>${esc(nom)}</b></td></tr>
+                <tr><td style="padding:4px 12px 4px 0;color:#666">Email</td><td><b>${esc(email)}</b></td></tr>
+                <tr><td style="padding:4px 12px 4px 0;color:#666">Téléphone</td><td><b>${esc(telephone)}</b></td></tr>
+                ${raison ? `<tr><td style="padding:4px 12px 4px 0;color:#666;vertical-align:top">Raison</td><td>${esc(raison)}</td></tr>` : ""}
               </table>
-              <p style="margin:24px 0">
-                <a href="${link}" style="background:#c8102e;color:#fff;text-decoration:none;padding:12px 24px;font-weight:600;display:inline-block">Valider ce membre</a>
-              </p>
-              <p style="font-size:12px;color:#666">Ou copiez ce lien dans votre navigateur :<br>${link}</p>
-              <p style="font-size:12px;color:#666;margin-top:24px">Le lien expire dans 30 jours et ne peut être utilisé qu'une seule fois.</p>
+              <p style="font-size:12px;color:#666;margin-top:24px">Valider ou refuser depuis l'espace admin du site.</p>
             </div>
           `;
 
@@ -98,14 +56,14 @@ export const Route = createFileRoute("/api/notify-signup")({
 
           if (!emailRes.ok) {
             const body = await emailRes.text();
-            console.error("Resend error", emailRes.status, body);
-            return Response.json({ error: "Envoi email échoué", detail: body }, { status: 502 });
+            console.error("[notify-signup] Resend error", emailRes.status, body);
+            return Response.json({ ok: true, emailed: false, status: emailRes.status });
           }
 
-          return Response.json({ ok: true });
+          return Response.json({ ok: true, emailed: true });
         } catch (e: any) {
-          console.error(e);
-          return Response.json({ error: e?.message ?? "Erreur" }, { status: 500 });
+          console.error("[notify-signup]", e);
+          return Response.json({ ok: true, emailed: false, error: e?.message });
         }
       },
     },

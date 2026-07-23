@@ -25,6 +25,7 @@ function AuthPage() {
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
   const [telephone, setTelephone] = useState("");
+  const [raison, setRaison] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "err" | "ok"; text: string } | null>(null);
 
@@ -49,34 +50,12 @@ function AuthPage() {
         });
         if (error) throw error;
         // Notifier l'admin. Le trigger DB crée le profil.
-        const userId = data.user?.id;
-        console.log("[signup] userId=", userId);
-        if (userId) {
-          await new Promise((r) => setTimeout(r, 2000));
-          try {
-            const res = await fetch("/api/notify-signup", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ profil_id: userId, email }),
-            });
-            const body = await res.json().catch(() => ({}));
-            console.log("[notify-signup]", res.status, body);
-            if (!res.ok) {
-              setMsg({
-                type: "err",
-                text: `Inscription OK mais notification échouée (${res.status}): ${body?.error ?? body?.detail ?? "erreur"}`,
-              });
-              return;
-            }
-          } catch (err: any) {
-            console.error("[notify-signup] fetch error", err);
-            setMsg({ type: "err", text: `Notification injoignable: ${err?.message ?? err}` });
-            return;
-          }
-        } else {
-          setMsg({ type: "err", text: "Signup réussi mais aucun userId retourné (email confirmation activée ?)." });
-          return;
-        }
+        // Notification email non bloquante — l'inscription réussit quoi qu'il arrive.
+        fetch("/api/notify-signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nom, prenom, email, telephone, raison }),
+        }).catch((err) => console.warn("[notify-signup]", err));
         setMsg({
           type: "ok",
           text: "Inscription enregistrée. Un administrateur validera votre accès sous peu.",
@@ -124,6 +103,10 @@ function AuthPage() {
                 <div>
                   <label className="label-field">Téléphone</label>
                   <input className="field" type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} maxLength={40} />
+                </div>
+                <div>
+                  <label className="label-field">Raison de la demande <span className="text-muted-foreground">(optionnel)</span></label>
+                  <textarea className="field min-h-[80px]" value={raison} onChange={(e) => setRaison(e.target.value)} maxLength={500} placeholder="Propriétaire, passionné, historien…" />
                 </div>
               </>
             )}
