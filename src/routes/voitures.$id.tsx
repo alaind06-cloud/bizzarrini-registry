@@ -243,15 +243,11 @@ function HistoryTimeline({
   chassis?: string | null;
   lang: Lang;
 }) {
+  const { t } = useI18n();
   const entries = description?.trim() ? parseHistory(description) : [];
 
   if (entries.length === 0) {
-    const fallback = {
-      fr: "L'historique détaillé de ce châssis est en cours de compilation par le registre. Si vous détenez des documents, photos d'époque ou informations de provenance, contactez l'expert via la page Contact.",
-      en: "The detailed history of this chassis is currently being compiled by the register. If you hold documents, period photographs, or provenance information, please contact the expert via the Contact page.",
-      it: "La storia dettagliata di questo telaio è in fase di compilazione da parte del registro. Se possiedi documenti, fotografie d'epoca o informazioni di provenienza, contatta l'esperto tramite la pagina Contatti.",
-    }[lang];
-    const chassisLabel = lang === "it" ? "telaio" : lang === "en" ? "chassis" : "châssis";
+    const chassisLabel = t("car.chassisWord");
     return (
       <div className="max-w-3xl border-l-2 border-brand/60 pl-5 py-2 text-foreground/80 leading-relaxed">
         <p>
@@ -259,10 +255,12 @@ function HistoryTimeline({
           {annee ? ` · ${annee}` : ""}
           {chassis ? ` · ${chassisLabel} ${chassis}` : ""}.
         </p>
-        <p className="mt-3 text-sm text-muted-foreground italic">{fallback}</p>
+        <p className="mt-3 text-sm text-muted-foreground italic">{t("car.history.fallback")}</p>
       </div>
     );
   }
+  void lang;
+
 
 
   return (
