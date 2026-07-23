@@ -421,7 +421,7 @@ const it: Dict = {
   "car.notFoundText": "Questa scheda non esiste.",
   "car.access.reserved": "Accesso riservato",
   "car.access.pending": "La tua iscrizione è in attesa di validazione da parte dell'esperto.",
-  "car.access.back": "Torna al catalogo",
+  "car.access.back": "Torna al registro",
   "car.loading": "Caricamento…",
   "car.history.fallback": "La storia dettagliata di questo telaio è in fase di compilazione da parte del registro. Se possiedi documenti, fotografie d'epoca o informazioni di provenienza, contatta l'esperto tramite la pagina Contatti.",
   "car.chassisWord": "telaio",
