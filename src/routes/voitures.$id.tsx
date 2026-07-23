@@ -2,6 +2,7 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
+import { useI18n, type Lang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/voitures/$id")({
   head: () => ({
@@ -16,31 +17,18 @@ export const Route = createFileRoute("/voitures/$id")({
   component: CarDetail,
 });
 
-type Lang = "en" | "fr" | "it";
-const LANG_KEY = "bz_lang";
-
 function CarDetail() {
   const { id } = Route.useParams();
   const router = useRouter();
   const { user, isValide, loading: authLoading } = useAuth();
+  const { t, lang } = useI18n();
   const [voiture, setVoiture] = useState<Voiture | null>(null);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [detail, setDetail] = useState<VoitureDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<string | null>(null);
-  const [lang, setLangState] = useState<Lang>("fr");
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const saved = window.localStorage.getItem(LANG_KEY) as Lang | null;
-    if (saved === "en" || saved === "fr" || saved === "it") setLangState(saved);
-  }, []);
-
-  const setLang = (l: Lang) => {
-    setLangState(l);
-    if (typeof window !== "undefined") window.localStorage.setItem(LANG_KEY, l);
-  };
 
   useEffect(() => {
     if (authLoading) return;
