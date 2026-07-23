@@ -46,7 +46,12 @@ const JSONLD = {
   ],
 };
 
+type GiottoSearch = { m?: string };
+
 export const Route = createFileRoute("/giotto-bizzarrini")({
+  validateSearch: (search: Record<string, unknown>): GiottoSearch => ({
+    m: typeof search.m === "string" && search.m.trim() ? search.m.trim() : undefined,
+  }),
   head: () => ({
     meta: [
       { title: TITLES.en },
@@ -78,6 +83,8 @@ export const Route = createFileRoute("/giotto-bizzarrini")({
 
 function GiottoPage() {
   const { lang, t } = useI18n();
+  const { m: currentM } = Route.useSearch();
+  const backSearch = currentM ? { m: currentM } : {};
 
   const content = COPY[lang];
 
@@ -143,7 +150,7 @@ function GiottoPage() {
             </li>
           </ul>
           <div className="mt-6 pt-6 border-t border-border">
-            <Link to="/" hash="registre" className="btn-brand w-full text-center">
+            <Link to="/" search={backSearch} hash="registre" className="btn-brand w-full text-center">
               {t("home.cta.catalog")}
             </Link>
           </div>
