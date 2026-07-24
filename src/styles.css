@@ -39,49 +39,52 @@
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
   --color-gold: var(--gold);
-  --font-display: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --font-display: "Bodoni Moda", "Playfair Display", "Didot", Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
 :root {
-  --radius: 0.375rem;
+  --radius: 0.25rem;
 
-  /* Light cream / ivory background, deep charcoal text */
-  --background: oklch(0.985 0.004 90);
-  --foreground: oklch(0.18 0.01 285);
+  /* Ivory / vellum paper background with dried-ink text */
+  --background: oklch(0.982 0.006 85);
+  --foreground: oklch(0.19 0.005 60);
 
-  --surface: oklch(0.965 0.005 90);
-  --surface-2: oklch(0.94 0.006 90);
+  --surface: oklch(0.97 0.006 82);
+  --surface-2: oklch(0.945 0.008 82);
 
-  --card: oklch(0.99 0.003 90);
-  --card-foreground: oklch(0.18 0.01 285);
-  --popover: oklch(0.99 0.003 90);
-  --popover-foreground: oklch(0.18 0.01 285);
+  --card: oklch(0.995 0.003 85);
+  --card-foreground: oklch(0.19 0.005 60);
+  --popover: oklch(0.995 0.003 85);
+  --popover-foreground: oklch(0.19 0.005 60);
 
-  /* Bizzarrini red */
-  --brand: oklch(0.55 0.21 27);
-  --brand-foreground: oklch(0.98 0.005 90);
+  /* Rosso Corsa vintage — deeper, less neon */
+  --brand: oklch(0.52 0.20 28);
+  --brand-foreground: oklch(0.985 0.005 85);
 
-  --primary: oklch(0.55 0.21 27);
-  --primary-foreground: oklch(0.98 0.005 90);
+  --primary: oklch(0.52 0.20 28);
+  --primary-foreground: oklch(0.985 0.005 85);
 
-  --secondary: oklch(0.92 0.006 90);
-  --secondary-foreground: oklch(0.2 0.01 285);
+  --secondary: oklch(0.93 0.008 82);
+  --secondary-foreground: oklch(0.22 0.005 60);
 
-  --muted: oklch(0.94 0.006 90);
-  --muted-foreground: oklch(0.42 0.01 285);
+  --muted: oklch(0.945 0.008 82);
+  --muted-foreground: oklch(0.44 0.008 60);
 
-  --accent: oklch(0.93 0.02 30);
-  --accent-foreground: oklch(0.2 0.01 285);
+  --accent: oklch(0.94 0.02 75);
+  --accent-foreground: oklch(0.22 0.005 60);
 
-  --gold: oklch(0.68 0.13 82);
+  /* Brushed gold accent for badges/details */
+  --gold: oklch(0.68 0.09 75);
 
-  --destructive: oklch(0.55 0.21 27);
-  --destructive-foreground: oklch(0.98 0.005 90);
+  --destructive: oklch(0.52 0.20 28);
+  --destructive-foreground: oklch(0.985 0.005 85);
 
-  --border: oklch(0.88 0.006 90);
-  --input: oklch(0.9 0.006 90);
-  --ring: oklch(0.55 0.21 27);
+  /* Warm hairline #E5E0D8 */
+  --border: oklch(0.91 0.008 80);
+  --input: oklch(0.925 0.008 80);
+  --ring: oklch(0.52 0.20 28);
 }
 
 
