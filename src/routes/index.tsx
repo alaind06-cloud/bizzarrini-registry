@@ -185,7 +185,7 @@ function HomePage() {
 
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-border bg-background">
+      <section className="relative overflow-hidden border-b border-border bg-background min-h-[92vh] flex items-center">
         <div className="absolute inset-0">
           <video
             src={heroVideo.url}
@@ -196,38 +196,82 @@ function HomePage() {
             poster={heroCovers[0] ? photoUrl(heroCovers[0].cover_photo) ?? undefined : undefined}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-brand/10 blur-3xl pointer-events-none" />
+          {/* Ivory wash for legibility on light theme */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background/55 via-background/70 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/30 to-background/60" />
+          {/* Radial vignette */}
+          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, transparent 0%, transparent 45%, var(--color-background) 100%)" }} />
+          {/* Center vertical accent hairline */}
+          <div className="absolute top-0 bottom-0 left-1/2 w-px bg-gradient-to-b from-transparent via-brand/25 to-transparent pointer-events-none" />
         </div>
 
-        <div className="container-page relative py-24 md:py-36 lg:py-44">
-          <p className="text-xs uppercase tracking-[0.4em] text-brand">{t("home.kicker")}</p>
-          <h1 className="mt-4 font-display text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
-            {t("home.title.a")}<br />
-            {t("home.title.b")} <span className="text-brand">Bizzarrini</span>.
+        <div className="container-page relative py-24 md:py-32 text-center">
+          <div className="opacity-0 animate-fade-in-up" style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}>
+            <span className="vintage-badge">Est. 1964 — Livorno, Italia</span>
+          </div>
+
+          <h1
+            className="mt-8 font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.02] text-shadow-hero opacity-0 animate-fade-in-up"
+            style={{ animationDelay: "0.35s", animationFillMode: "forwards" }}
+          >
+            {t("home.title.b")} <span className="text-brand italic">Bizzarrini</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-base md:text-lg text-muted-foreground">
+
+          <p
+            className="mt-5 font-display italic text-xl md:text-2xl text-foreground/60 opacity-0 animate-fade-in-up"
+            style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}
+          >
+            {t("home.title.a")}
+          </p>
+
+          <div className="mt-8 mx-auto section-divider opacity-0 animate-fade-in-up" style={{ animationDelay: "0.65s", animationFillMode: "forwards" }} />
+
+          <p
+            className="mt-8 mx-auto max-w-2xl text-base md:text-lg text-muted-foreground leading-relaxed opacity-0 animate-fade-in-up"
+            style={{ animationDelay: "0.8s", animationFillMode: "forwards" }}
+          >
             {t("home.lead")}
           </p>
-          {!authLoading && !user && (
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
-              <a href="#registre" className="btn-ghost">{t("home.cta.catalog")}</a>
-            </div>
-          )}
-          {user && !isValide && (
-            <div className="mt-8 inline-flex items-center gap-3 rounded border border-brand/40 bg-brand/10 px-4 py-2 text-sm backdrop-blur">
-              <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
-              {t("home.pending")}
-            </div>
-          )}
+
+          <div className="mt-10 flex flex-wrap justify-center gap-3 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.95s", animationFillMode: "forwards" }}>
+            {!authLoading && !user && (
+              <>
+                <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
+                <a href="#registre" className="btn-ghost">{t("home.cta.catalog")}</a>
+              </>
+            )}
+            {user && !isValide && (
+              <div className="inline-flex items-center gap-3 rounded border border-brand/40 bg-brand/10 px-4 py-2 text-sm backdrop-blur">
+                <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
+                {t("home.pending")}
+              </div>
+            )}
+            {user && isValide && (
+              <a href="#registre" className="btn-brand">{t("home.cta.catalog")}</a>
+            )}
+          </div>
+
+          <a
+            href="#registre"
+            className="mt-16 inline-flex flex-col items-center gap-2 text-muted-foreground hover:text-brand transition-colors opacity-0 animate-fade-in-up"
+            style={{ animationDelay: "1.15s", animationFillMode: "forwards" }}
+          >
+            <span className="text-[10px] uppercase tracking-[0.32em]">{t("home.cta.catalog")}</span>
+            <span className="animate-float text-brand">▾</span>
+          </a>
         </div>
       </section>
 
 
       <section id="registre" className="border-b border-border bg-background">
-        <div className="container-page pt-8 pb-5">
+        <div className="container-page pt-20 pb-8">
+          <div className="text-center mb-12">
+            <span className="eyebrow">{t("home.kicker")}</span>
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mt-3">Historical Registry</h2>
+            <div className="mt-5 section-divider" />
+          </div>
+
+
           {/* Search field */}
           <div className="max-w-md">
             <label htmlFor="filter-search" className="label-field">
