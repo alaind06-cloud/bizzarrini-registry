@@ -79,7 +79,7 @@ const fr: Dict = {
   "videos.featuredBadge": "Interview exclusive",
   "videos.featuredTitle": "BIZZARRINI — L'interview exclusive de Giotto Bizzarrini par Genepifilm",
   "videos.featuredLead": "Série documentaire en six parties consacrée à Giotto Bizzarrini, réalisée par Genepifilm.",
-  "videos.featuredNote": "Philippe est le seul expert au monde à détenir un certificat d'authentification délivré personnellement par Giotto Bizzarrini. C'est lui qui a mené cette interview exclusive.",
+  "videos.featuredNote": "Philippe Olczyk est le seul expert au monde à détenir un certificat d'authentification délivré personnellement par Giotto Bizzarrini. C'est lui qui a mené cette interview exclusive.",
   "videos.partLabel": "Partie",
   "videos.othersTitle": "Autres vidéos",
 
@@ -88,7 +88,7 @@ const fr: Dict = {
   "books.title": "Livres",
   "books.lead": "Les ouvrages de référence publiés par Philippe Olczyk sur les grandes voitures de course.",
   "books.bizzarriniTitle": "Les livres Bizzarrini",
-  "books.bizzarriniNote": "Ces trois ouvrages sont écrits par Philippe, le même expert détenteur du certificat d'authentification Giotto Bizzarrini.",
+  "books.bizzarriniNote": "Ces trois ouvrages sont écrits par Philippe Olczyk, le même expert détenteur du certificat d'authentification Giotto Bizzarrini.",
   "books.othersTitle": "Autres ouvrages",
   "books.buy": "Acheter →",
 
@@ -238,7 +238,7 @@ const en: Dict = {
   "videos.featuredBadge": "Exclusive interview",
   "videos.featuredTitle": "BIZZARRINI — The exclusive interview of Giotto Bizzarrini by Genepifilm",
   "videos.featuredLead": "A six-part documentary series dedicated to Giotto Bizzarrini, produced by Genepifilm.",
-  "videos.featuredNote": "Philippe is the only expert in the world to hold an authentication certificate personally delivered by Giotto Bizzarrini. He is the one who conducted this exclusive interview.",
+  "videos.featuredNote": "Philippe Olczyk is the only expert in the world to hold an authentication certificate personally delivered by Giotto Bizzarrini. He is the one who conducted this exclusive interview.",
   "videos.partLabel": "Part",
   "videos.othersTitle": "Other videos",
 
@@ -246,7 +246,7 @@ const en: Dict = {
   "books.title": "Books",
   "books.lead": "Reference works published by Philippe Olczyk on the great racing cars.",
   "books.bizzarriniTitle": "The Bizzarrini books",
-  "books.bizzarriniNote": "These three books are written by Philippe, the same expert holder of the Giotto Bizzarrini authentication certificate.",
+  "books.bizzarriniNote": "These three books are written by Philippe Olczyk, the same expert holder of the Giotto Bizzarrini authentication certificate.",
   "books.othersTitle": "Other works",
   "books.buy": "Buy →",
 
@@ -392,7 +392,7 @@ const it: Dict = {
   "videos.featuredBadge": "Intervista esclusiva",
   "videos.featuredTitle": "BIZZARRINI — L'intervista esclusiva a Giotto Bizzarrini di Genepifilm",
   "videos.featuredLead": "Serie documentaria in sei parti dedicata a Giotto Bizzarrini, realizzata da Genepifilm.",
-  "videos.featuredNote": "Philippe è l'unico esperto al mondo a detenere un certificato di autenticazione rilasciato personalmente da Giotto Bizzarrini. È lui ad aver condotto questa intervista esclusiva.",
+  "videos.featuredNote": "Philippe Olczyk è l'unico esperto al mondo a detenere un certificato di autenticazione rilasciato personalmente da Giotto Bizzarrini. È lui ad aver condotto questa intervista esclusiva.",
   "videos.partLabel": "Parte",
   "videos.othersTitle": "Altri video",
 
@@ -400,7 +400,7 @@ const it: Dict = {
   "books.title": "Libri",
   "books.lead": "Le opere di riferimento pubblicate da Philippe Olczyk sulle grandi vetture da corsa.",
   "books.bizzarriniTitle": "I libri Bizzarrini",
-  "books.bizzarriniNote": "Questi tre volumi sono scritti da Philippe, lo stesso esperto detentore del certificato di autenticazione Giotto Bizzarrini.",
+  "books.bizzarriniNote": "Questi tre volumi sono scritti da Philippe Olczyk, lo stesso esperto detentore del certificato di autenticazione Giotto Bizzarrini.",
   "books.othersTitle": "Altre opere",
   "books.buy": "Acquista →",
 
