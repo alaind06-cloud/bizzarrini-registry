@@ -215,7 +215,8 @@ function HomePage() {
             style={{ animationDelay: "0.35s", animationFillMode: "forwards" }}
           >
             {t("home.title")
-              .split("<brand>")
+              .replace(/<\/?brand>/g, "")
+              .split("Bizzarrini")
               .map((part, i, arr) => (
                 <span key={i}>
                   {part}
