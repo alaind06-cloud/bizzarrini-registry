@@ -207,24 +207,26 @@ function HomePage() {
 
         <div className="container-page relative py-24 md:py-32 text-center">
           <div className="opacity-0 animate-fade-in-up" style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}>
-            <span className="vintage-badge">Est. 1964 — Livorno, Italia</span>
+            <span className="vintage-badge">{t("home.hero.badge")}</span>
           </div>
 
           <h1
             className="mt-8 font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.02] text-shadow-hero opacity-0 animate-fade-in-up"
             style={{ animationDelay: "0.35s", animationFillMode: "forwards" }}
           >
-            {t("home.title.b")} <span className="text-brand italic">Bizzarrini</span>
+            {t("home.title")
+              .split("<brand>")
+              .map((part, i, arr) => (
+                <span key={i}>
+                  {part}
+                  {i < arr.length - 1 && (
+                    <span className="text-brand italic">Bizzarrini</span>
+                  )}
+                </span>
+              ))}
           </h1>
 
-          <p
-            className="mt-5 font-display italic text-xl md:text-2xl text-foreground/60 opacity-0 animate-fade-in-up"
-            style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}
-          >
-            {t("home.title.a")}
-          </p>
-
-          <div className="mt-8 mx-auto section-divider opacity-0 animate-fade-in-up" style={{ animationDelay: "0.65s", animationFillMode: "forwards" }} />
+          <div className="mt-10 mx-auto section-divider opacity-0 animate-fade-in-up" style={{ animationDelay: "0.55s", animationFillMode: "forwards" }} />
 
           <p
             className="mt-8 mx-auto max-w-2xl text-base md:text-lg text-muted-foreground leading-relaxed opacity-0 animate-fade-in-up"
