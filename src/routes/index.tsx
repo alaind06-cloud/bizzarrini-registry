@@ -230,12 +230,12 @@ function HomePage() {
 
           <p
             className="mt-8 mx-auto max-w-2xl text-base md:text-lg text-muted-foreground leading-relaxed opacity-0 animate-fade-in-up"
-            style={{ animationDelay: "0.8s", animationFillMode: "forwards" }}
+            style={{ animationDelay: "0.7s", animationFillMode: "forwards" }}
           >
             {t("home.lead")}
           </p>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-3 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.95s", animationFillMode: "forwards" }}>
+          <div className="mt-10 flex flex-wrap justify-center gap-3 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.85s", animationFillMode: "forwards" }}>
             {!authLoading && !user && (
               <>
                 <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
@@ -256,7 +256,7 @@ function HomePage() {
           <a
             href="#registre"
             className="mt-16 inline-flex flex-col items-center gap-2 text-muted-foreground hover:text-brand transition-colors opacity-0 animate-fade-in-up"
-            style={{ animationDelay: "1.15s", animationFillMode: "forwards" }}
+            style={{ animationDelay: "1.0s", animationFillMode: "forwards" }}
           >
             <span className="text-[10px] uppercase tracking-[0.32em]">{t("home.cta.catalog")}</span>
             <span className="animate-float text-brand">▾</span>
