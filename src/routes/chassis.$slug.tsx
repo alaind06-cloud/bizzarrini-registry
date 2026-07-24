@@ -167,7 +167,7 @@ function CarDetail() {
                     {specEntries.map((key) => (
                       <div key={key} className="flex flex-col gap-0.5">
                         <dt className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">{specLabels[key]}</dt>
-                        <dd className="text-white font-medium">{specs[key]}</dd>
+                        <dd className="text-foreground font-semibold">{specs[key]}</dd>
                       </div>
                     ))}
                   </dl>
