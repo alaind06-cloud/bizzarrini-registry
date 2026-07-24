@@ -319,3 +319,69 @@
   }
   &:hover::after { width: 100%; left: 0; }
 }
+
+/* ============================================================
+ * Heritage Luxury — enrichments inspired by heritage-hub
+ * ============================================================ */
+
+@utility vintage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: var(--color-brand);
+  border: 1px solid color-mix(in oklab, var(--color-brand) 45%, transparent);
+  background: color-mix(in oklab, var(--color-brand) 4%, transparent);
+  border-radius: 2px;
+}
+
+@utility eyebrow {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  color: var(--color-brand);
+}
+
+@utility section-divider {
+  width: 6rem;
+  height: 1px;
+  margin-inline: auto;
+  background: linear-gradient(90deg, transparent, var(--color-gold) 20%, var(--color-brand) 50%, var(--color-gold) 80%, transparent);
+  opacity: 0.9;
+}
+
+.text-gold { color: var(--color-gold); }
+
+.text-shadow-hero {
+  text-shadow: 0 2px 24px rgba(255, 250, 240, 0.55), 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-float {
+  animation: floatY 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-float { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+
