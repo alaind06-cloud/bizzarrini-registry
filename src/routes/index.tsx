@@ -180,12 +180,8 @@ function HomePage() {
     return picks.slice(0, 4);
   }, [voitures]);
 
-  const [heroIdx, setHeroIdx] = useState(0);
-  useEffect(() => {
-    if (heroCovers.length < 2) return;
-    const timer = setInterval(() => setHeroIdx((i) => (i + 1) % heroCovers.length), 6000);
-    return () => clearInterval(timer);
-  }, [heroCovers.length]);
+
+
 
   return (
     <div>
