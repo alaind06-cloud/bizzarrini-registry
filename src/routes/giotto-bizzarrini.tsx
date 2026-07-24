@@ -313,6 +313,13 @@ const COPY: Record<Lang, Copy> = {
       { value: "1961", label: "Départ de Ferrari" },
       { value: "1964", label: "Fondation Bizzarrini S.p.A." },
     ],
+    achievementsTitle: "Autres réalisations majeures",
+    achievementsFerrari: "Ferrari 250 GTO",
+    achievementsLamborghini: "V12 Lamborghini",
+    achievementsFerrariDesc:
+      "Maître d'œuvre du développement de la Ferrari 250 GTO à Maranello. Voir l'ouvrage de référence « Ferrari 166 to F50 GT ».",
+    achievementsLamborghiniDesc:
+      "Conception du légendaire moteur V12 3,5 L pour le prototype Lamborghini 350 GTV — un bloc qui restera au cœur des Lamborghini pendant des décennies.",
   },
 
   en: {
@@ -342,6 +349,13 @@ const COPY: Record<Lang, Copy> = {
       { value: "1961", label: "Left Ferrari" },
       { value: "1964", label: "Founded Bizzarrini S.p.A." },
     ],
+    achievementsTitle: "Other major achievements",
+    achievementsFerrari: "Ferrari 250 GTO",
+    achievementsLamborghini: "Lamborghini V12",
+    achievementsFerrariDesc:
+      "Driving force behind the development of the Ferrari 250 GTO at Maranello. See the reference book « Ferrari 166 to F50 GT ».",
+    achievementsLamborghiniDesc:
+      "Designed the legendary 3.5-litre V12 engine for the Lamborghini 350 GTV prototype — a unit that would remain at the heart of Lamborghini's cars for decades.",
   },
 
   it: {
@@ -371,6 +385,13 @@ const COPY: Record<Lang, Copy> = {
       { value: "1961", label: "Addio alla Ferrari" },
       { value: "1964", label: "Fondazione Bizzarrini S.p.A." },
     ],
+    achievementsTitle: "Altre realizzazioni maggiori",
+    achievementsFerrari: "Ferrari 250 GTO",
+    achievementsLamborghini: "V12 Lamborghini",
+    achievementsFerrariDesc:
+      "Artefice dello sviluppo della Ferrari 250 GTO a Maranello. Vedi l'opera di riferimento « Ferrari 166 to F50 GT ».",
+    achievementsLamborghiniDesc:
+      "Progettazione del leggendario motore V12 3,5 litri per il prototipo Lamborghini 350 GTV — un propulsore che rimarrà al cuore delle Lamborghini per decenni.",
   },
 
 };
