@@ -235,112 +235,56 @@ function HomePage() {
 
       <section id="registre" className="border-b border-border bg-background">
         <div className="container-page pt-8 pb-5">
-          {/* Row 1: search + filter trigger */}
-          <div className="flex items-end gap-3">
-            <div className="relative flex-1 min-w-0">
-              <label htmlFor="filter-search" className="label-field">
-                {t("home.filter.search")}
-              </label>
-              <div className="relative">
-                <Search
-                  aria-hidden="true"
-                  className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/70"
-                />
-                <input
-                  id="filter-search"
-                  className="field-underline pl-6"
-                  placeholder={t("home.filter.searchPlaceholder")}
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* Desktop: inline selects */}
-            <div className="hidden md:flex items-end gap-6 shrink-0">
-              <div className="min-w-[160px]">
-                <label htmlFor="filter-model" className="label-field">{t("home.filter.model")}</label>
-                <select
-                  id="filter-model"
-                  className="field-underline pr-6"
-                  value={modele}
-                  onChange={(e) => setModele(e.target.value)}
-                >
-                  <option value="all">{t("home.filter.allModels")}</option>
-                  {modeles.map((m) => <option key={m} value={m}>{m}</option>)}
-                </select>
-              </div>
-              <div className="min-w-[120px]">
-                <label htmlFor="filter-decade" className="label-field">{t("home.filter.decade")}</label>
-                <select
-                  id="filter-decade"
-                  className="field-underline pr-6"
-                  value={annee}
-                  onChange={(e) => setAnnee(e.target.value)}
-                >
-                  <option value="all">{t("home.filter.allDecades")}</option>
-                  {decennies.map((d) => <option key={d} value={d}>{d}s</option>)}
-                </select>
-              </div>
-            </div>
-
-            {/* Mobile: drawer trigger */}
-            <div className="md:hidden shrink-0">
-              <Sheet>
-                <SheetTrigger
-                  className="inline-flex items-center gap-2 px-3 py-2 border-b border-border text-[0.72rem] uppercase tracking-[0.22em] text-foreground/80 hover:text-brand transition-colors"
-                  aria-label={t("home.filter.toggle")}
-                >
-                  <SlidersHorizontal className="h-3.5 w-3.5" />
-                  <span>{t("home.filter.toggle")}</span>
-                  {(modele !== "all" || annee !== "all") && (
-                    <span className="ml-1 h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true" />
-                  )}
-                </SheetTrigger>
-                <SheetContent side="bottom" className="rounded-t-lg">
-                  <SheetHeader>
-                    <SheetTitle className="font-display text-xl">{t("home.filter.toggle")}</SheetTitle>
-                  </SheetHeader>
-                  <div className="px-4 pb-4 space-y-6">
-                    <div>
-                      <label htmlFor="m-filter-model" className="label-field">{t("home.filter.model")}</label>
-                      <select
-                        id="m-filter-model"
-                        className="field-underline"
-                        value={modele}
-                        onChange={(e) => setModele(e.target.value)}
-                      >
-                        <option value="all">{t("home.filter.allModels")}</option>
-                        {modeles.map((m) => <option key={m} value={m}>{m}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label htmlFor="m-filter-decade" className="label-field">{t("home.filter.decade")}</label>
-                      <select
-                        id="m-filter-decade"
-                        className="field-underline"
-                        value={annee}
-                        onChange={(e) => setAnnee(e.target.value)}
-                      >
-                        <option value="all">{t("home.filter.allDecades")}</option>
-                        {decennies.map((d) => <option key={d} value={d}>{d}s</option>)}
-                      </select>
-                    </div>
-                  </div>
-                  <SheetFooter className="flex-row gap-3 border-t border-border pt-4">
-                    <button
-                      type="button"
-                      onClick={() => { setModele("all"); setAnnee("all"); clearM(); }}
-                      className="flex-1 py-2 text-[0.72rem] uppercase tracking-[0.22em] text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {t("home.filter.reset")}
-                    </button>
-                    <SheetClose className="flex-1 btn-brand">{t("home.filter.done")}</SheetClose>
-                  </SheetFooter>
-                </SheetContent>
-              </Sheet>
+          {/* Search field */}
+          <div className="max-w-md">
+            <label htmlFor="filter-search" className="label-field">
+              {t("home.filter.search")}
+            </label>
+            <div className="relative">
+              <Search
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/70"
+              />
+              <input
+                id="filter-search"
+                className="field-underline pl-6"
+                placeholder={t("home.filter.searchPlaceholder")}
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+              />
             </div>
           </div>
+
+          {/* Model pills */}
+          <div className="mt-8">
+            <span className="label-field block mb-3">{t("home.filter.model")}</span>
+            <div className="flex flex-wrap gap-2">
+              <FilterChip active={modele === "all"} onClick={() => setModele("all")}>
+                {t("home.filter.allModels")}
+              </FilterChip>
+              {modeles.map((m) => (
+                <FilterChip key={m} active={modele === m} onClick={() => setModele(m)}>
+                  {m}
+                </FilterChip>
+              ))}
+            </div>
+          </div>
+
+          {/* Decade pills */}
+          <div className="mt-6">
+            <span className="label-field block mb-3">{t("home.filter.decade")}</span>
+            <div className="flex flex-wrap gap-2">
+              <FilterChip active={annee === "all"} onClick={() => setAnnee("all")}>
+                {t("home.filter.allDecades")}
+              </FilterChip>
+              {decennies.map((d) => (
+                <FilterChip key={d} active={annee === String(d)} onClick={() => setAnnee(String(d))}>
+                  {d}s
+                </FilterChip>
+              ))}
+            </div>
+          </div>
+
 
           {/* Row 2: pills + single elegant count */}
           {(activePills.length > 0 || !loading) && (
