@@ -125,6 +125,56 @@ function GiottoPage() {
         </div>
       )}
 
+      {/* Portrait + quote + key stats */}
+      <section className="border-b border-border bg-surface/30">
+        <div className="container-page py-16 md:py-24">
+          <div className="grid gap-12 lg:gap-20 lg:grid-cols-2 items-center">
+            <div className="relative">
+              <div className="art-frame">
+                <img
+                  src={giottoPhoto.url}
+                  alt="Giotto Bizzarrini beside a Fiat 500 Machinetta, 1953"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-4 md:-right-8 max-w-xs bg-background/95 backdrop-blur border border-border shadow-lg p-6">
+                <p className="font-display text-lg md:text-xl italic leading-snug text-foreground">
+                  “{content.quote}”
+                </p>
+                <span className="mt-2 block text-xs uppercase tracking-[0.28em] text-brand">
+                  — Giotto Bizzarrini
+                </span>
+              </div>
+              <p className="mt-10 text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
+                {content.photoCredit}
+              </p>
+            </div>
+
+            <div className="space-y-6 lg:pl-6">
+              <p className="text-xs uppercase tracking-[0.3em] text-brand">{content.legacyKicker}</p>
+              <h2 className="font-display text-3xl md:text-4xl leading-tight">
+                {content.legacyTitle}
+              </h2>
+              <p className="text-lg text-foreground/85 leading-relaxed">
+                {content.legacyLead}
+              </p>
+
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border">
+                {content.stats.map((s) => (
+                  <div key={s.value}>
+                    <span className="font-display text-3xl md:text-4xl text-brand block leading-none">
+                      {s.value}
+                    </span>
+                    <p className="mt-2 text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground leading-snug">
+                      {s.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
 
       <article className="container-page py-12 md:py-16 grid gap-12 lg:grid-cols-[1fr_320px] items-start">
