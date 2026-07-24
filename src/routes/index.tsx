@@ -279,9 +279,9 @@ function HomePage() {
               <FilterChip active={modele === "all"} onClick={() => setModele("all")}>
                 {t("home.filter.allModels")}
               </FilterChip>
-              {modeles.map((m) => (
-                <FilterChip key={m} active={modele === m} onClick={() => setModele(m)}>
-                  {m}
+              {availableGroups.map((g) => (
+                <FilterChip key={g.key} active={modele === g.key} onClick={() => setModele(g.key)}>
+                  {g.label}
                 </FilterChip>
               ))}
             </div>
