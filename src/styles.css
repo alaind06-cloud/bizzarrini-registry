@@ -194,15 +194,40 @@
   }
 }
 
+
+@utility field-underline {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-foreground);
+  border-radius: 0;
+  padding: 0.5rem 0 0.55rem;
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color 0.2s ease;
+  appearance: none;
+  &:focus, &:focus-visible {
+    outline: none;
+    border-bottom-color: var(--color-brand);
+  }
+  &::placeholder {
+    color: color-mix(in oklab, var(--color-foreground) 42%, transparent);
+    font-style: italic;
+  }
+}
+
 @utility label-field {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-muted-foreground);
-  margin-bottom: 0.35rem;
-  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: color-mix(in oklab, var(--color-foreground) 55%, transparent);
+  margin-bottom: 0.3rem;
+  font-weight: 500;
 }
+
 
 @keyframes hero-kenburns {
   0%   { transform: scale(1.08) translate3d(0, 0, 0); }
