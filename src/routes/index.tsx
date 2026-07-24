@@ -357,7 +357,33 @@ function HomePage() {
   );
 }
 
+function FilterChip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={
+        active
+          ? "inline-flex items-center px-4 py-1.5 text-[0.72rem] uppercase tracking-[0.22em] bg-brand text-brand-foreground border border-brand shadow-sm transition-colors"
+          : "inline-flex items-center px-4 py-1.5 text-[0.72rem] uppercase tracking-[0.22em] bg-surface/40 text-foreground/70 border border-border hover:border-brand hover:text-brand transition-colors"
+      }
+    >
+      {children}
+    </button>
+  );
+}
+
 function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
+
   const { t } = useI18n();
   const cover = photoUrl(v.cover_photo);
   const slug = (v.chassis ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
