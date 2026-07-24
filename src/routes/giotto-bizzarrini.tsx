@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
+import giottoPhoto from "@/assets/giotto-bizzarrini-1953.jpg.asset.json";
+
 
 const CANONICAL = "https://bizzarrini-registry.lovable.app/giotto-bizzarrini";
 
