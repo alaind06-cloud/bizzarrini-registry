@@ -126,7 +126,7 @@ function HomePage() {
     activePills.push({
       key: "modele",
       label: t("home.filter.model"),
-      value: modele,
+      value: selectedGroup?.label ?? modele,
       onRemove: () => setModele("all"),
     });
   }
