@@ -235,6 +235,7 @@ function GiottoPage() {
   );
 }
 
+type Stat = { value: string; label: string };
 type Copy = {
   kicker: string;
   h1a: string;
@@ -245,7 +246,14 @@ type Copy = {
   aboutBody: string;
   exploreKicker: string;
   exploreTitle: string;
+  quote: string;
+  photoCredit: string;
+  legacyKicker: string;
+  legacyTitle: string;
+  legacyLead: string;
+  stats: Stat[];
 };
+
 
 const COPY: Record<Lang, Copy> = {
   fr: {
