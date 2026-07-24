@@ -181,6 +181,35 @@ function GiottoPage() {
 
           <h2 className="font-display text-2xl md:text-3xl mt-12">{content.aboutTitle}</h2>
           <p>{content.aboutBody}</p>
+
+          <div className="mt-12 pt-12 border-t border-border">
+            <h2 className="font-display text-2xl md:text-3xl">{content.achievementsTitle}</h2>
+            <div className="mt-6 grid md:grid-cols-2 gap-4">
+              <Link
+                to="/books"
+                hash="ferrari-166-f50-gt"
+                className="group block p-5 border border-border bg-surface/40 hover:bg-surface/80 transition-colors"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="font-display text-lg group-hover:text-brand transition-colors">
+                      {content.achievementsFerrari}
+                    </h3>
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                      {content.achievementsFerrariDesc}
+                    </p>
+                  </div>
+                  <span className="text-brand text-lg shrink-0">→</span>
+                </div>
+              </Link>
+              <div className="p-5 border border-border bg-surface/40">
+                <h3 className="font-display text-lg">{content.achievementsLamborghini}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  {content.achievementsLamborghiniDesc}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <aside className="lg:sticky lg:top-24 border border-border bg-surface/60 rounded-sm p-6">
@@ -248,6 +277,11 @@ type Copy = {
   legacyTitle: string;
   legacyLead: string;
   stats: Stat[];
+  achievementsTitle: string;
+  achievementsFerrari: string;
+  achievementsLamborghini: string;
+  achievementsFerrariDesc: string;
+  achievementsLamborghiniDesc: string;
 };
 
 
