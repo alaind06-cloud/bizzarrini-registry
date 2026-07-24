@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
-import giottoPhoto from "@/assets/giotto-bizzarrini-1953.jpg.asset.json";
+import giottoPhoto from "@/assets/giotto-bizzarrini-workshop.jpg.asset.json";
 
 
 const CANONICAL = "https://bizzarrini-registry.lovable.app/giotto-bizzarrini";
@@ -107,65 +107,57 @@ function GiottoPage() {
 
   return (
     <div>
-      <section className="border-b border-border bg-surface/40">
-        <div className="container-page py-16 md:py-24">
-          <p className="text-xs uppercase tracking-[0.4em] text-brand">{content.kicker}</p>
-          <h1 className="mt-4 font-display text-4xl md:text-6xl leading-[1.05] max-w-4xl">
-            {content.h1a} <span className="text-brand">{content.h1b}</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-base md:text-lg text-muted-foreground">
-            {content.dates}
-          </p>
-        </div>
-      </section>
-
       {activePills.length > 0 && (
         <div className="container-page pt-4">
           <FilterPills pills={activePills} />
         </div>
       )}
 
-      {/* Portrait + quote + key stats */}
-      <section className="border-b border-border bg-surface/30">
-        <div className="container-page py-16 md:py-24">
-          <div className="grid gap-12 lg:gap-20 lg:grid-cols-2 items-center">
-            <div className="relative">
-              <div className="art-frame">
+      {/* Cinematic hero — A Rebel's Vision */}
+      <section className="relative bg-[#0f0d0b] text-[#f3ebdc] overflow-hidden">
+        <div className="container-page py-20 md:py-32">
+          <div className="grid gap-14 lg:gap-24 lg:grid-cols-2 items-center">
+            <div className="relative order-2 lg:order-1">
+              <div className="absolute -inset-6 md:-inset-10 bg-[radial-gradient(ellipse_at_center,rgba(200,160,90,0.18),transparent_70%)] pointer-events-none" />
+              <div className="relative overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
                 <img
                   src={giottoPhoto.url}
-                  alt="Giotto Bizzarrini beside a Fiat 500 Machinetta, 1953"
-                  className="w-full h-auto object-cover"
+                  alt="Giotto Bizzarrini in his workshop"
+                  className="w-full h-auto object-cover grayscale-[0.15] contrast-[1.05]"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-4 md:-right-8 max-w-xs bg-background/95 backdrop-blur border border-border shadow-lg p-6">
-                <p className="font-display text-lg md:text-xl italic leading-snug text-foreground">
-                  “{content.quote}”
-                </p>
-                <span className="mt-2 block text-xs uppercase tracking-[0.28em] text-brand">
-                  — Giotto Bizzarrini
-                </span>
-              </div>
-              <p className="mt-10 text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
-                {content.photoCredit}
-              </p>
             </div>
 
-            <div className="space-y-6 lg:pl-6">
-              <p className="text-xs uppercase tracking-[0.3em] text-brand">{content.legacyKicker}</p>
-              <h2 className="font-display text-3xl md:text-4xl leading-tight">
+            <div className="order-1 lg:order-2 space-y-8">
+              <p className="text-[0.7rem] uppercase tracking-[0.5em] text-[#c8a05a]">
+                {content.legacyKicker}
+              </p>
+              <h1 className="font-display text-5xl md:text-6xl lg:text-7xl leading-[1.02]">
                 {content.legacyTitle}
-              </h2>
-              <p className="text-lg text-foreground/85 leading-relaxed">
+              </h1>
+
+              <figure className="border-l-2 border-[#c8a05a] pl-6 py-2">
+                <blockquote className="font-display italic text-2xl md:text-3xl leading-snug text-[#f3ebdc]">
+                  “{content.quote}”
+                </blockquote>
+                <figcaption className="mt-4 text-xs uppercase tracking-[0.4em] text-[#c8a05a]">
+                  — Giotto Bizzarrini
+                </figcaption>
+              </figure>
+
+              <p className="text-lg text-[#f3ebdc]/80 leading-relaxed max-w-xl">
                 {content.legacyLead}
               </p>
 
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border">
+              <p className="text-sm text-[#f3ebdc]/60">{content.dates}</p>
+
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/10">
                 {content.stats.map((s) => (
                   <div key={s.value}>
-                    <span className="font-display text-3xl md:text-4xl text-brand block leading-none">
+                    <span className="font-display text-3xl md:text-4xl text-[#c8a05a] block leading-none">
                       {s.value}
                     </span>
-                    <p className="mt-2 text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground leading-snug">
+                    <p className="mt-2 text-[0.65rem] uppercase tracking-[0.25em] text-[#f3ebdc]/60 leading-snug">
                       {s.label}
                     </p>
                   </div>
@@ -173,6 +165,10 @@ function GiottoPage() {
               </div>
             </div>
           </div>
+
+          <p className="mt-16 text-[0.65rem] uppercase tracking-[0.25em] text-[#f3ebdc]/40">
+            {content.photoCredit}
+          </p>
         </div>
       </section>
 
