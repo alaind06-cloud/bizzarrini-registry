@@ -20,7 +20,7 @@ export const Route = createFileRoute("/books")({
 function BookCard({ book, index }: { book: Book; index: number }) {
   const { t } = useI18n();
   return (
-    <article className="group">
+    <article id={book.id} className="group scroll-mt-24">
       <div className="relative aspect-[3/4] bg-surface-2 overflow-hidden border border-border shadow-[0_20px_40px_-25px_rgba(0,0,0,0.9)] transition-all duration-500 group-hover:-translate-y-1 group-hover:border-brand/60 group-hover:shadow-[0_28px_60px_-25px_rgba(220,38,38,0.35)]">
         <img
           src={book.couverture}

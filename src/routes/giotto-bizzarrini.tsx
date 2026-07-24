@@ -181,6 +181,35 @@ function GiottoPage() {
 
           <h2 className="font-display text-2xl md:text-3xl mt-12">{content.aboutTitle}</h2>
           <p>{content.aboutBody}</p>
+
+          <div className="mt-12 pt-12 border-t border-border">
+            <h2 className="font-display text-2xl md:text-3xl">{content.achievementsTitle}</h2>
+            <div className="mt-6 grid md:grid-cols-2 gap-4">
+              <Link
+                to="/books"
+                hash="ferrari-166-f50-gt"
+                className="group block p-5 border border-border bg-surface/40 hover:bg-surface/80 transition-colors"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="font-display text-lg group-hover:text-brand transition-colors">
+                      {content.achievementsFerrari}
+                    </h3>
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                      {content.achievementsFerrariDesc}
+                    </p>
+                  </div>
+                  <span className="text-brand text-lg shrink-0">→</span>
+                </div>
+              </Link>
+              <div className="p-5 border border-border bg-surface/40">
+                <h3 className="font-display text-lg">{content.achievementsLamborghini}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  {content.achievementsLamborghiniDesc}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <aside className="lg:sticky lg:top-24 border border-border bg-surface/60 rounded-sm p-6">
@@ -248,6 +277,11 @@ type Copy = {
   legacyTitle: string;
   legacyLead: string;
   stats: Stat[];
+  achievementsTitle: string;
+  achievementsFerrari: string;
+  achievementsLamborghini: string;
+  achievementsFerrariDesc: string;
+  achievementsLamborghiniDesc: string;
 };
 
 
@@ -279,6 +313,13 @@ const COPY: Record<Lang, Copy> = {
       { value: "1961", label: "Départ de Ferrari" },
       { value: "1964", label: "Fondation Bizzarrini S.p.A." },
     ],
+    achievementsTitle: "Autres réalisations majeures",
+    achievementsFerrari: "Ferrari 250 GTO",
+    achievementsLamborghini: "V12 Lamborghini",
+    achievementsFerrariDesc:
+      "Maître d'œuvre du développement de la Ferrari 250 GTO à Maranello. Voir l'ouvrage de référence « Ferrari 166 to F50 GT ».",
+    achievementsLamborghiniDesc:
+      "Conception du légendaire moteur V12 3,5 L pour le prototype Lamborghini 350 GTV — un bloc qui restera au cœur des Lamborghini pendant des décennies.",
   },
 
   en: {
@@ -308,6 +349,13 @@ const COPY: Record<Lang, Copy> = {
       { value: "1961", label: "Left Ferrari" },
       { value: "1964", label: "Founded Bizzarrini S.p.A." },
     ],
+    achievementsTitle: "Other major achievements",
+    achievementsFerrari: "Ferrari 250 GTO",
+    achievementsLamborghini: "Lamborghini V12",
+    achievementsFerrariDesc:
+      "Driving force behind the development of the Ferrari 250 GTO at Maranello. See the reference book « Ferrari 166 to F50 GT ».",
+    achievementsLamborghiniDesc:
+      "Designed the legendary 3.5-litre V12 engine for the Lamborghini 350 GTV prototype — a unit that would remain at the heart of Lamborghini's cars for decades.",
   },
 
   it: {
@@ -337,6 +385,13 @@ const COPY: Record<Lang, Copy> = {
       { value: "1961", label: "Addio alla Ferrari" },
       { value: "1964", label: "Fondazione Bizzarrini S.p.A." },
     ],
+    achievementsTitle: "Altre realizzazioni maggiori",
+    achievementsFerrari: "Ferrari 250 GTO",
+    achievementsLamborghini: "V12 Lamborghini",
+    achievementsFerrariDesc:
+      "Artefice dello sviluppo della Ferrari 250 GTO a Maranello. Vedi l'opera di riferimento « Ferrari 166 to F50 GT ».",
+    achievementsLamborghiniDesc:
+      "Progettazione del leggendario motore V12 3,5 litri per il prototipo Lamborghini 350 GTV — un propulsore che rimarrà al cuore delle Lamborghini per decenni.",
   },
 
 };
