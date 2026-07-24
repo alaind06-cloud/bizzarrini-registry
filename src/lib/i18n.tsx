@@ -20,7 +20,8 @@ const fr: Dict = {
   "footer.tagline": "Registre officiel des châssis authentifiés",
 
   // Home
-  "home.kicker": "Registro ufficiale",
+  "home.kicker": "Registre officiel",
+  "home.registryTitle": "Registre historique",
   "home.hero.badge": "Fondé en 1964 — Livourne, Italie",
   "home.title": "Le registre officiel des <brand>Bizzarrini</brand>",
   "home.lead": "Près de trois décennies à rassembler des informations sur les modèles Bizzarrini et leur histoire, partagées avec les passionnés. Seuls les faits nous intéressent, pour vous offrir le registre Bizzarrini le plus honnête possible. N'hésitez pas à contribuer.",
@@ -206,6 +207,7 @@ const en: Dict = {
   "footer.tagline": "Authenticated chassis registry",
 
   "home.kicker": "Official register",
+  "home.registryTitle": "Historical Registry",
   "home.hero.badge": "Est. 1964 — Livorno, Italia",
   "home.title": "The official <brand>Bizzarrini</brand> register",
   "home.lead": "Nearly three decades gathering information on the Bizzarrini model and its history, shared with fellow enthusiasts. We are only interested in the facts, to bring you the most honest Bizzarrini register. Feel free to contribute.",
@@ -383,6 +385,7 @@ const it: Dict = {
   "footer.tagline": "Registro ufficiale dei telai autenticati",
 
   "home.kicker": "Registro ufficiale",
+  "home.registryTitle": "Registro storico",
   "home.hero.badge": "Fondato nel 1964 — Livorno, Italia",
   "home.title": "Il registro ufficiale delle <brand>Bizzarrini</brand>",
   "home.lead": "Quasi tre decenni a raccogliere informazioni sui modelli Bizzarrini e sulla loro storia, condivise con gli appassionati. Ci interessano solo i fatti, per offrirvi il registro Bizzarrini più onesto possibile. Sentitevi liberi di contribuire.",
