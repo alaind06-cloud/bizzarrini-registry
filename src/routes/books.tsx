@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { books, type Book } from "@/data/books-data";
 import { useI18n } from "@/lib/i18n";
 
