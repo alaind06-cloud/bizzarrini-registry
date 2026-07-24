@@ -302,7 +302,18 @@ const COPY: Record<Lang, Copy> = {
       "This register exists to document, chassis by chassis, the cars born from Giotto Bizzarrini's engineering genius — from the Iso Grifo prototypes to the Bizzarrini 5300 GT and P538. Its purpose is to preserve the traceability and technical heritage of each individual car for the collectors, historians, and enthusiasts who continue to care for them.",
     exploreKicker: "Explore",
     exploreTitle: "Models in the register",
+    quote: "The 250 GTO is my car.",
+    photoCredit: "Photo: Giotto Bizzarrini with the Fiat 500 “Macchinetta”, 1953 — Wikimedia Commons (public domain)",
+    legacyKicker: "The legacy",
+    legacyTitle: "One engineer, three revolutions",
+    legacyLead: "From the Ferrari 250 GTO to the Bizzarrini 5300 GT, by way of the Lamborghini V12, Giotto Bizzarrini laid the mechanical foundations of the modern Italian GT.",
+    stats: [
+      { value: "1926", label: "Born in Livorno" },
+      { value: "1961", label: "Left Ferrari" },
+      { value: "1964", label: "Founded Bizzarrini S.p.A." },
+    ],
   },
+
   it: {
     kicker: "Ritratto",
     h1a: "Giotto Bizzarrini —",
