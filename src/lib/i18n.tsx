@@ -76,6 +76,11 @@ const fr: Dict = {
   "videos.title": "Vidéos",
   "videos.lead": "Sélection de reportages, essais et courses documentant l'histoire des Bizzarrini.",
   "videos.unsupported": "Format non supporté",
+  "videos.featuredBadge": "Interview exclusive",
+  "videos.featuredTitle": "BIZZARRINI — L'interview exclusive de Giotto Bizzarrini par Genepifilm",
+  "videos.featuredLead": "Série documentaire en six parties consacrée à Giotto Bizzarrini, réalisée par Genepifilm.",
+  "videos.partLabel": "Partie",
+  "videos.othersTitle": "Autres vidéos",
 
   // Books
   "books.kicker": "Bibliographie",
@@ -226,6 +231,11 @@ const en: Dict = {
   "videos.title": "Videos",
   "videos.lead": "Selected reports, road tests and races documenting Bizzarrini history.",
   "videos.unsupported": "Format not supported",
+  "videos.featuredBadge": "Exclusive interview",
+  "videos.featuredTitle": "BIZZARRINI — The exclusive interview of Giotto Bizzarrini by Genepifilm",
+  "videos.featuredLead": "A six-part documentary series dedicated to Giotto Bizzarrini, produced by Genepifilm.",
+  "videos.partLabel": "Part",
+  "videos.othersTitle": "Other videos",
 
   "books.kicker": "Bibliography",
   "books.title": "Books",
@@ -371,6 +381,11 @@ const it: Dict = {
   "videos.title": "Video",
   "videos.lead": "Selezione di reportage, prove e gare che documentano la storia delle Bizzarrini.",
   "videos.unsupported": "Formato non supportato",
+  "videos.featuredBadge": "Intervista esclusiva",
+  "videos.featuredTitle": "BIZZARRINI — L'intervista esclusiva a Giotto Bizzarrini di Genepifilm",
+  "videos.featuredLead": "Serie documentaria in sei parti dedicata a Giotto Bizzarrini, realizzata da Genepifilm.",
+  "videos.partLabel": "Parte",
+  "videos.othersTitle": "Altri video",
 
   "books.kicker": "Bibliografia",
   "books.title": "Libri",
