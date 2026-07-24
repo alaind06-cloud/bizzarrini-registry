@@ -511,6 +511,24 @@ const it: Dict = {
   "car.specs.condition": "Stato",
   "car.timeline.summary": "Vista sintetica",
   "car.timeline.full": "Vista completa",
+  "car.provenance.title": "Provenienza e documentazione storica",
+  "car.provenance.body": "Ogni telaio del registro è autenticato secondo il metodo stabilito da Philippe Olczyk, esperto ufficialmente riconosciuto da Giotto Bizzarrini: incrocio degli archivi personali dell'ingegnere, dei registri di fabbrica di Livorno e dei documenti di consegna d'epoca.",
+  "car.provenance.link": "Scopri di più sul certificato di perizia →",
+
+  "expert.kicker": "Esperto riconosciuto",
+  "expert.title": "Esperto & Certificato",
+  "expert.intro": "Giotto Bizzarrini ha formalmente riconosciuto Philippe Olczyk come esperto ufficiale delle sue automobili, consegnandogli un documento/certificato firmato di suo pugno che gli conferisce questo ruolo e la legittimità di archivista ed esperto ufficiale del marchio.",
+  "expert.whyTitle": "Perché questo certificato è importante",
+  "expert.point1.title": "Legittimazione diretta dal creatore",
+  "expert.point1.body": "A differenza di semplici storici autoproclamati, Philippe Olczyk disponeva dell'avallo personale e scritto di Giotto Bizzarrini, che gli affidò gran parte dei suoi archivi personali (schizzi, documenti di consegna, schede tecniche d'epoca).",
+  "expert.point2.title": "Firma congiunta sui certificati",
+  "expert.point2.body": "Quando Philippe autenticava un telaio (5300 GT, Iso Grifo A3/C, P538, ecc.), i documenti di attestazione di autenticità e provenienza erano firmati da Giotto Bizzarrini in persona.",
+  "expert.point3.title": "Accesso ai registri di fabbrica di Livorno",
+  "expert.point3.body": "Questa vicinanza gli ha permesso di pubblicare i libri e i registri di telai più completi sul marchio.",
+  "expert.cta.books": "Vedi i libri",
+  "expert.cta.videos": "Guarda l'intervista",
+  "expert.cta.contact": "Contatta l'esperto",
+  "common.learnMore": "Scopri di più →",
 };
 
 const DICTS: Record<Lang, Dict> = { fr, en, it };
