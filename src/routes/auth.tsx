@@ -102,9 +102,9 @@ function AuthPage() {
                 </div>
                 <div>
                   <label htmlFor="auth-raison" className="label-field">
-                    {t("auth.field.raison")} <span className="text-muted-foreground">{t("auth.field.optional")}</span>
+                    {t("auth.field.raison")}
                   </label>
-                  <textarea id="auth-raison" className="field min-h-[80px]" value={raison} onChange={(e) => setRaison(e.target.value)} maxLength={500} placeholder={t("auth.field.raisonPlaceholder")} />
+                  <textarea id="auth-raison" className="field min-h-[80px]" value={raison} onChange={(e) => setRaison(e.target.value)} required minLength={10} maxLength={500} placeholder={t("auth.field.raisonPlaceholder")} />
                 </div>
               </>
             )}
