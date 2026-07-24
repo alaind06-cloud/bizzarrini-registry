@@ -296,8 +296,7 @@ function HomePage() {
       <section id="registre" className="border-b border-border bg-background">
         <div className="container-page pt-20 pb-8">
           <div className="text-center mb-12">
-            <span className="eyebrow">{t("home.kicker")}</span>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mt-3">{t("home.registryTitle")}</h2>
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl">{t("home.registryTitle")}</h2>
             <div className="mt-5 section-divider" />
           </div>
 
