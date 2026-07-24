@@ -47,45 +47,46 @@
 :root {
   --radius: 0.25rem;
 
-  /* Ivory / vellum paper background with dried-ink text */
-  --background: oklch(0.982 0.006 85);
-  --foreground: oklch(0.19 0.005 60);
+  /* Muted warm parchment — softer than pure ivory to reduce glare */
+  --background: oklch(0.945 0.012 82);
+  --foreground: oklch(0.24 0.006 60);
 
-  --surface: oklch(0.97 0.006 82);
-  --surface-2: oklch(0.945 0.008 82);
+  --surface: oklch(0.928 0.012 82);
+  --surface-2: oklch(0.905 0.014 82);
 
-  --card: oklch(0.995 0.003 85);
-  --card-foreground: oklch(0.19 0.005 60);
-  --popover: oklch(0.995 0.003 85);
-  --popover-foreground: oklch(0.19 0.005 60);
+  --card: oklch(0.955 0.010 82);
+  --card-foreground: oklch(0.24 0.006 60);
+  --popover: oklch(0.955 0.010 82);
+  --popover-foreground: oklch(0.24 0.006 60);
 
-  /* Rosso Corsa vintage — deeper, less neon */
-  --brand: oklch(0.52 0.20 28);
-  --brand-foreground: oklch(0.985 0.005 85);
+  /* Rosso Corsa — deepened for elegance */
+  --brand: oklch(0.46 0.17 28);
+  --brand-foreground: oklch(0.965 0.008 85);
 
-  --primary: oklch(0.52 0.20 28);
-  --primary-foreground: oklch(0.985 0.005 85);
+  --primary: oklch(0.46 0.17 28);
+  --primary-foreground: oklch(0.965 0.008 85);
 
-  --secondary: oklch(0.93 0.008 82);
-  --secondary-foreground: oklch(0.22 0.005 60);
+  --secondary: oklch(0.90 0.012 82);
+  --secondary-foreground: oklch(0.26 0.006 60);
 
-  --muted: oklch(0.945 0.008 82);
-  --muted-foreground: oklch(0.44 0.008 60);
+  --muted: oklch(0.905 0.014 82);
+  --muted-foreground: oklch(0.46 0.010 60);
 
-  --accent: oklch(0.94 0.02 75);
-  --accent-foreground: oklch(0.22 0.005 60);
+  --accent: oklch(0.905 0.022 75);
+  --accent-foreground: oklch(0.26 0.006 60);
 
-  /* Brushed gold accent for badges/details */
-  --gold: oklch(0.68 0.09 75);
+  /* Brushed gold accent — muted */
+  --gold: oklch(0.62 0.08 75);
 
-  --destructive: oklch(0.52 0.20 28);
-  --destructive-foreground: oklch(0.985 0.005 85);
+  --destructive: oklch(0.46 0.17 28);
+  --destructive-foreground: oklch(0.965 0.008 85);
 
-  /* Warm hairline #E5E0D8 */
-  --border: oklch(0.91 0.008 80);
-  --input: oklch(0.925 0.008 80);
-  --ring: oklch(0.52 0.20 28);
+  /* Warm hairline */
+  --border: oklch(0.87 0.012 78);
+  --input: oklch(0.89 0.012 78);
+  --ring: oklch(0.46 0.17 28);
 }
+
 
 
 @layer base {
