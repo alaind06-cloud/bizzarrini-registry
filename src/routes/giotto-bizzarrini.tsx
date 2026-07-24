@@ -331,5 +331,16 @@ const COPY: Record<Lang, Copy> = {
       "Questo registro è dedicato al censimento e alla documentazione, telaio per telaio, delle vetture nate dal genio di Giotto Bizzarrini — dai prototipi Iso Grifo alle Bizzarrini 5300 GT e P538. Il suo scopo è preservare la tracciabilità e il patrimonio tecnico di ogni esemplare per collezionisti, storici e appassionati.",
     exploreKicker: "Esplora",
     exploreTitle: "I modelli nel registro",
+    quote: "La 250 GTO è la mia macchina.",
+    photoCredit: "Foto: Giotto Bizzarrini con la Fiat 500 “Macchinetta”, 1953 — Wikimedia Commons (pubblico dominio)",
+    legacyKicker: "L'eredità",
+    legacyTitle: "Un ingegnere, tre rivoluzioni",
+    legacyLead: "Dalla Ferrari 250 GTO alla Bizzarrini 5300 GT, passando per il V12 Lamborghini, Giotto Bizzarrini ha posto le basi meccaniche della moderna GT italiana.",
+    stats: [
+      { value: "1926", label: "Nascita a Livorno" },
+      { value: "1961", label: "Addio alla Ferrari" },
+      { value: "1964", label: "Fondazione Bizzarrini S.p.A." },
+    ],
   },
+
 };
