@@ -135,8 +135,9 @@ function CarDetail() {
             {t("car.backCatalog")}
           </Link>
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
-            <div className="bg-black border border-white/15 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.9)] p-2 sm:p-3">
-              <div className="aspect-[3/2] bg-black overflow-hidden">
+            <div className="bg-surface-2 border border-border shadow-[0_20px_60px_-30px_rgba(0,0,0,0.25)] p-2 sm:p-3">
+              <div className="aspect-[3/2] bg-surface-2 overflow-hidden">
+
                 {cover ? (
                   <img src={cover} alt={voiture.titre} className="w-full h-full object-contain" />
                 ) : (
@@ -166,7 +167,7 @@ function CarDetail() {
                     {specEntries.map((key) => (
                       <div key={key} className="flex flex-col gap-0.5">
                         <dt className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">{specLabels[key]}</dt>
-                        <dd className="text-white font-medium">{specs[key]}</dd>
+                        <dd className="text-foreground font-semibold">{specs[key]}</dd>
                       </div>
                     ))}
                   </dl>
