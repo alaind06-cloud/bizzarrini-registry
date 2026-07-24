@@ -339,6 +339,24 @@ const en: Dict = {
   "car.specs.condition": "Condition",
   "car.timeline.summary": "Summary view",
   "car.timeline.full": "Full view",
+  "car.provenance.title": "Provenance & Historical Documentation",
+  "car.provenance.body": "Every chassis in the register is authenticated using the method established by Philippe Olczyk, an expert formally recognised by Giotto Bizzarrini himself: cross-referencing the engineer's personal archives, the Livorno factory registers and period delivery documents.",
+  "car.provenance.link": "Learn more about the expert certificate →",
+
+  "expert.kicker": "Recognised expert",
+  "expert.title": "Expert & Certificate",
+  "expert.intro": "Giotto Bizzarrini formally recognised Philippe Olczyk as the official expert on his cars, handing him a document/certificate signed in his own hand conferring this role and legitimacy as archivist and official expert of the marque.",
+  "expert.whyTitle": "Why this certificate matters",
+  "expert.point1.title": "Direct endorsement by the creator",
+  "expert.point1.body": "Unlike self-proclaimed historians, Philippe Olczyk had the personal and written endorsement of Giotto Bizzarrini, who entrusted him with a large part of his personal archives (sketches, delivery documents, period technical data sheets).",
+  "expert.point2.title": "Joint signature on the certificates",
+  "expert.point2.body": "When Philippe authenticated a chassis (5300 GT, Iso Grifo A3/C, P538, etc.), the certificates of authenticity and provenance were signed by Giotto Bizzarrini in person.",
+  "expert.point3.title": "Access to the Livorno factory registers",
+  "expert.point3.body": "This closeness allowed him to publish the most complete books and chassis registers on the marque.",
+  "expert.cta.books": "See the books",
+  "expert.cta.videos": "Watch the interview",
+  "expert.cta.contact": "Contact the expert",
+  "common.learnMore": "Learn more →",
 };
 
 const it: Dict = {
