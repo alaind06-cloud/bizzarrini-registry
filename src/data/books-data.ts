@@ -2,6 +2,7 @@ export interface Book {
   titre: string;
   couverture: string;
   lienAchat?: string;
+  id?: string;
 }
 
 export const books: Book[] = [
@@ -12,7 +13,7 @@ export const books: Book[] = [
   { titre: "Lancia 037 - Macchina da Corsa / Registro", couverture: "/books/book-9.jpg" },
   { titre: "Porsche 904 - The Truth and The Rumours", couverture: "/books/Book8.jpg" },
   { titre: "Ford RS200 to Focus WRC - The Fabulous Destiny of the Ford Rally Cars", couverture: "/books/Book6.jpg" },
-  { titre: "Ferrari 166 to F50 GT - The Racing Berlinettas", couverture: "/books/Book5.jpg" },
+  { titre: "Ferrari 166 to F50 GT - The Racing Berlinettas", couverture: "/books/Book5.jpg", id: "ferrari-166-f50-gt" },
   { titre: "Ferrari Fifty Years on the Track - The Sport Racing Cars", couverture: "/books/Book4.jpg" },
   { titre: "Alfa Romeo TZ - Zagato - Autodelta - Conrero", couverture: "/books/Book1-1.jpg" },
   { titre: "Visa 1000 Pistes - La Petite Bombe", couverture: "/books/Book2.jpg" },
