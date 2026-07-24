@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { videos, toYoutubeEmbed, toFacebookEmbed } from "@/data/videos-data";
+import { videos, genepifilmSeries, toYoutubeEmbed, toFacebookEmbed, type Video } from "@/data/videos-data";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/videos")({
@@ -17,6 +17,41 @@ export const Route = createFileRoute("/videos")({
   component: VideosPage,
 });
 
+function VideoCard({ v, label }: { v: Video; label?: string }) {
+  const { t } = useI18n();
+  const src = v.plateforme === "youtube" ? toYoutubeEmbed(v.url) : toFacebookEmbed(v.url);
+  return (
+    <article className="group bg-card border border-border overflow-hidden hover:border-brand/60 transition-colors">
+      <div className="aspect-video bg-surface-2 relative">
+        {src ? (
+          <iframe
+            src={src}
+            title={v.titre}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        ) : (
+          <div className="w-full h-full grid place-items-center text-muted-foreground text-sm">
+            {t("videos.unsupported")}
+          </div>
+        )}
+      </div>
+      <div className="p-4 border-t border-border flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="font-display text-lg leading-snug truncate">{label ?? v.titre}</h3>
+          {v.sousTitre && (
+            <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{v.sousTitre}</p>
+          )}
+        </div>
+        <span className="shrink-0 text-[10px] uppercase tracking-[0.2em] text-brand border border-brand/40 rounded-sm px-2 py-1">
+          {v.plateforme === "youtube" ? "YouTube" : "Facebook"}
+        </span>
+      </div>
+    </article>
+  );
+}
+
 function VideosPage() {
   const { t } = useI18n();
   return (
@@ -27,43 +62,28 @@ function VideosPage() {
         <p className="mt-4 text-muted-foreground">{t("videos.lead")}</p>
       </header>
 
+      {/* Featured Genepifilm series */}
+      <section className="mb-16 border border-brand/40 bg-card/60 p-5 md:p-8 rounded-sm">
+        <div className="mb-6 flex flex-wrap items-center gap-3">
+          <span className="inline-block text-[10px] uppercase tracking-[0.25em] text-brand border border-brand/60 rounded-sm px-2 py-1">
+            {t("videos.featuredBadge")}
+          </span>
+        </div>
+        <h2 className="font-display text-2xl md:text-3xl leading-snug">{t("videos.featuredTitle")}</h2>
+        <p className="mt-3 text-sm text-muted-foreground max-w-3xl">{t("videos.featuredLead")}</p>
+
+        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {genepifilmSeries.map((v, i) => (
+            <VideoCard key={v.id} v={v} label={`${t("videos.partLabel")} ${i + 1}`} />
+          ))}
+        </div>
+      </section>
+
+      <h2 className="font-display text-2xl md:text-3xl mb-6">{t("videos.othersTitle")}</h2>
       <div className="grid gap-8 md:grid-cols-2">
-        {videos.map((v) => {
-          const src = v.plateforme === "youtube" ? toYoutubeEmbed(v.url) : toFacebookEmbed(v.url);
-          return (
-            <article
-              key={v.id}
-              className="group bg-card border border-border overflow-hidden hover:border-brand/60 transition-colors"
-            >
-              <div className="aspect-video bg-surface-2 relative">
-                {src ? (
-                  <iframe
-                    src={src}
-                    title={v.titre}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                  />
-                ) : (
-                  <div className="w-full h-full grid place-items-center text-muted-foreground text-sm">
-                    {t("videos.unsupported")}
-                  </div>
-                )}
-              </div>
-              <div className="p-4 border-t border-border flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <h2 className="font-display text-lg leading-snug truncate">{v.titre}</h2>
-                  {v.sousTitre && (
-                    <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{v.sousTitre}</p>
-                  )}
-                </div>
-                <span className="shrink-0 text-[10px] uppercase tracking-[0.2em] text-brand border border-brand/40 rounded-sm px-2 py-1">
-                  {v.plateforme === "youtube" ? "YouTube" : "Facebook"}
-                </span>
-              </div>
-            </article>
-          );
-        })}
+        {videos.map((v) => (
+          <VideoCard key={v.id} v={v} />
+        ))}
       </div>
     </div>
   );
