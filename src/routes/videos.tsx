@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { videos, genepifilmSeries, toYoutubeEmbed, toFacebookEmbed, type Video } from "@/data/videos-data";
 import { useI18n } from "@/lib/i18n";
+
 
 export const Route = createFileRoute("/videos")({
   head: () => ({
