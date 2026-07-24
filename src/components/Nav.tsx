@@ -46,13 +46,13 @@ export function Nav() {
 
   const activeCls = "text-brand after:w-full after:left-0";
 
-  const navItems = [
+  const navItems: { to: string; label: string; exact?: boolean }[] = [
     { to: "/", label: t("nav.home"), exact: true },
     { to: "/giotto-bizzarrini", label: t("nav.giotto") },
     { to: "/videos", label: t("nav.videos") },
     { to: "/books", label: t("nav.books") },
     { to: "/contact", label: t("nav.contact") },
-  ] as const;
+  ];
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
