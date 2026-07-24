@@ -385,6 +385,7 @@ const it: Dict = {
   "footer.tagline": "Registro ufficiale dei telai autenticati",
 
   "home.kicker": "Registro ufficiale",
+  "home.registryTitle": "Registro storico",
   "home.hero.badge": "Fondato nel 1964 — Livorno, Italia",
   "home.title": "Il registro ufficiale delle <brand>Bizzarrini</brand>",
   "home.lead": "Quasi tre decenni a raccogliere informazioni sui modelli Bizzarrini e sulla loro storia, condivise con gli appassionati. Ci interessano solo i fatti, per offrirvi il registro Bizzarrini più onesto possibile. Sentitevi liberi di contribuire.",
