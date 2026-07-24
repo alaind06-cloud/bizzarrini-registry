@@ -204,15 +204,28 @@ function HomePage() {
     <div>
       <section className="relative overflow-hidden border-b border-border bg-background min-h-[92vh] flex items-center">
         <div className="absolute inset-0">
-          <video
-            src={heroVideo.url}
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster={heroCovers[0] ? photoUrl(heroCovers[0].cover_photo) ?? undefined : undefined}
-            className="w-full h-full object-cover"
+          <img
+            src={heroPoster.url}
+            alt=""
+            fetchPriority="high"
+            decoding="async"
+            width={1600}
+            height={1000}
+            className="absolute inset-0 w-full h-full object-cover"
           />
+          {enableVideo && (
+            <video
+              src={heroVideo.url}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="none"
+              poster={heroPoster.url}
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
           {/* Ivory wash for legibility on light theme */}
           <div className="absolute inset-0 bg-gradient-to-b from-background/55 via-background/70 to-background" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/30 to-background/60" />
