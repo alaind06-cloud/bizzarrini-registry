@@ -207,6 +207,7 @@ const en: Dict = {
   "footer.tagline": "Authenticated chassis registry",
 
   "home.kicker": "Official register",
+  "home.registryTitle": "Historical Registry",
   "home.hero.badge": "Est. 1964 — Livorno, Italia",
   "home.title": "The official <brand>Bizzarrini</brand> register",
   "home.lead": "Nearly three decades gathering information on the Bizzarrini model and its history, shared with fellow enthusiasts. We are only interested in the facts, to bring you the most honest Bizzarrini register. Feel free to contribute.",
