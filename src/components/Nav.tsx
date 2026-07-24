@@ -11,21 +11,23 @@ function LangSwitch({ className = "" }: { className?: string }) {
     { code: "it", label: "IT" },
   ];
   return (
-    <div className={`inline-flex rounded-sm border border-border overflow-hidden text-[10px] font-mono uppercase tracking-widest ${className}`}>
-      {langs.map(({ code, label }) => (
-        <button
-          key={code}
-          onClick={() => setLang(code)}
-          className={`px-2 py-1 transition-colors ${
-            lang === code
-              ? "bg-brand text-brand-foreground"
-              : "bg-transparent hover:bg-surface-2 text-muted-foreground hover:text-foreground"
-          }`}
-          aria-pressed={lang === code}
-          aria-label={code === "fr" ? "Français" : code === "en" ? "English" : "Italiano"}
-        >
-          {label}
-        </button>
+    <div className={`inline-flex items-center gap-1 font-mono text-[10px] tracking-[0.2em] ${className}`}>
+      {langs.map(({ code, label }, i) => (
+        <span key={code} className="inline-flex items-center gap-1">
+          {i > 0 && <span className="text-muted-foreground/40">·</span>}
+          <button
+            onClick={() => setLang(code)}
+            className={`px-1 py-0.5 transition-colors ${
+              lang === code
+                ? "text-brand"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+            aria-pressed={lang === code}
+            aria-label={code === "fr" ? "Français" : code === "en" ? "English" : "Italiano"}
+          >
+            {label}
+          </button>
+        </span>
       ))}
     </div>
   );
@@ -42,84 +44,104 @@ export function Nav() {
     router.navigate({ to: "/" });
   };
 
-  const linkCls = "text-sm font-medium tracking-wide uppercase text-foreground/80 hover:text-brand transition-colors";
-  const activeCls = "text-brand";
+  const activeCls = "text-brand after:w-full after:left-0";
+
+  const navItems: { to: string; label: string; exact?: boolean }[] = [
+    { to: "/", label: t("nav.home"), exact: true },
+    { to: "/giotto-bizzarrini", label: t("nav.giotto") },
+    { to: "/videos", label: t("nav.videos") },
+    { to: "/books", label: t("nav.books") },
+    { to: "/contact", label: t("nav.contact") },
+  ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
-      <div className="container-page flex items-center justify-between py-4">
-        <Link to="/" className="flex items-center gap-3 group">
-          <span className="inline-block w-1.5 h-6 bg-brand" aria-hidden />
-          <span className="font-display text-lg md:text-xl tracking-wide">
-            Bizzarrini <span className="text-brand">Register</span>
-          </span>
-        </Link>
-
-        <nav className="hidden md:flex items-center gap-8">
-          <Link to="/" className={linkCls} activeProps={{ className: activeCls }} activeOptions={{ exact: true }}>{t("nav.home")}</Link>
-          <Link to="/giotto-bizzarrini" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.giotto")}</Link>
-          <Link to="/videos" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.videos")}</Link>
-          <Link to="/books" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.books")}</Link>
-          <Link to="/contact" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.contact")}</Link>
-          {isAdmin && (
-            <Link to="/admin" className={linkCls} activeProps={{ className: activeCls }}>{t("nav.admin")}</Link>
-          )}
-        </nav>
-
-        <div className="hidden md:flex items-center gap-3">
-          <LangSwitch />
-          {user ? (
-            <button onClick={handleLogout} className="btn-ghost">{t("nav.logout")}</button>
-          ) : (
-            <Link to="/auth" className="btn-brand">{t("nav.signin")}</Link>
-          )}
-        </div>
-
-        <div className="md:hidden flex items-center gap-2">
-          <LangSwitch />
-          <button
-            className="btn-ghost !p-2"
-            aria-label={t("nav.menu")}
-            onClick={() => setOpen((v) => !v)}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+    <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
+      {/* Top strip: language + auth (discreet) */}
+      <div className="border-b border-border/60">
+        <div className="container-page flex items-center justify-between py-2 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+          <span className="hidden sm:inline">Registre officiel · dep. 1996</span>
+          <div className="flex items-center gap-4 ml-auto">
+            <LangSwitch />
+            <span className="text-border">|</span>
+            {user ? (
+              <button onClick={handleLogout} className="hover:text-brand transition-colors">
+                {t("nav.logout")}
+              </button>
+            ) : (
+              <Link to="/auth" className="hover:text-brand transition-colors">
+                {t("nav.signin")}
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
+      {/* Centered logo */}
+      <div className="container-page pt-6 pb-3 flex items-center justify-between md:justify-center relative">
+        <Link to="/" className="flex flex-col items-center group text-center">
+          <span className="font-display text-2xl md:text-[28px] leading-none tracking-[0.02em]">
+            Bizzarrini
+          </span>
+          <span className="mt-1 flex items-center gap-2 text-[10px] uppercase tracking-[0.42em] text-muted-foreground">
+            <span className="inline-block h-px w-6 bg-border" />
+            <span className="text-brand">Register</span>
+            <span className="inline-block h-px w-6 bg-border" />
+          </span>
+        </Link>
+
+        <button
+          className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 p-2 text-foreground/70 hover:text-foreground"
+          aria-label={t("nav.menu")}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Nav row */}
+      <nav className="hidden md:flex items-center justify-center gap-10 pb-5 pt-1">
+        {navItems.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className="nav-link"
+            activeProps={{ className: activeCls }}
+            activeOptions={item.exact ? { exact: true } : undefined}
+          >
+            {item.label}
+          </Link>
+        ))}
+        {isAdmin && (
+          <Link to="/admin" className="nav-link" activeProps={{ className: activeCls }}>
+            {t("nav.admin")}
+          </Link>
+        )}
+      </nav>
+
       {open && (
         <div className="md:hidden border-t border-border bg-background">
-          <div className="container-page flex flex-col gap-1 py-3">
-            {[
-              { to: "/", label: t("nav.home") },
-              { to: "/giotto-bizzarrini", label: t("nav.giotto") },
-              { to: "/videos", label: t("nav.videos") },
-              { to: "/books", label: t("nav.books") },
-              { to: "/contact", label: t("nav.contact") },
-            ].map((l) => (
+          <div className="container-page flex flex-col py-3">
+            {navItems.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
                 onClick={() => setOpen(false)}
-                className="py-2 px-1 text-sm uppercase tracking-wide text-foreground/80 hover:text-brand"
+                className="py-3 text-[11px] uppercase tracking-[0.25em] text-foreground/80 hover:text-brand border-b border-border/60 last:border-b-0"
               >
                 {l.label}
               </Link>
             ))}
             {isAdmin && (
-              <Link to="/admin" onClick={() => setOpen(false)} className="py-2 px-1 text-sm uppercase tracking-wide text-foreground/80">
+              <Link
+                to="/admin"
+                onClick={() => setOpen(false)}
+                className="py-3 text-[11px] uppercase tracking-[0.25em] text-foreground/80"
+              >
                 {t("nav.admin")}
               </Link>
             )}
-            <div className="pt-2 border-t border-border mt-2">
-              {user ? (
-                <button onClick={handleLogout} className="btn-ghost w-full">{t("nav.logout")}</button>
-              ) : (
-                <Link to="/auth" onClick={() => setOpen(false)} className="btn-brand w-full">{t("nav.signin")}</Link>
-              )}
-            </div>
           </div>
         </div>
       )}
@@ -131,9 +153,16 @@ export function Footer() {
   const { t } = useI18n();
   return (
     <footer className="mt-24 border-t border-border">
-      <div className="container-page py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-        <p>{t("footer.rights", { year: new Date().getFullYear() })}</p>
-        <p className="text-xs uppercase tracking-widest">{t("footer.tagline")}</p>
+      <div className="container-page py-10 flex flex-col items-center gap-3 text-center">
+        <span className="font-display text-lg tracking-wide">
+          Bizzarrini <span className="text-brand">Register</span>
+        </span>
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <span className="inline-block h-px w-8 bg-border" />
+          <p className="text-[10px] uppercase tracking-[0.35em]">{t("footer.tagline")}</p>
+          <span className="inline-block h-px w-8 bg-border" />
+        </div>
+        <p className="text-xs text-muted-foreground">{t("footer.rights", { year: new Date().getFullYear() })}</p>
       </div>
     </footer>
   );

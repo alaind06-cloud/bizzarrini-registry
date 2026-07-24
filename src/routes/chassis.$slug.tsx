@@ -135,9 +135,8 @@ function CarDetail() {
             {t("car.backCatalog")}
           </Link>
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
-            <div className="bg-surface-2 border border-border shadow-[0_20px_60px_-30px_rgba(0,0,0,0.25)] p-2 sm:p-3">
+            <div className="art-frame">
               <div className="aspect-[3/2] bg-surface-2 overflow-hidden">
-
                 {cover ? (
                   <img src={cover} alt={voiture.titre} className="w-full h-full object-contain" />
                 ) : (
@@ -147,16 +146,20 @@ function CarDetail() {
             </div>
             <div className="flex flex-col gap-6">
               <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-brand">
-                  {voiture.modele ?? "Bizzarrini"} {voiture.annee ? `· ${voiture.annee}` : ""}
+                <p className="text-[10px] uppercase tracking-[0.38em] text-muted-foreground">
+                  {voiture.modele ?? "Bizzarrini"}{voiture.annee ? ` · ${voiture.annee}` : ""}
                 </p>
-                <h1 className="mt-3 font-display text-3xl md:text-5xl leading-[1.1]">{voiture.titre}</h1>
+                <h1 className="mt-3 font-display text-3xl md:text-5xl leading-[1.05]">{voiture.titre}</h1>
                 {voiture.chassis && (
-                  <p className="mt-4 font-mono text-sm text-muted-foreground">
-                    {t("car.chassisLabel")} · <span className="text-foreground">{voiture.chassis}</span>
-                  </p>
+                  <div className="mt-5">
+                    <span className="chassis-plaque">
+                      <span className="text-muted-foreground">{t("car.chassisLabel")}</span>
+                      <span>{voiture.chassis}</span>
+                    </span>
+                  </div>
                 )}
               </div>
+
 
               {specEntries.length > 0 && (
                 <div className="border border-border bg-surface/50 rounded-sm p-5">

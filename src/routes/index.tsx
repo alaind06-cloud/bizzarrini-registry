@@ -330,37 +330,66 @@ function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
   const slug = (v.chassis ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug } } : { to: "/auth" };
 
+  // Strip model/year echo from the title to avoid repetition on the card
+  const rawTitle = (v.titre ?? "").trim();
+  const modelUp = (v.modele ?? "").trim();
+  const yearStr = v.annee ? String(v.annee) : "";
+  let cleanTitle = rawTitle;
+  if (modelUp) {
+    cleanTitle = cleanTitle.replace(new RegExp(`^\\s*${modelUp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*[-·:]?\\s*`, "i"), "");
+  }
+  if (yearStr) {
+    cleanTitle = cleanTitle.replace(new RegExp(`(^|\\s)${yearStr}(\\s|$)`), " ").trim();
+  }
+  cleanTitle = cleanTitle.replace(/\s{2,}/g, " ").trim();
+  const showTitle = cleanTitle && cleanTitle.toLowerCase() !== modelUp.toLowerCase();
+
   return (
     <Link
       {...(href as any)}
-      className="group block bg-card border border-border overflow-hidden hover:border-brand transition-colors"
+      className="group block"
     >
-      <div className="aspect-[4/3] bg-surface-2 relative overflow-hidden">
-        {cover ? (
-          <img
-            src={cover}
-            alt={v.titre}
-            loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-            onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
-          />
-        ) : (
-          <div className="w-full h-full grid place-items-center text-muted-foreground text-xs uppercase tracking-widest">
-            {t("card.noPhoto")}
-          </div>
+      <div className="art-frame">
+        <div className="aspect-[4/3] bg-surface-2 relative overflow-hidden">
+          {cover ? (
+            <img
+              src={cover}
+              alt={v.titre}
+              loading="lazy"
+              className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
+              onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
+            />
+          ) : (
+            <div className="w-full h-full grid place-items-center text-muted-foreground text-xs uppercase tracking-widest">
+              {t("card.noPhoto")}
+            </div>
+          )}
+          {!canAccess && (
+            <div className="absolute inset-0 bg-background/50 backdrop-blur-[1px] grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-foreground bg-background/90 border border-border px-3 py-1.5">
+                {t("card.membersOnly")}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="pt-4 px-1">
+        <p className="text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
+          {v.modele ?? "Bizzarrini"}{v.annee ? ` · ${v.annee}` : ""}
+        </p>
+        {showTitle && (
+          <h3 className="mt-2 font-display text-[17px] leading-snug line-clamp-2 text-foreground">
+            {cleanTitle}
+          </h3>
         )}
-        {!canAccess && (
-          <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <span className="text-xs uppercase tracking-[0.25em] text-foreground bg-background/80 border border-border px-3 py-1.5 rounded">
-              {t("card.membersOnly")}
+        {v.chassis && (
+          <div className="mt-3">
+            <span className="chassis-plaque">
+              <span className="text-muted-foreground">N°</span>
+              <span>{v.chassis}</span>
             </span>
           </div>
         )}
-      </div>
-      <div className="p-4">
-        <p className="text-xs uppercase tracking-widest text-brand">{v.modele ?? "Bizzarrini"} {v.annee ? `· ${v.annee}` : ""}</p>
-        <h3 className="mt-1.5 font-display text-lg leading-snug line-clamp-2">{v.titre}</h3>
-        {v.chassis && <p className="mt-2 text-xs text-muted-foreground font-mono">#{v.chassis}</p>}
       </div>
     </Link>
   );
@@ -368,12 +397,14 @@ function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
 
 function CarCardSkeleton() {
   return (
-    <div className="bg-card border border-border overflow-hidden" aria-hidden="true">
-      <div className="aspect-[4/3] bg-surface-2 animate-pulse" />
-      <div className="p-4 space-y-3">
-        <div className="h-3 w-1/3 bg-muted rounded animate-pulse" />
-        <div className="h-5 w-3/4 bg-muted rounded animate-pulse" />
-        <div className="h-3 w-1/2 bg-muted rounded animate-pulse" />
+    <div aria-hidden="true">
+      <div className="art-frame">
+        <div className="aspect-[4/3] bg-surface-2 animate-pulse" />
+      </div>
+      <div className="pt-4 px-1 space-y-3">
+        <div className="h-2.5 w-1/3 bg-muted rounded-sm animate-pulse" />
+        <div className="h-4 w-3/4 bg-muted rounded-sm animate-pulse" />
+        <div className="h-5 w-24 bg-muted rounded-sm animate-pulse" />
       </div>
     </div>
   );
