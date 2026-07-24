@@ -221,3 +221,76 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-kenburns { animation: none; }
 }
+
+@utility art-frame {
+  background: var(--color-card);
+  padding: 0.9rem;
+  border: 1px solid var(--color-border);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 30px 60px -40px rgba(26, 26, 26, 0.25),
+    0 4px 10px -8px rgba(26, 26, 26, 0.18);
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+  &:hover {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.6) inset,
+      0 40px 80px -40px rgba(184, 35, 28, 0.22),
+      0 6px 14px -10px rgba(26, 26, 26, 0.22);
+    transform: translateY(-2px);
+  }
+}
+
+@utility art-frame-sm {
+  background: var(--color-card);
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 18px 36px -28px rgba(26, 26, 26, 0.22);
+}
+
+@utility chassis-plaque {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-foreground);
+  background: linear-gradient(180deg, oklch(0.965 0.008 82), oklch(0.93 0.01 82));
+  border: 1px solid var(--color-border);
+  padding: 0.3rem 0.65rem;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(26, 26, 26, 0.06);
+}
+
+@utility hairline {
+  height: 1px;
+  width: 100%;
+  background: var(--color-border);
+}
+
+@utility nav-link {
+  position: relative;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-foreground) 72%, transparent);
+  transition: color 0.2s ease;
+  &:hover { color: var(--color-brand); }
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    width: 0;
+    height: 1px;
+    background: var(--color-brand);
+    transition: width 0.25s ease, left 0.25s ease;
+  }
+  &:hover::after { width: 100%; left: 0; }
+}
