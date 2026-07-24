@@ -20,7 +20,8 @@ const fr: Dict = {
   "footer.tagline": "Registre officiel des châssis authentifiés",
 
   // Home
-  "home.kicker": "Registro ufficiale",
+  "home.kicker": "Registre officiel",
+  "home.registryTitle": "Registre historique",
   "home.hero.badge": "Fondé en 1964 — Livourne, Italie",
   "home.title": "Le registre officiel des <brand>Bizzarrini</brand>",
   "home.lead": "Près de trois décennies à rassembler des informations sur les modèles Bizzarrini et leur histoire, partagées avec les passionnés. Seuls les faits nous intéressent, pour vous offrir le registre Bizzarrini le plus honnête possible. N'hésitez pas à contribuer.",
