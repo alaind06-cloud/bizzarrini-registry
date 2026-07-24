@@ -191,22 +191,17 @@ function HomePage() {
     <div>
       <section className="relative overflow-hidden border-b border-border bg-background">
         <div className="absolute inset-0">
-          {heroCovers.map((v, i) => (
-            <div
-              key={v.id}
-              className="absolute inset-0 transition-opacity duration-[1600ms] ease-in-out"
-              style={{ opacity: i === heroIdx ? 1 : 0 }}
-            >
-              <img
-                src={photoUrl(v.cover_photo)!}
-                alt=""
-                aria-hidden
-                className="w-full h-full object-cover hero-kenburns"
-              />
-            </div>
-          ))}
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+          <video
+            src={heroVideo.url}
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster={heroCovers[0] ? photoUrl(heroCovers[0].cover_photo) ?? undefined : undefined}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
           <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-brand/10 blur-3xl pointer-events-none" />
         </div>
 
@@ -231,25 +226,9 @@ function HomePage() {
               {t("home.pending")}
             </div>
           )}
-
-          {heroCovers.length > 1 && (
-            <div className="mt-12 flex items-center gap-2">
-              {heroCovers.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  aria-label={`Image ${i + 1}`}
-                  aria-current={i === heroIdx ? "true" : undefined}
-                  onClick={() => setHeroIdx(i)}
-                  className={`h-1 rounded-sm transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-                    i === heroIdx ? "w-10 bg-brand" : "w-6 bg-foreground/30 hover:bg-foreground/60"
-                  }`}
-                />
-              ))}
-            </div>
-          )}
         </div>
       </section>
+
 
       <section id="registre" className="border-b border-border bg-background">
         <div className="container-page pt-8 pb-5">
