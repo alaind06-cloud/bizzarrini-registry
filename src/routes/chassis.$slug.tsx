@@ -216,6 +216,17 @@ function CarDetail() {
         />
       </section>
 
+      <section className="container-page py-6">
+        <aside className="max-w-3xl border-l-2 border-brand/60 bg-surface-2/40 p-5 rounded-sm">
+          <h2 className="font-display text-lg md:text-xl">{t("car.provenance.title")}</h2>
+          <p className="mt-2 text-sm text-foreground/85 leading-relaxed">{t("car.provenance.body")}</p>
+          <Link to="/expert-certificate" className="mt-3 inline-block text-xs uppercase tracking-widest text-brand hover:underline">
+            {t("car.provenance.link")}
+          </Link>
+        </aside>
+      </section>
+
+
       {/* Gallery */}
       {photos.length > 0 && (
         <section className="container-page py-12 pb-16">
