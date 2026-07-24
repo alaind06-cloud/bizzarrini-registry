@@ -233,56 +233,142 @@ function HomePage() {
         </div>
       </section>
 
-      <section id="registre" className="border-b border-border bg-surface/40">
-        <div className="container-page py-6 grid gap-4 md:grid-cols-[1fr_1fr_2fr] items-end">
-          <div>
-            <label htmlFor="filter-model" className="label-field">{t("home.filter.model")}</label>
-            <select id="filter-model" className="field" value={modele} onChange={(e) => setModele(e.target.value)}>
-              <option value="all">{t("home.filter.allModels")}</option>
-              {modeles.map((m) => <option key={m} value={m}>{m}</option>)}
-            </select>
+      <section id="registre" className="border-b border-border bg-background">
+        <div className="container-page pt-8 pb-5">
+          {/* Row 1: search + filter trigger */}
+          <div className="flex items-end gap-3">
+            <div className="relative flex-1 min-w-0">
+              <label htmlFor="filter-search" className="label-field">
+                {t("home.filter.search")}
+              </label>
+              <div className="relative">
+                <Search
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/70"
+                />
+                <input
+                  id="filter-search"
+                  className="field-underline pl-6"
+                  placeholder={t("home.filter.searchPlaceholder")}
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Desktop: inline selects */}
+            <div className="hidden md:flex items-end gap-6 shrink-0">
+              <div className="min-w-[160px]">
+                <label htmlFor="filter-model" className="label-field">{t("home.filter.model")}</label>
+                <select
+                  id="filter-model"
+                  className="field-underline pr-6"
+                  value={modele}
+                  onChange={(e) => setModele(e.target.value)}
+                >
+                  <option value="all">{t("home.filter.allModels")}</option>
+                  {modeles.map((m) => <option key={m} value={m}>{m}</option>)}
+                </select>
+              </div>
+              <div className="min-w-[120px]">
+                <label htmlFor="filter-decade" className="label-field">{t("home.filter.decade")}</label>
+                <select
+                  id="filter-decade"
+                  className="field-underline pr-6"
+                  value={annee}
+                  onChange={(e) => setAnnee(e.target.value)}
+                >
+                  <option value="all">{t("home.filter.allDecades")}</option>
+                  {decennies.map((d) => <option key={d} value={d}>{d}s</option>)}
+                </select>
+              </div>
+            </div>
+
+            {/* Mobile: drawer trigger */}
+            <div className="md:hidden shrink-0">
+              <Sheet>
+                <SheetTrigger
+                  className="inline-flex items-center gap-2 px-3 py-2 border-b border-border text-[0.72rem] uppercase tracking-[0.22em] text-foreground/80 hover:text-brand transition-colors"
+                  aria-label={t("home.filter.toggle")}
+                >
+                  <SlidersHorizontal className="h-3.5 w-3.5" />
+                  <span>{t("home.filter.toggle")}</span>
+                  {(modele !== "all" || annee !== "all") && (
+                    <span className="ml-1 h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true" />
+                  )}
+                </SheetTrigger>
+                <SheetContent side="bottom" className="rounded-t-lg">
+                  <SheetHeader>
+                    <SheetTitle className="font-display text-xl">{t("home.filter.toggle")}</SheetTitle>
+                  </SheetHeader>
+                  <div className="px-4 pb-4 space-y-6">
+                    <div>
+                      <label htmlFor="m-filter-model" className="label-field">{t("home.filter.model")}</label>
+                      <select
+                        id="m-filter-model"
+                        className="field-underline"
+                        value={modele}
+                        onChange={(e) => setModele(e.target.value)}
+                      >
+                        <option value="all">{t("home.filter.allModels")}</option>
+                        {modeles.map((m) => <option key={m} value={m}>{m}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="m-filter-decade" className="label-field">{t("home.filter.decade")}</label>
+                      <select
+                        id="m-filter-decade"
+                        className="field-underline"
+                        value={annee}
+                        onChange={(e) => setAnnee(e.target.value)}
+                      >
+                        <option value="all">{t("home.filter.allDecades")}</option>
+                        {decennies.map((d) => <option key={d} value={d}>{d}s</option>)}
+                      </select>
+                    </div>
+                  </div>
+                  <SheetFooter className="flex-row gap-3 border-t border-border pt-4">
+                    <button
+                      type="button"
+                      onClick={() => { setModele("all"); setAnnee("all"); clearM(); }}
+                      className="flex-1 py-2 text-[0.72rem] uppercase tracking-[0.22em] text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {t("home.filter.reset")}
+                    </button>
+                    <SheetClose className="flex-1 btn-brand">{t("home.filter.done")}</SheetClose>
+                  </SheetFooter>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
-          <div>
-            <label htmlFor="filter-decade" className="label-field">{t("home.filter.decade")}</label>
-            <select id="filter-decade" className="field" value={annee} onChange={(e) => setAnnee(e.target.value)}>
-              <option value="all">{t("home.filter.allDecades")}</option>
-              {decennies.map((d) => <option key={d} value={d}>{d}s</option>)}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="filter-search" className="label-field">{t("home.filter.search")}</label>
-            <input id="filter-search" className="field" placeholder={t("home.filter.searchPlaceholder")} value={q} onChange={(e) => setQ(e.target.value)} />
-          </div>
-        </div>
-        <div className="container-page pb-4 flex flex-wrap items-center justify-between gap-3">
-          <FilterPills pills={activePills} />
-          <p
-            className="text-xs uppercase tracking-widest text-muted-foreground ml-auto"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            {loading ? "…" : t("home.chassisCount", { n: filtered.length })}
-          </p>
+
+          {/* Row 2: pills + single elegant count */}
+          {(activePills.length > 0 || !loading) && (
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+              <FilterPills pills={activePills} />
+              <p
+                className="text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground ml-auto"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {loading ? "…" : t("home.chassisCountLong", { n: filtered.length })}
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
       <section className="container-page py-10">
-        <div className="flex items-baseline justify-between mb-6">
-          <h2 className="font-display text-2xl md:text-3xl">
+        <div className="flex items-baseline justify-end mb-6">
+          <p className="text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
             {loading ? (
-              <span className="inline-block w-40 h-8 bg-muted rounded animate-pulse" aria-hidden="true" />
-            ) : (
-              t("home.chassisCount", { n: filtered.length })
-            )}
-          </h2>
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">
-            {loading ? (
-              <span className="inline-block w-24 h-4 bg-muted rounded animate-pulse" aria-hidden="true" />
+              <span className="inline-block w-24 h-3 bg-muted rounded animate-pulse" aria-hidden="true" />
             ) : (
               t("home.pageOf", { p: page, t: totalPages })
             )}
           </p>
         </div>
+
 
         {err && (
           <p className="text-sm text-brand">{t("home.errorLoading", { msg: err })}</p>
