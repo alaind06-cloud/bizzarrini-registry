@@ -5,8 +5,8 @@ import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
 import { Search } from "lucide-react";
-import heroVideo from "@/assets/hero-bizzarrini.mp4.asset.json";
-import heroPoster from "@/assets/hero-poster.jpg.asset.json";
+const heroVideo = { url: "/hero-bizzarrini.mp4" };
+const heroPoster = { url: "/hero-poster.jpg" };
 
 
 
