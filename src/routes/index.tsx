@@ -268,10 +268,7 @@ function HomePage() {
 
           <div className="mt-10 flex flex-wrap justify-center gap-3 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.85s", animationFillMode: "forwards" }}>
             {!authLoading && !user && (
-              <>
-                <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
-                <a href="#registre" className="btn-ghost">{t("home.cta.catalog")}</a>
-              </>
+              <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
             )}
             {user && !isValide && (
               <div className="inline-flex items-center gap-3 rounded border border-brand/40 bg-brand/10 px-4 py-2 text-sm backdrop-blur">
