@@ -32,6 +32,9 @@ export const Route = createFileRoute("/")({
         content: "Registre complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
       },
     ],
+    links: [
+      { rel: "preload", as: "image", href: heroPoster.url, fetchpriority: "high" },
+    ],
   }),
   component: HomePage,
 });
