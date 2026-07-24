@@ -73,7 +73,10 @@ function VideosPage() {
         <h2 className="font-display text-2xl md:text-3xl leading-snug">{t("videos.featuredTitle")}</h2>
         <p className="mt-3 text-sm text-muted-foreground max-w-3xl">{t("videos.featuredLead")}</p>
         <p className="mt-3 text-sm max-w-3xl text-foreground/90 italic border-l-2 border-brand/60 pl-3">
-          {t("videos.featuredNote")}
+          {t("videos.featuredNote")}{" "}
+          <Link to="/expert-certificate" className="not-italic text-brand hover:underline">
+            {t("common.learnMore")}
+          </Link>
         </p>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
