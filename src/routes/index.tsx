@@ -6,6 +6,7 @@ import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
 import { Search } from "lucide-react";
 import heroVideo from "@/assets/hero-bizzarrini.mp4.asset.json";
+import heroPoster from "@/assets/hero-poster.jpg.asset.json";
 
 
 
@@ -30,6 +31,9 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Registre complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
       },
+    ],
+    links: [
+      { rel: "preload", as: "image", href: heroPoster.url, fetchpriority: "high" },
     ],
   }),
   component: HomePage,
@@ -57,6 +61,19 @@ function HomePage() {
 
 
   const [page, setPage] = useState(1);
+  const [enableVideo, setEnableVideo] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mql = window.matchMedia("(min-width: 768px) and (prefers-reduced-motion: no-preference)");
+    const conn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    const saveData = conn?.saveData === true;
+    const slow = !!conn?.effectiveType && /(^|-)(2g|slow-2g)$/.test(conn.effectiveType);
+    if (!mql.matches || saveData || slow) return;
+    const w = window as unknown as { requestIdleCallback?: (cb: () => void) => void };
+    const idle = w.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 400));
+    idle(() => setEnableVideo(true));
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -187,15 +204,28 @@ function HomePage() {
     <div>
       <section className="relative overflow-hidden border-b border-border bg-background min-h-[92vh] flex items-center">
         <div className="absolute inset-0">
-          <video
-            src={heroVideo.url}
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster={heroCovers[0] ? photoUrl(heroCovers[0].cover_photo) ?? undefined : undefined}
-            className="w-full h-full object-cover"
+          <img
+            src={heroPoster.url}
+            alt=""
+            fetchPriority="high"
+            decoding="async"
+            width={1600}
+            height={1000}
+            className="absolute inset-0 w-full h-full object-cover"
           />
+          {enableVideo && (
+            <video
+              src={heroVideo.url}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="none"
+              poster={heroPoster.url}
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
           {/* Ivory wash for legibility on light theme */}
           <div className="absolute inset-0 bg-gradient-to-b from-background/55 via-background/70 to-background" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/30 to-background/60" />
