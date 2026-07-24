@@ -245,6 +245,9 @@ const en: Dict = {
   "books.kicker": "Bibliography",
   "books.title": "Books",
   "books.lead": "Reference works published by Philippe Olczyk on the great racing cars.",
+  "books.bizzarriniTitle": "The Bizzarrini books",
+  "books.bizzarriniNote": "These three books are written by Philippe, the same expert holder of the Giotto Bizzarrini authentication certificate.",
+  "books.othersTitle": "Other works",
   "books.buy": "Buy →",
 
   "contact.kicker": "Get in touch",
@@ -396,6 +399,9 @@ const it: Dict = {
   "books.kicker": "Bibliografia",
   "books.title": "Libri",
   "books.lead": "Le opere di riferimento pubblicate da Philippe Olczyk sulle grandi vetture da corsa.",
+  "books.bizzarriniTitle": "I libri Bizzarrini",
+  "books.bizzarriniNote": "Questi tre volumi sono scritti da Philippe, lo stesso esperto detentore del certificato di autenticazione Giotto Bizzarrini.",
+  "books.othersTitle": "Altre opere",
   "books.buy": "Acquista →",
 
   "contact.kicker": "Scrivici",
