@@ -286,7 +286,7 @@ function HomePage() {
             className="mt-16 inline-flex flex-col items-center gap-2 text-muted-foreground hover:text-brand transition-colors opacity-0 animate-fade-in-up"
             style={{ animationDelay: "1.0s", animationFillMode: "forwards" }}
           >
-            <span className="text-[10px] uppercase tracking-[0.32em]">{t("home.registryTitle")}</span>
+            <span className="sr-only">{t("home.registryTitle")}</span>
             <span className="animate-float text-brand">▾</span>
           </a>
         </div>
@@ -296,8 +296,7 @@ function HomePage() {
       <section id="registre" className="border-b border-border bg-background">
         <div className="container-page pt-20 pb-8">
           <div className="text-center mb-12">
-            <span className="eyebrow">{t("home.kicker")}</span>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mt-3">{t("home.registryTitle")}</h2>
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl">{t("home.registryTitle")}</h2>
             <div className="mt-5 section-divider" />
           </div>
 
