@@ -135,8 +135,9 @@ function CarDetail() {
             {t("car.backCatalog")}
           </Link>
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
-            <div className="bg-black border border-white/15 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.9)] p-2 sm:p-3">
-              <div className="aspect-[3/2] bg-black overflow-hidden">
+            <div className="bg-surface-2 border border-border shadow-[0_20px_60px_-30px_rgba(0,0,0,0.25)] p-2 sm:p-3">
+              <div className="aspect-[3/2] bg-surface-2 overflow-hidden">
+
                 {cover ? (
                   <img src={cover} alt={voiture.titre} className="w-full h-full object-contain" />
                 ) : (
