@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
+import giottoPhoto from "@/assets/giotto-bizzarrini-1953.jpg.asset.json";
+
 
 const CANONICAL = "https://bizzarrini-registry.lovable.app/giotto-bizzarrini";
 
@@ -123,6 +125,56 @@ function GiottoPage() {
         </div>
       )}
 
+      {/* Portrait + quote + key stats */}
+      <section className="border-b border-border bg-surface/30">
+        <div className="container-page py-16 md:py-24">
+          <div className="grid gap-12 lg:gap-20 lg:grid-cols-2 items-center">
+            <div className="relative">
+              <div className="art-frame">
+                <img
+                  src={giottoPhoto.url}
+                  alt="Giotto Bizzarrini beside a Fiat 500 Machinetta, 1953"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-4 md:-right-8 max-w-xs bg-background/95 backdrop-blur border border-border shadow-lg p-6">
+                <p className="font-display text-lg md:text-xl italic leading-snug text-foreground">
+                  “{content.quote}”
+                </p>
+                <span className="mt-2 block text-xs uppercase tracking-[0.28em] text-brand">
+                  — Giotto Bizzarrini
+                </span>
+              </div>
+              <p className="mt-10 text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
+                {content.photoCredit}
+              </p>
+            </div>
+
+            <div className="space-y-6 lg:pl-6">
+              <p className="text-xs uppercase tracking-[0.3em] text-brand">{content.legacyKicker}</p>
+              <h2 className="font-display text-3xl md:text-4xl leading-tight">
+                {content.legacyTitle}
+              </h2>
+              <p className="text-lg text-foreground/85 leading-relaxed">
+                {content.legacyLead}
+              </p>
+
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border">
+                {content.stats.map((s) => (
+                  <div key={s.value}>
+                    <span className="font-display text-3xl md:text-4xl text-brand block leading-none">
+                      {s.value}
+                    </span>
+                    <p className="mt-2 text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground leading-snug">
+                      {s.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
 
       <article className="container-page py-12 md:py-16 grid gap-12 lg:grid-cols-[1fr_320px] items-start">
@@ -183,6 +235,7 @@ function GiottoPage() {
   );
 }
 
+type Stat = { value: string; label: string };
 type Copy = {
   kicker: string;
   h1a: string;
@@ -193,7 +246,14 @@ type Copy = {
   aboutBody: string;
   exploreKicker: string;
   exploreTitle: string;
+  quote: string;
+  photoCredit: string;
+  legacyKicker: string;
+  legacyTitle: string;
+  legacyLead: string;
+  stats: Stat[];
 };
+
 
 const COPY: Record<Lang, Copy> = {
   fr: {
@@ -213,7 +273,18 @@ const COPY: Record<Lang, Copy> = {
       "Ce registre est dédié au recensement et à la documentation, châssis par châssis, des automobiles nées du génie de Giotto Bizzarrini — des prototypes Iso Grifo aux Bizzarrini 5300 GT et P538. Son objectif est de préserver la traçabilité et le patrimoine technique de chaque exemplaire pour les collectionneurs, historiens et passionnés.",
     exploreKicker: "Explorer",
     exploreTitle: "Les modèles au registre",
+    quote: "La 250 GTO, c'est ma voiture.",
+    photoCredit: "Photo : Giotto Bizzarrini et Fiat 500 « Macchinetta », 1953 — Wikimedia Commons (domaine public)",
+    legacyKicker: "L'héritage",
+    legacyTitle: "Un ingénieur, trois révolutions",
+    legacyLead: "De la Ferrari 250 GTO à la Bizzarrini 5300 GT, en passant par le V12 Lamborghini, Giotto Bizzarrini a signé les fondations mécaniques du GT italien moderne.",
+    stats: [
+      { value: "1926", label: "Naissance à Livourne" },
+      { value: "1961", label: "Départ de Ferrari" },
+      { value: "1964", label: "Fondation Bizzarrini S.p.A." },
+    ],
   },
+
   en: {
     kicker: "Portrait",
     h1a: "Giotto Bizzarrini —",
@@ -231,7 +302,18 @@ const COPY: Record<Lang, Copy> = {
       "This register exists to document, chassis by chassis, the cars born from Giotto Bizzarrini's engineering genius — from the Iso Grifo prototypes to the Bizzarrini 5300 GT and P538. Its purpose is to preserve the traceability and technical heritage of each individual car for the collectors, historians, and enthusiasts who continue to care for them.",
     exploreKicker: "Explore",
     exploreTitle: "Models in the register",
+    quote: "The 250 GTO is my car.",
+    photoCredit: "Photo: Giotto Bizzarrini with the Fiat 500 “Macchinetta”, 1953 — Wikimedia Commons (public domain)",
+    legacyKicker: "The legacy",
+    legacyTitle: "One engineer, three revolutions",
+    legacyLead: "From the Ferrari 250 GTO to the Bizzarrini 5300 GT, by way of the Lamborghini V12, Giotto Bizzarrini laid the mechanical foundations of the modern Italian GT.",
+    stats: [
+      { value: "1926", label: "Born in Livorno" },
+      { value: "1961", label: "Left Ferrari" },
+      { value: "1964", label: "Founded Bizzarrini S.p.A." },
+    ],
   },
+
   it: {
     kicker: "Ritratto",
     h1a: "Giotto Bizzarrini —",
@@ -249,5 +331,16 @@ const COPY: Record<Lang, Copy> = {
       "Questo registro è dedicato al censimento e alla documentazione, telaio per telaio, delle vetture nate dal genio di Giotto Bizzarrini — dai prototipi Iso Grifo alle Bizzarrini 5300 GT e P538. Il suo scopo è preservare la tracciabilità e il patrimonio tecnico di ogni esemplare per collezionisti, storici e appassionati.",
     exploreKicker: "Esplora",
     exploreTitle: "I modelli nel registro",
+    quote: "La 250 GTO è la mia macchina.",
+    photoCredit: "Foto: Giotto Bizzarrini con la Fiat 500 “Macchinetta”, 1953 — Wikimedia Commons (pubblico dominio)",
+    legacyKicker: "L'eredità",
+    legacyTitle: "Un ingegnere, tre rivoluzioni",
+    legacyLead: "Dalla Ferrari 250 GTO alla Bizzarrini 5300 GT, passando per il V12 Lamborghini, Giotto Bizzarrini ha posto le basi meccaniche della moderna GT italiana.",
+    stats: [
+      { value: "1926", label: "Nascita a Livorno" },
+      { value: "1961", label: "Addio alla Ferrari" },
+      { value: "1964", label: "Fondazione Bizzarrini S.p.A." },
+    ],
   },
+
 };
