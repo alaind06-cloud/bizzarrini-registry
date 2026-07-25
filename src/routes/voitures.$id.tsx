@@ -1,7 +1,7 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { chassisToSlug } from "./chassis.$slug";
+import { carSlug } from "./chassis.$slug";
 
 export const Route = createFileRoute("/voitures/$id")({
   head: () => ({
