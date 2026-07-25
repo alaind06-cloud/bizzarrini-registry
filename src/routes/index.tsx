@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { carSlug } from "./chassis.$slug";
 import { useEffect, useMemo, useState } from "react";
 import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
@@ -452,7 +453,7 @@ function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
 
   const { t } = useI18n();
   const cover = photoUrl(v.cover_photo);
-  const slug = (v.chassis ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  const slug = carSlug(v);
   const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug } } : { to: "/auth" };
 
   // Strip model/year echo from the title to avoid repetition on the card

@@ -1,7 +1,7 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { chassisToSlug } from "./chassis.$slug";
+import { carSlug } from "./chassis.$slug";
 
 export const Route = createFileRoute("/voitures/$id")({
   head: () => ({
@@ -17,9 +17,9 @@ function LegacyRedirect() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase.from("voitures").select("chassis").eq("id", id).maybeSingle();
-      const chassis = (data as { chassis: string | null } | null)?.chassis;
-      const s = chassisToSlug(chassis);
+      const { data } = await supabase.from("voitures").select("chassis, titre").eq("id", id).maybeSingle();
+      const row = data as { chassis: string | null; titre: string | null } | null;
+      const s = row ? carSlug(row) : "";
       if (s) setSlug(s);
       else setNotFound(true);
     })();

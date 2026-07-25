@@ -25,6 +25,11 @@ export function chassisToSlug(chassis: string | null | undefined): string {
     .replace(/^-+|-+$/g, "");
 }
 
+/** Slug used in URLs: chassis when available, otherwise the car title. */
+export function carSlug(car: { chassis?: string | null; titre?: string | null }): string {
+  return chassisToSlug(car.chassis) || chassisToSlug(car.titre);
+}
+
 function CarDetail() {
   const { slug } = Route.useParams();
   const router = useRouter();
@@ -48,11 +53,14 @@ function CarDetail() {
 
     (async () => {
       setLoading(true);
-      // Look up by chassis (case-insensitive). Fallback: fetch all and match slug.
+      // Look up by chassis (case-insensitive). Fallback: match slug on chassis or title.
       let v = await supabase.from("voitures").select("*").ilike("chassis", slug).maybeSingle();
       if (!v.data) {
         const all = await supabase.from("voitures").select("*");
-        const match = (all.data as Voiture[] | null)?.find((row) => chassisToSlug(row.chassis) === slug);
+        const rows = (all.data as Voiture[] | null) ?? [];
+        const match =
+          rows.find((row) => chassisToSlug(row.chassis) === slug) ??
+          rows.find((row) => carSlug(row) === slug);
         v = { data: match ?? null, error: all.error } as typeof v;
       }
       if (v.error || !v.data) {
