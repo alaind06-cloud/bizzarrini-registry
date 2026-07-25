@@ -25,6 +25,11 @@ export function chassisToSlug(chassis: string | null | undefined): string {
     .replace(/^-+|-+$/g, "");
 }
 
+/** Slug used in URLs: chassis when available, otherwise the car title. */
+export function carSlug(car: { chassis?: string | null; titre?: string | null }): string {
+  return chassisToSlug(car.chassis) || chassisToSlug(car.titre);
+}
+
 function CarDetail() {
   const { slug } = Route.useParams();
   const router = useRouter();
