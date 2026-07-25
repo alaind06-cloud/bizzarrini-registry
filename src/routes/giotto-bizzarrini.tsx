@@ -182,7 +182,7 @@ function GiottoPage() {
           <h2 className="font-display text-2xl md:text-3xl mt-12">{content.aboutTitle}</h2>
           <p>{content.aboutBody}</p>
 
-          <div className="mt-12 pt-12 border-t border-border">
+          <div id="realisations" className="mt-12 pt-12 border-t border-border scroll-mt-24">
             <h2 className="font-display text-2xl md:text-3xl">{content.achievementsTitle}</h2>
             <div className="mt-6 grid md:grid-cols-2 gap-4">
               <Link
