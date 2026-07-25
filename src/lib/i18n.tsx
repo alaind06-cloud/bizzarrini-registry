@@ -97,6 +97,7 @@ const fr: Dict = {
   "books.bizzarriniNote": "Ces trois ouvrages sont écrits par Philippe Olczyk, le même expert détenteur du certificat d'authentification Giotto Bizzarrini.",
   "books.othersTitle": "Autres ouvrages",
   "books.buy": "Acheter →",
+  "books.relatedGiotto": "En lien avec Giotto Bizzarrini →",
 
   // Contact
   "contact.kicker": "Nous écrire",
