@@ -281,6 +281,7 @@ const en: Dict = {
   "books.bizzarriniNote": "These three books are written by Philippe Olczyk, the same expert holder of the Giotto Bizzarrini authentication certificate.",
   "books.othersTitle": "Other works",
   "books.buy": "Buy →",
+  "books.relatedGiotto": "Related to Giotto Bizzarrini →",
 
   "contact.kicker": "Get in touch",
   "contact.title": "Contact",
