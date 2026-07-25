@@ -466,6 +466,24 @@ function pickDescription(d: VoitureDetail | null, lang: Lang): string | null {
   return primary ?? d.description_en ?? d.description ?? null;
 }
 
+/** Adds curated milestones for years absent from the parsed history, keeping chronological order. */
+function mergeMilestones(
+  entries: TimelineEntry[],
+  extra?: Array<{ year: string; text: string }>,
+): TimelineEntry[] {
+  if (!extra || extra.length === 0) return entries;
+  const existing = new Set(entries.map((e) => e.year).filter(Boolean));
+  const merged = [...entries];
+  for (const m of extra) {
+    if (!existing.has(m.year)) merged.push({ year: m.year, events: [{ value: m.text }] });
+  }
+  return merged.sort((a, b) => {
+    if (!a.year) return -1;
+    if (!b.year) return 1;
+    return Number(a.year) - Number(b.year);
+  });
+}
+
 function HistoryTimeline({
   description,
   modele,
