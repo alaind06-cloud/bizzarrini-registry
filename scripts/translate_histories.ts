@@ -14,7 +14,7 @@
  *
  * Idempotent : ne retraduit pas les lignes déjà remplies (sauf --force).
  */
-const SUPABASE_URL = "https://rbrkzrtrlvihpjugksnb.supabase.co";
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "";
 const SERVICE = process.env.SERVICE_ROLE_KEY!;
 const LOVABLE = process.env.LOVABLE_API_KEY!;
 const FORCE = process.argv.includes("--force");
