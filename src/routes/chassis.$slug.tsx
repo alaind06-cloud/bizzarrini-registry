@@ -35,7 +35,7 @@ function CarDetail() {
   const [detail, setDetail] = useState<VoitureDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const [mode, setMode] = useState<"summary" | "full">("full");
 
   useEffect(() => {
@@ -239,12 +239,12 @@ function CarDetail() {
         <section className="container-page py-12 pb-16">
           <h2 className="font-display text-2xl md:text-3xl mb-6">{t("car.gallery")} · {photos.length} {t("car.photos")}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {photos.map((ph) => {
+            {photos.map((ph, idx) => {
               const src = photoUrl(ph.filename)!;
               return (
                 <button
                   key={ph.id}
-                  onClick={() => setLightbox(src)}
+                  onClick={() => setLightboxIdx(idx)}
                   className="aspect-square bg-surface-2 overflow-hidden group"
                 >
                   <img
@@ -261,13 +261,14 @@ function CarDetail() {
         </section>
       )}
 
-      {lightbox && (
-        <div
-          className="fixed inset-0 z-50 bg-background/95 backdrop-blur flex items-center justify-center p-4 cursor-zoom-out"
-          onClick={() => setLightbox(null)}
-        >
-          <img src={lightbox} alt="" className="max-w-full max-h-full object-contain" />
-        </div>
+      {lightboxIdx !== null && (
+        <Lightbox
+          photos={photos}
+          index={lightboxIdx}
+          alt={voiture.titre}
+          onClose={() => setLightboxIdx(null)}
+          onChange={setLightboxIdx}
+        />
       )}
     </div>
   );
@@ -503,6 +504,107 @@ function HistoryTimeline({
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+function Lightbox({
+  photos,
+  index,
+  alt,
+  onClose,
+  onChange,
+}: {
+  photos: Photo[];
+  index: number;
+  alt: string;
+  onClose: () => void;
+  onChange: (i: number) => void;
+}) {
+  const total = photos.length;
+  const prev = () => onChange((index - 1 + total) % total);
+  const next = () => onChange((index + 1) % total);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowLeft") prev();
+      else if (e.key === "ArrowRight") next();
+    };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [index, total]);
+
+  const touchStartX = useMemo(() => ({ x: 0 }), []);
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.x = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const dx = e.changedTouches[0].clientX - touchStartX.x;
+    if (Math.abs(dx) > 40) {
+      if (dx > 0) prev();
+      else next();
+    }
+  };
+
+  const src = photoUrl(photos[index].filename)!;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/95 backdrop-blur flex items-center justify-center"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      {/* Close */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        aria-label="Fermer"
+        className="absolute top-4 right-4 z-10 h-11 w-11 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white text-2xl leading-none"
+      >
+        ×
+      </button>
+
+      {/* Counter */}
+      <div className="absolute top-4 left-4 z-10 px-3 py-1.5 rounded-full bg-white/10 text-white text-sm tracking-wider">
+        {index + 1} / {total}
+      </div>
+
+      {/* Prev */}
+      {total > 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); prev(); }}
+          aria-label="Précédent"
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white text-3xl"
+        >
+          ‹
+        </button>
+      )}
+
+      {/* Next */}
+      {total > 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); next(); }}
+          aria-label="Suivant"
+          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white text-3xl"
+        >
+          ›
+        </button>
+      )}
+
+      <img
+        src={src}
+        alt={alt}
+        className="max-w-[92vw] max-h-[88vh] object-contain select-none"
+        onClick={(e) => e.stopPropagation()}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      />
     </div>
   );
 }
