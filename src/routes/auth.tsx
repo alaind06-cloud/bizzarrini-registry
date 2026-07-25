@@ -16,6 +16,15 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+const RAISON_OPTIONS = [
+  "proprietaire",
+  "ancienProprietaire",
+  "passionne",
+  "historien",
+  "professionnel",
+  "autre",
+] as const;
+
 function AuthPage() {
   const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const router = useRouter();
