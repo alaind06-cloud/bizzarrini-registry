@@ -31,6 +31,12 @@ export function carSlug(car: { chassis?: string | null; titre?: string | null })
   return chassisToSlug(car.chassis) || chassisToSlug(car.titre);
 }
 
+/** Documents propres au châssis (fiche châssis), à afficher en tête de galerie. */
+const CHASSIS_DOC_FILENAMES = new Set<string>([
+  "bizzarrini-iso-grifo-a3c-b-0225-1965-10.jpg", // Tableau "Le Bizzarrini telaio per telaio" — AutoCapital, 1982
+]);
+
+
 function CarDetail() {
   const { slug } = Route.useParams();
   const router = useRouter();
