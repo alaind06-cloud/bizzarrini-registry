@@ -1,26 +1,55 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Configuration via variables d'environnement Vite (voir .env.example).
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
-const SUPABASE_ANON_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY ??
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY) as string;
+// Les variables sont lues de façon fiable dans les deux contextes :
+// - client : import.meta.env.VITE_* (remplacé au build par Vite)
+// - serveur (SSR Nitro/Vercel/Cloudflare) : process.env.* si le remplacement n'a pas eu lieu
+const viteEnv = (import.meta.env ?? {}) as Record<string, string | undefined>;
+const nodeEnv: Record<string, string | undefined> =
+  typeof process !== "undefined" && process.env ? (process.env as Record<string, string | undefined>) : {};
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  throw new Error(
+const pick = (...names: string[]) => {
+  for (const name of names) {
+    const value = viteEnv[name] ?? nodeEnv[name];
+    if (typeof value === "string" && value.length > 0) return value;
+  }
+  return undefined;
+};
+
+const SUPABASE_URL = pick("VITE_SUPABASE_URL", "SUPABASE_URL");
+const SUPABASE_ANON_KEY = pick(
+  "VITE_SUPABASE_ANON_KEY",
+  "VITE_SUPABASE_PUBLISHABLE_KEY",
+  "SUPABASE_ANON_KEY",
+  "SUPABASE_PUBLISHABLE_KEY",
+);
+
+export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+
+if (!isSupabaseConfigured) {
+  // Ne jamais throw au chargement du module : cela casserait tout le rendu SSR
+  // (page blanche / 500) alors que seules les requêtes Supabase devraient échouer.
+  console.error(
     "Supabase non configuré : définissez VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY dans vos variables d'environnement.",
   );
 }
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
+export const supabase = createClient(
+  SUPABASE_URL ?? "https://placeholder.supabase.co",
+  SUPABASE_ANON_KEY ?? "placeholder-anon-key",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+    },
   },
-});
+);
 
 export const photoUrl = (filename: string | null | undefined) =>
-  filename ? `${SUPABASE_URL}/storage/v1/object/public/Bizzarrini%20Photos/photos_flat/${filename}` : null;
+  filename && SUPABASE_URL
+    ? `${SUPABASE_URL}/storage/v1/object/public/Bizzarrini%20Photos/photos_flat/${filename}`
+    : null;
+
 
 
 export type Voiture = {
