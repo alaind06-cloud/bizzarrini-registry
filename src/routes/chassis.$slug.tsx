@@ -228,8 +228,37 @@ function CarDetail() {
           annee={voiture.annee}
           chassis={voiture.chassis}
           mode={mode}
+          extraMilestones={bz2001 ? bz2001.timeline : undefined}
         />
       </section>
+
+      {bz2001 && (
+        <section className="container-page py-6">
+          <div className="grid gap-6 lg:grid-cols-[1.7fr_1fr] items-start max-w-5xl">
+            <article className="border-l-2 border-brand/60 bg-surface-2/40 p-5 md:p-6 rounded-sm">
+              <h2 className="font-display text-xl md:text-2xl">{bz2001.genesisTitle}</h2>
+              <p className="mt-2 text-sm uppercase tracking-[0.18em] text-muted-foreground">{bz2001.genesisLead}</p>
+              <div className="mt-4 space-y-3 text-foreground/85 leading-relaxed">
+                {bz2001.genesisBody.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
+            </article>
+
+            <aside className="border border-border bg-surface/60 rounded-sm p-5 md:p-6">
+              <p className="text-[0.7rem] uppercase tracking-[0.25em] text-muted-foreground">{bz2001.mediaKicker}</p>
+              <p className="mt-3 font-display text-5xl md:text-6xl leading-none text-brand">{bz2001.mediaNumber}</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">{bz2001.mediaUnit}</p>
+              <p className="mt-4 text-sm text-foreground/85 leading-relaxed">{bz2001.mediaBody}</p>
+              <ul className="mt-4 space-y-1 border-t border-border pt-3 text-xs text-muted-foreground">
+                {bz2001.mediaExamples.map((m) => (
+                  <li key={m}>{m}</li>
+                ))}
+              </ul>
+            </aside>
+          </div>
+        </section>
+      )}
 
       <section className="container-page py-6">
         <aside className="max-w-3xl border-l-2 border-brand/60 bg-surface-2/40 p-5 rounded-sm">
@@ -240,6 +269,7 @@ function CarDetail() {
           </Link>
         </aside>
       </section>
+
 
 
       {/* Gallery */}
