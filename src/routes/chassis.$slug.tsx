@@ -239,12 +239,12 @@ function CarDetail() {
         <section className="container-page py-12 pb-16">
           <h2 className="font-display text-2xl md:text-3xl mb-6">{t("car.gallery")} · {photos.length} {t("car.photos")}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {photos.map((ph) => {
+            {photos.map((ph, idx) => {
               const src = photoUrl(ph.filename)!;
               return (
                 <button
                   key={ph.id}
-                  onClick={() => setLightbox(src)}
+                  onClick={() => setLightboxIdx(idx)}
                   className="aspect-square bg-surface-2 overflow-hidden group"
                 >
                   <img
@@ -261,13 +261,14 @@ function CarDetail() {
         </section>
       )}
 
-      {lightbox && (
-        <div
-          className="fixed inset-0 z-50 bg-background/95 backdrop-blur flex items-center justify-center p-4 cursor-zoom-out"
-          onClick={() => setLightbox(null)}
-        >
-          <img src={lightbox} alt="" className="max-w-full max-h-full object-contain" />
-        </div>
+      {lightboxIdx !== null && (
+        <Lightbox
+          photos={photos}
+          index={lightboxIdx}
+          alt={voiture.titre}
+          onClose={() => setLightboxIdx(null)}
+          onChange={setLightboxIdx}
+        />
       )}
     </div>
   );
