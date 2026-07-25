@@ -1,10 +1,17 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Publishable key — safe to expose in client code.
-const SUPABASE_URL = "https://rbrkzrtrlvihpjugksnb.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_GrhhILemLzDZ-9_ncAjoeg_4HVtSmjP";
+// Configuration via variables d'environnement Vite (voir .env.example).
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
+const SUPABASE_ANON_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY ??
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY) as string;
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  throw new Error(
+    "Supabase non configuré : définissez VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY dans vos variables d'environnement.",
+  );
+}
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
@@ -14,6 +21,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
 
 export const photoUrl = (filename: string | null | undefined) =>
   filename ? `${SUPABASE_URL}/storage/v1/object/public/Bizzarrini%20Photos/photos_flat/${filename}` : null;
+
 
 export type Voiture = {
   id: string;
