@@ -126,7 +126,37 @@ function AuthPage() {
                   <label htmlFor="auth-raison" className="label-field">
                     {t("auth.field.raison")}
                   </label>
-                  <textarea id="auth-raison" className="field min-h-[80px]" value={raison} onChange={(e) => setRaison(e.target.value)} required minLength={10} maxLength={500} placeholder={t("auth.field.raisonPlaceholder")} />
+                  <select
+                    id="auth-raison"
+                    className="field"
+                    value={raison}
+                    onChange={(e) => setRaison(e.target.value)}
+                    required
+                  >
+                    <option value="" disabled>
+                      {t("auth.field.raisonPlaceholder")}
+                    </option>
+                    {RAISON_OPTIONS.map((key) => (
+                      <option key={key} value={t(`auth.raison.${key}` as never)}>
+                        {t(`auth.raison.${key}` as never)}
+                      </option>
+                    ))}
+                  </select>
+                  {raison === t("auth.raison.autre") && (
+                    <div className="mt-3">
+                      <label htmlFor="auth-raison-autre" className="label-field">
+                        {t("auth.raison.autrePrecision")} <span className="text-muted-foreground">{t("auth.field.optional")}</span>
+                      </label>
+                      <input
+                        id="auth-raison-autre"
+                        className="field"
+                        value={raisonAutre}
+                        onChange={(e) => setRaisonAutre(e.target.value)}
+                        maxLength={300}
+                        placeholder={t("auth.raison.autrePlaceholder")}
+                      />
+                    </div>
+                  )}
                 </div>
               </>
             )}
