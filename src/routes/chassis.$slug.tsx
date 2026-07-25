@@ -135,12 +135,16 @@ function CarDetail() {
             {t("car.backCatalog")}
           </Link>
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
-            <div className="art-frame">
-              <div className="aspect-[3/2] bg-surface-2 overflow-hidden">
+            <div className="art-frame w-full">
+              <div className="bg-surface-2 overflow-hidden flex items-center justify-center">
                 {cover ? (
-                  <img src={cover} alt={voiture.titre} className="w-full h-full object-contain" />
+                  <img
+                    src={cover}
+                    alt={voiture.titre}
+                    className="w-full h-auto max-h-[70vh] object-contain"
+                  />
                 ) : (
-                  <div className="w-full h-full grid place-items-center text-muted-foreground">{t("card.noPhoto")}</div>
+                  <div className="w-full aspect-[3/2] grid place-items-center text-muted-foreground">{t("card.noPhoto")}</div>
                 )}
               </div>
             </div>
