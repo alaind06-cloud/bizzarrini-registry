@@ -472,15 +472,18 @@ function HistoryTimeline({
   annee,
   chassis,
   mode,
+  extraMilestones,
 }: {
   description?: string | null;
   modele?: string | null;
   annee?: number | null;
   chassis?: string | null;
   mode: "summary" | "full";
+  extraMilestones?: Array<{ year: string; text: string }>;
 }) {
   const { t } = useI18n();
-  const allEntries = description?.trim() ? parseHistory(description) : [];
+  const parsed = description?.trim() ? parseHistory(description) : [];
+  const allEntries = mergeMilestones(parsed, extraMilestones);
 
   if (allEntries.length === 0) {
     const chassisLabel = t("car.chassisWord");
@@ -502,6 +505,7 @@ function HistoryTimeline({
           .filter((e) => e.year)
           .map((e) => ({ ...e, events: e.events.slice(0, 1) }))
       : allEntries;
+
 
   return (
     <div className="relative max-w-4xl">
