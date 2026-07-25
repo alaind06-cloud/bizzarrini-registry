@@ -88,6 +88,16 @@ function CarDetail() {
   const description = pickDescription(detail, lang);
   const specs = useMemo(() => extractSpecs(description ?? ""), [description]);
   const bz2001 = voiture && isBz2001(voiture) ? bz2001Content(lang) : null;
+  const chassisDocs = useMemo(
+    () => photos.filter((p) => CHASSIS_DOC_FILENAMES.has(p.filename ?? "")),
+    [photos],
+  );
+  const pressDocs = useMemo(
+    () => photos.filter((p) => !CHASSIS_DOC_FILENAMES.has(p.filename ?? "")),
+    [photos],
+  );
+  const orderedPhotos = useMemo(() => [...chassisDocs, ...pressDocs], [chassisDocs, pressDocs]);
+
 
   if (authLoading || (user && isValide && loading)) {
     return <div className="container-page py-20 text-center text-muted-foreground">{t("car.loading")}</div>;
