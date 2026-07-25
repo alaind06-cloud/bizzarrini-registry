@@ -71,7 +71,16 @@ function AuthPage() {
           const notifyRes = await fetch("/api/notify-signup", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nom, prenom, email, telephone, raison }),
+            body: JSON.stringify({
+              nom,
+              prenom,
+              email,
+              telephone,
+              raison:
+                raison === t("auth.raison.autre") && raisonAutre.trim()
+                  ? `${raison} — ${raisonAutre.trim()}`
+                  : raison,
+            }),
           });
           if (!notifyRes.ok) {
             const body = await notifyRes.text().catch(() => "");
