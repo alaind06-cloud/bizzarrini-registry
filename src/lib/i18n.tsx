@@ -460,6 +460,7 @@ const it: Dict = {
   "books.bizzarriniNote": "Questi tre volumi sono scritti da Philippe Olczyk, lo stesso esperto detentore del certificato di autenticazione Giotto Bizzarrini.",
   "books.othersTitle": "Altre opere",
   "books.buy": "Acquista →",
+  "books.relatedGiotto": "Correlato a Giotto Bizzarrini →",
 
   "contact.kicker": "Scrivici",
   "contact.title": "Contatti",
