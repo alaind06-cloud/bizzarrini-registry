@@ -275,11 +275,45 @@ function CarDetail() {
 
 
       {/* Gallery */}
-      {photos.length > 0 && (
+      {orderedPhotos.length > 0 && (
         <section className="container-page py-12 pb-16">
-          <h2 className="font-display text-2xl md:text-3xl mb-6">{t("car.gallery")} · {photos.length} {t("car.photos")}</h2>
+          <h2 className="font-display text-2xl md:text-3xl mb-6">{t("car.gallery")} · {orderedPhotos.length} {t("car.photos")}</h2>
+
+          {chassisDocs.length > 0 && (
+            <div className="mb-10">
+              <h3 className="text-xs tracking-[0.18em] uppercase text-muted-foreground mb-4">{t("car.docs.chassis")}</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {chassisDocs.map((ph, idx) => (
+                  <figure key={ph.id}>
+                    <button
+                      onClick={() => setLightboxIdx(idx)}
+                      className="aspect-square w-full bg-surface-2 overflow-hidden group block"
+                    >
+                      <img
+                        src={photoUrl(ph.filename)!}
+                        alt={t("car.docs.chassisCaption")}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
+                      />
+                    </button>
+                    <figcaption className="mt-2 text-xs text-muted-foreground">{t("car.docs.chassisCaption")}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {chassisDocs.length > 0 && pressDocs.length > 0 && (
+            <div className="mb-4">
+              <h3 className="text-xs tracking-[0.18em] uppercase text-muted-foreground">{t("car.docs.press")}</h3>
+              <p className="mt-1 text-xs text-muted-foreground/80 italic">{t("car.docs.pressNote")}</p>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {photos.map((ph, idx) => {
+            {pressDocs.map((ph, i) => {
+              const idx = chassisDocs.length + i;
               const src = photoUrl(ph.filename)!;
               return (
                 <button
@@ -300,6 +334,7 @@ function CarDetail() {
           </div>
         </section>
       )}
+
 
       {lightboxIdx !== null && (
         <Lightbox
