@@ -35,7 +35,7 @@ function CarDetail() {
   const [detail, setDetail] = useState<VoitureDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const [mode, setMode] = useState<"summary" | "full">("full");
 
   useEffect(() => {
