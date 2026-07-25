@@ -56,9 +56,9 @@ function HomePage() {
   const q = qParam ?? "";
 
   const setAnnee = (v: string) =>
-    navigate({ search: (prev: RegisterSearch) => ({ ...prev, d: v === "all" ? undefined : v }), replace: true });
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, d: v === "all" ? undefined : v }), replace: true, resetScroll: false });
   const setQ = (v: string) =>
-    navigate({ search: (prev: RegisterSearch) => ({ ...prev, q: v.trim() ? v : undefined }), replace: true });
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, q: v.trim() ? v : undefined }), replace: true, resetScroll: false });
 
 
   const [page, setPage] = useState(1);
@@ -138,7 +138,7 @@ function HomePage() {
 
 
   const clearM = () =>
-    navigate({ search: (prev: RegisterSearch) => ({ ...prev, m: undefined }), replace: true });
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, m: undefined }), replace: true, resetScroll: false });
 
   const activePills: ActivePill[] = [];
   if (modele !== "all") {
