@@ -42,7 +42,7 @@ function AuthPage() {
         await refreshProfil();
         router.navigate({ to: "/" });
       } else if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -50,12 +50,27 @@ function AuthPage() {
             data: { nom, prenom, telephone },
           },
         });
-        if (error) throw error;
-        fetch("/api/notify-signup", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nom, prenom, email, telephone, raison }),
-        }).catch((err) => console.warn("[notify-signup]", err));
+        if (error) {
+          console.error("[signup] supabase.auth.signUp error", error);
+          throw error;
+        }
+        console.info("[signup] ok, user id:", data.user?.id);
+
+        // Notification admin — best-effort, ne doit jamais faire échouer l'inscription.
+        try {
+          const notifyRes = await fetch("/api/notify-signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nom, prenom, email, telephone, raison }),
+          });
+          if (!notifyRes.ok) {
+            const body = await notifyRes.text().catch(() => "");
+            console.warn("[notify-signup] HTTP", notifyRes.status, body);
+          }
+        } catch (err) {
+          console.warn("[notify-signup] network error", err);
+        }
+
         setMsg({ type: "ok", text: t("auth.msg.signupOk") });
       } else {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -65,7 +80,14 @@ function AuthPage() {
         setMsg({ type: "ok", text: t("auth.msg.resetOk") });
       }
     } catch (e: any) {
-      setMsg({ type: "err", text: e.message ?? t("auth.msg.genericErr") });
+      const parts: string[] = [];
+      if (e?.status) parts.push(`HTTP ${e.status}`);
+      if (e?.code) parts.push(`code ${e.code}`);
+      if (e?.message) parts.push(e.message);
+      else if (typeof e === "string") parts.push(e);
+      const text = parts.length ? parts.join(" — ") : t("auth.msg.genericErr");
+      console.error("[auth] submit failed", e);
+      setMsg({ type: "err", text });
     } finally {
       setBusy(false);
     }
