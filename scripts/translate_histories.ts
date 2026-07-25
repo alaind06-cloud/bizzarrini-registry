@@ -19,8 +19,8 @@ const SERVICE = process.env.SERVICE_ROLE_KEY!;
 const LOVABLE = process.env.LOVABLE_API_KEY!;
 const FORCE = process.argv.includes("--force");
 
-if (!SERVICE || !LOVABLE) {
-  console.error("Manque SERVICE_ROLE_KEY ou LOVABLE_API_KEY.");
+if (!SUPABASE_URL || !SERVICE || !LOVABLE) {
+  console.error("Manque SUPABASE_URL, SERVICE_ROLE_KEY ou LOVABLE_API_KEY.");
   process.exit(1);
 }
 
