@@ -354,7 +354,7 @@ function CarDetail() {
 
       {lightboxIdx !== null && (
         <Lightbox
-          photos={photos}
+          photos={orderedPhotos}
           index={lightboxIdx}
           alt={voiture.titre}
           onClose={() => setLightboxIdx(null)}
