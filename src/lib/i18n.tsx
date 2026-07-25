@@ -39,7 +39,7 @@ const fr: Dict = {
   "home.filter.reset": "Réinitialiser",
   "home.loading": "Chargement…",
   "home.chassisCount": "{n} châssis",
-  "home.chassisCountLong": "{n} modèles répertoriés",
+  "home.chassisCountLong": "{n} châssis répertoriés",
 
   "home.pageOf": "Page {p} / {t}",
   "home.errorLoading": "Erreur de chargement : {msg}",
