@@ -44,6 +44,15 @@ function BookCard({ book, index }: { book: Book; index: number }) {
           {t("books.buy")}
         </a>
       )}
+      {book.id === "ferrari-166-f50-gt" && (
+        <Link
+          to="/giotto-bizzarrini"
+          hash="realisations"
+          className="mt-2 block text-xs uppercase tracking-widest text-brand hover:underline"
+        >
+          {t("books.relatedGiotto")}
+        </Link>
+      )}
     </article>
   );
 }
