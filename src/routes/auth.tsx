@@ -28,6 +28,7 @@ function AuthPage() {
   const [prenom, setPrenom] = useState("");
   const [telephone, setTelephone] = useState("");
   const [raison, setRaison] = useState("");
+  const [raisonAutre, setRaisonAutre] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "err" | "ok"; text: string } | null>(null);
 
