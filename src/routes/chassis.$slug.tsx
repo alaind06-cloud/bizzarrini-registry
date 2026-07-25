@@ -87,6 +87,7 @@ function CarDetail() {
 
   const description = pickDescription(detail, lang);
   const specs = useMemo(() => extractSpecs(description ?? ""), [description]);
+  const bz2001 = voiture && isBz2001(voiture) ? bz2001Content(lang) : null;
 
   if (authLoading || (user && isValide && loading)) {
     return <div className="container-page py-20 text-center text-muted-foreground">{t("car.loading")}</div>;
