@@ -16,6 +16,15 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+const RAISON_OPTIONS = [
+  "proprietaire",
+  "ancienProprietaire",
+  "passionne",
+  "historien",
+  "professionnel",
+  "autre",
+] as const;
+
 function AuthPage() {
   const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const router = useRouter();
@@ -28,6 +37,7 @@ function AuthPage() {
   const [prenom, setPrenom] = useState("");
   const [telephone, setTelephone] = useState("");
   const [raison, setRaison] = useState("");
+  const [raisonAutre, setRaisonAutre] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "err" | "ok"; text: string } | null>(null);
 
@@ -61,7 +71,16 @@ function AuthPage() {
           const notifyRes = await fetch("/api/notify-signup", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nom, prenom, email, telephone, raison }),
+            body: JSON.stringify({
+              nom,
+              prenom,
+              email,
+              telephone,
+              raison:
+                raison === t("auth.raison.autre") && raisonAutre.trim()
+                  ? `${raison} — ${raisonAutre.trim()}`
+                  : raison,
+            }),
           });
           if (!notifyRes.ok) {
             const body = await notifyRes.text().catch(() => "");
@@ -126,7 +145,37 @@ function AuthPage() {
                   <label htmlFor="auth-raison" className="label-field">
                     {t("auth.field.raison")}
                   </label>
-                  <textarea id="auth-raison" className="field min-h-[80px]" value={raison} onChange={(e) => setRaison(e.target.value)} required minLength={10} maxLength={500} placeholder={t("auth.field.raisonPlaceholder")} />
+                  <select
+                    id="auth-raison"
+                    className="field"
+                    value={raison}
+                    onChange={(e) => setRaison(e.target.value)}
+                    required
+                  >
+                    <option value="" disabled>
+                      {t("auth.field.raisonPlaceholder")}
+                    </option>
+                    {RAISON_OPTIONS.map((key) => (
+                      <option key={key} value={t(`auth.raison.${key}` as never)}>
+                        {t(`auth.raison.${key}` as never)}
+                      </option>
+                    ))}
+                  </select>
+                  {raison === t("auth.raison.autre") && (
+                    <div className="mt-3">
+                      <label htmlFor="auth-raison-autre" className="label-field">
+                        {t("auth.raison.autrePrecision")} <span className="text-muted-foreground">{t("auth.field.optional")}</span>
+                      </label>
+                      <input
+                        id="auth-raison-autre"
+                        className="field"
+                        value={raisonAutre}
+                        onChange={(e) => setRaisonAutre(e.target.value)}
+                        maxLength={300}
+                        placeholder={t("auth.raison.autrePlaceholder")}
+                      />
+                    </div>
+                  )}
                 </div>
               </>
             )}
