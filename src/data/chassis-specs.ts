@@ -121,13 +121,37 @@ const ARCHIVE_SPECS: Record<string, ArchiveSpecs> = {
     },
     notes: "Fiche technique Auto-Supermarket Düsseldorf",
   },
-  "b-0221": {
-    displacement: {
-      value: "~5354 cm³ (illisible)",
-      source: "Fiche technique Auto-Supermarket Düsseldorf",
-    },
-    notes: "Fiche technique Auto-Supermarket Düsseldorf",
-  },
+  "b-0221": (() => {
+    const SRC = "Fiche technique Auto-Supermarket Düsseldorf, 16.9.1965";
+    const s = (value: string) => ({ value, source: SRC });
+    return {
+      bodywork: s("Berlinetta Coupé, dessin et fabrication Bertone"),
+      engine: s("Chevrolet 327 Corvette V8 (90°)"),
+      displacement: s("5354 cm³ (alésage 101,6 mm / course 82,55 mm)"),
+      compression: s("10,25:1"),
+      fuelSystem: s("1 carburateur quadruple corps"),
+      power: s("365 ch SAE à 5400 tr/min"),
+      torque: s("52 mkg SAE"),
+      transmission: s(
+        "Embrayage monodisque à sec, boîte 4 vitesses synchronisée, différentiel autobloquant",
+      ),
+      wheels: s("Jantes alliage léger, Dunlop R6, 6.00x15 avant / 7.00x15 arrière"),
+      brakes: s("4 disques Dunlop assistés"),
+      electrical: s("12V, 65 Ah"),
+      wheelbase: s("245 cm"),
+      track: s("141 cm avant / 143 cm arrière"),
+      length: s("437 cm"),
+      width: s("173 cm"),
+      height: s("111 cm"),
+      groundClearance: s("12 cm"),
+      weight: s("1250 kg"),
+      fuelTank: s("130 L"),
+      topSpeed: s("249 à 275 km/h selon rapport de pont"),
+      notes: s(
+        "Version optionnelle disponible avec 4 carburateurs Weber 45 DCOE12 (420 ch SAE à 5400 tr/min, couple max 60 mkg SAE à 4000 tr/min)",
+      ),
+    };
+  })(),
   "b-0509": {
     seats: { value: "2", source: "Carte PRA Firenze, dossier n°969886 (1970)" },
     notes: "Carte PRA Firenze, dossier n°969886, année 1970",
