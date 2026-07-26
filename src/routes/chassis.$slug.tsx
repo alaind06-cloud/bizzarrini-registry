@@ -4,6 +4,7 @@ import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from
 import { useAuth } from "@/lib/auth";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { bz2001Content, isBz2001 } from "@/data/bz2001-dossier";
+import { archiveSpecs, type ArchiveSpecKey } from "@/data/chassis-specs";
 
 export const Route = createFileRoute("/chassis/$slug")({
   head: () => ({
@@ -92,7 +93,11 @@ function CarDetail() {
   }, [slug, user, isValide, authLoading, router]);
 
   const description = pickDescription(detail, lang);
-  const specs = useMemo(() => extractSpecs(description ?? ""), [description]);
+  const specs = useMemo(() => {
+    const extracted = extractSpecs(description ?? "");
+    // Les relevés d'archives sont prioritaires sur l'extraction automatique.
+    return { ...extracted, ...archiveSpecs(voiture?.chassis, slug, voiture?.titre) };
+  }, [description, voiture?.chassis, voiture?.titre, slug]);
   const bz2001 = voiture && isBz2001(voiture) ? bz2001Content(lang) : null;
   const chassisDocs = useMemo(
     () => photos.filter((p) => CHASSIS_DOC_FILENAMES.has(p.filename ?? "")),
@@ -141,16 +146,24 @@ function CarDetail() {
     gearboxNumber: t("car.specs.gearboxNumber"),
     coachbuilder: t("car.specs.coachbuilder"),
     condition: t("car.specs.condition"),
+    power: t("car.specs.power"),
+    displacement: t("car.specs.displacement"),
+    seats: t("car.specs.seats"),
+    notes: t("car.specs.notes"),
   };
-  // Ordered pairs for a two-column grid (paired for visual balance)
+  // Ordered pairs for a two-column grid (paired for visual balance).
+  // "notes" est rendu à part, sur toute la largeur.
   const specOrder: SpecKey[] = [
+    "engine", "engineNumber",
+    "power", "displacement",
+    "gearbox", "gearboxNumber",
+    "bodywork", "coachbuilder",
     "color", "interior",
-    "engineNumber", "gearboxNumber",
-    "coachbuilder", "condition",
-    "engine", "gearbox",
-    "bodywork", "registration",
+    "seats", "condition",
+    "registration",
   ];
   const specEntries = specOrder.filter((k) => specs[k]);
+  const specNotes = specs.notes;
 
   return (
     <div>
@@ -191,19 +204,31 @@ function CarDetail() {
               </div>
 
 
-              {specEntries.length > 0 && (
+              {(specEntries.length > 0 || specNotes) && (
                 <div className="border border-border bg-surface/50 rounded-sm p-5">
                   <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
                     {t("car.specs.title")}
                   </p>
-                  <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
-                    {specEntries.map((key) => (
-                      <div key={key} className="flex flex-col gap-0.5">
-                        <dt className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">{specLabels[key]}</dt>
-                        <dd className="text-foreground font-semibold">{specs[key]}</dd>
-                      </div>
-                    ))}
-                  </dl>
+                  {specEntries.length > 0 && (
+                    <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                      {specEntries.map((key) => (
+                        <div key={key} className="flex flex-col gap-0.5">
+                          <dt className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">{specLabels[key]}</dt>
+                          <dd className="text-foreground font-semibold">{specs[key]}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
+                  {specNotes && (
+                    <div
+                      className={`text-sm ${specEntries.length > 0 ? "mt-4 pt-4 border-t border-border/70" : ""}`}
+                    >
+                      <p className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">
+                        {specLabels.notes}
+                      </p>
+                      <p className="mt-1 text-foreground/90 leading-relaxed">{specNotes}</p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -365,22 +390,12 @@ function CarDetail() {
   );
 }
 
-type SpecKey =
-  | "engine"
-  | "color"
-  | "gearbox"
-  | "bodywork"
-  | "registration"
-  | "interior"
-  | "engineNumber"
-  | "gearboxNumber"
-  | "coachbuilder"
-  | "condition";
+type SpecKey = ArchiveSpecKey;
 
 // Two families per key:
 //  - labelled line: "Colour: red", "Interior: black leather"
 //  - inline prose:  "Engine # 447 F 0815 RE.", 'Reg. no.: "SNK 899M"'
-const SPEC_PATTERNS: Record<SpecKey, RegExp[]> = {
+const SPEC_PATTERNS: Partial<Record<SpecKey, RegExp[]>> = {
   engine: [/^\s*(?:engine|moteur|motore)\s*[:\-–]\s*(.+)$/im],
   color: [
     /^\s*(?:original\s+colou?r|colou?r|couleur(?:\s+d['']origine)?|colore(?:\s+originale)?)\s*[:\-–]\s*(.+)$/im,
@@ -437,7 +452,7 @@ function cleanValue(raw: string): string {
 function extractSpecs(text: string): Partial<Record<SpecKey, string>> {
   const out: Partial<Record<SpecKey, string>> = {};
   for (const key of Object.keys(SPEC_PATTERNS) as SpecKey[]) {
-    for (const re of SPEC_PATTERNS[key]) {
+    for (const re of SPEC_PATTERNS[key] ?? []) {
       const m = text.match(re);
       if (m && m[1]) {
         const cleaned = cleanValue(m[1]);
