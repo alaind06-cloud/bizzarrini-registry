@@ -146,16 +146,24 @@ function CarDetail() {
     gearboxNumber: t("car.specs.gearboxNumber"),
     coachbuilder: t("car.specs.coachbuilder"),
     condition: t("car.specs.condition"),
+    power: t("car.specs.power"),
+    displacement: t("car.specs.displacement"),
+    seats: t("car.specs.seats"),
+    notes: t("car.specs.notes"),
   };
-  // Ordered pairs for a two-column grid (paired for visual balance)
+  // Ordered pairs for a two-column grid (paired for visual balance).
+  // "notes" est rendu à part, sur toute la largeur.
   const specOrder: SpecKey[] = [
+    "engine", "engineNumber",
+    "power", "displacement",
+    "gearbox", "gearboxNumber",
+    "bodywork", "coachbuilder",
     "color", "interior",
-    "engineNumber", "gearboxNumber",
-    "coachbuilder", "condition",
-    "engine", "gearbox",
-    "bodywork", "registration",
+    "seats", "condition",
+    "registration",
   ];
   const specEntries = specOrder.filter((k) => specs[k]);
+  const specNotes = specs.notes;
 
   return (
     <div>
