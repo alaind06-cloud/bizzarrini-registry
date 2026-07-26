@@ -93,7 +93,11 @@ function CarDetail() {
   }, [slug, user, isValide, authLoading, router]);
 
   const description = pickDescription(detail, lang);
-  const specs = useMemo(() => extractSpecs(description ?? ""), [description]);
+  const specs = useMemo(() => {
+    const extracted = extractSpecs(description ?? "");
+    // Les relevés d'archives sont prioritaires sur l'extraction automatique.
+    return { ...extracted, ...archiveSpecs(voiture?.chassis, slug, voiture?.titre) };
+  }, [description, voiture?.chassis, voiture?.titre, slug]);
   const bz2001 = voiture && isBz2001(voiture) ? bz2001Content(lang) : null;
   const chassisDocs = useMemo(
     () => photos.filter((p) => CHASSIS_DOC_FILENAMES.has(p.filename ?? "")),
