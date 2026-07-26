@@ -6,6 +6,7 @@ import { useI18n, type Lang } from "@/lib/i18n";
 import { bz2001Content, isBz2001 } from "@/data/bz2001-dossier";
 import { archiveSpecs, type ArchiveSpecKey } from "@/data/chassis-specs";
 import { SpecsBlock } from "@/components/SpecsBlock";
+import { HistoryProse, wordCount } from "@/components/HistoryProse";
 import { filterCars, hasFilters, type RegistryFilters } from "@/data/model-groups";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -257,6 +258,7 @@ function CarDetail() {
           chassis={voiture.chassis}
           mode={mode}
           extraMilestones={bz2001 ? bz2001.timeline : undefined}
+          onExpand={() => setMode("full")}
         />
       </section>
 
@@ -609,6 +611,7 @@ function HistoryTimeline({
   chassis,
   mode,
   extraMilestones,
+  onExpand,
 }: {
   description?: string | null;
   modele?: string | null;
@@ -616,6 +619,7 @@ function HistoryTimeline({
   chassis?: string | null;
   mode: "summary" | "full";
   extraMilestones?: Array<{ year: string; text: string }>;
+  onExpand?: () => void;
 }) {
   const { t } = useI18n();
   const parsed = description?.trim() ? parseHistory(description) : [];
