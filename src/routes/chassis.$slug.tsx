@@ -427,7 +427,7 @@ function cleanValue(raw: string): string {
 function extractSpecs(text: string): Partial<Record<SpecKey, string>> {
   const out: Partial<Record<SpecKey, string>> = {};
   for (const key of Object.keys(SPEC_PATTERNS) as SpecKey[]) {
-    for (const re of SPEC_PATTERNS[key]) {
+    for (const re of SPEC_PATTERNS[key] ?? []) {
       const m = text.match(re);
       if (m && m[1]) {
         const cleaned = cleanValue(m[1]);
