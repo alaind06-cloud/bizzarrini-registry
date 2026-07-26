@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
 import { Search } from "lucide-react";
+import { MODEL_GROUPS, type RegistryFilters } from "@/data/model-groups";
 const heroVideo = { url: "/hero-bizzarrini.mp4" };
 const heroPoster = { url: "/hero-poster.jpg" };
 
@@ -377,7 +378,7 @@ function HomePage() {
           {loading
             ? Array.from({ length: PAGE_SIZE }).map((_, i) => <CarCardSkeleton key={i} />)
             : currentItems.map((v) => (
-                <CarCard key={v.id} v={v} canAccess={canAccess} />
+                <CarCard key={v.id} v={v} canAccess={canAccess} filters={{ g: modele !== "all" ? modele : undefined, m: modelQuery, d: annee !== "all" ? annee : undefined, q: q.trim() || undefined }} />
               ))}
           {!loading && currentItems.length === 0 && (
             <p className="col-span-full text-center text-muted-foreground py-16">
@@ -437,12 +438,12 @@ function FilterChip({
   );
 }
 
-function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
+function CarCard({ v, canAccess, filters }: { v: Voiture; canAccess: boolean; filters: RegistryFilters }) {
 
   const { t } = useI18n();
   const cover = photoUrl(v.cover_photo);
   const slug = carSlug(v);
-  const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug } } : { to: "/auth" };
+  const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug }, search: filters } : { to: "/auth" };
 
   // Strip model/year echo from the title to avoid repetition on the card
   const rawTitle = (v.titre ?? "").trim();
