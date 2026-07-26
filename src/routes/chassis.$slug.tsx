@@ -5,6 +5,8 @@ import { useAuth } from "@/lib/auth";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { bz2001Content, isBz2001 } from "@/data/bz2001-dossier";
 import { archiveSpecs, type ArchiveSpecKey } from "@/data/chassis-specs";
+import { SpecsBlock } from "@/components/SpecsBlock";
+
 
 export const Route = createFileRoute("/chassis/$slug")({
   head: () => ({
