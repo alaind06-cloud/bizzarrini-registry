@@ -174,35 +174,8 @@ function CarDetail() {
                   </div>
                 )}
               </div>
+              <SpecsBlock specs={specs} />
 
-
-              {(specEntries.length > 0 || specNotes) && (
-                <div className="border border-border bg-surface/50 rounded-sm p-5">
-                  <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
-                    {t("car.specs.title")}
-                  </p>
-                  {specEntries.length > 0 && (
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
-                      {specEntries.map((key) => (
-                        <div key={key} className="flex flex-col gap-0.5">
-                          <dt className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">{specLabels[key]}</dt>
-                          <dd className="text-foreground font-semibold">{specs[key]}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  )}
-                  {specNotes && (
-                    <div
-                      className={`text-sm ${specEntries.length > 0 ? "mt-4 pt-4 border-t border-border/70" : ""}`}
-                    >
-                      <p className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">
-                        {specLabels.notes}
-                      </p>
-                      <p className="mt-1 text-foreground/90 leading-relaxed">{specNotes}</p>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
           </div>
         </div>
