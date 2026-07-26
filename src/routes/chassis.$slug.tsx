@@ -639,12 +639,15 @@ function HistoryTimeline({
     );
   }
 
+  const summarised = allEntries
+    .filter((e) => e.year)
+    .map((e) => ({ ...e, events: e.events.slice(0, 1) }));
   const entries =
-    mode === "summary"
-      ? allEntries
-          .filter((e) => e.year)
-          .map((e) => ({ ...e, events: e.events.slice(0, 1) }))
-      : allEntries;
+    mode === "summary" && summarised.length > 0
+      ? summarised
+      : mode === "summary"
+        ? allEntries.map((e) => ({ ...e, events: e.events.slice(0, 1) }))
+        : allEntries;
 
 
   return (
