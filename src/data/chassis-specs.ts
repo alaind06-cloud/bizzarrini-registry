@@ -99,15 +99,21 @@ const ARCHIVE_SPECS: Record<string, ArchiveSpecs> = {
     notes: "1ère mise en circulation 15.05.1968",
   },
   "b-0213": {
-    displacement: "~5354 cm³ (illisible)",
+    displacement: {
+      value: "~5354 cm³ (illisible)",
+      source: "Fiche technique Auto-Supermarket Düsseldorf",
+    },
     notes: "Fiche technique Auto-Supermarket Düsseldorf",
   },
   "b-0221": {
-    displacement: "~5354 cm³ (illisible)",
+    displacement: {
+      value: "~5354 cm³ (illisible)",
+      source: "Fiche technique Auto-Supermarket Düsseldorf",
+    },
     notes: "Fiche technique Auto-Supermarket Düsseldorf",
   },
   "b-0509": {
-    seats: "2",
+    seats: { value: "2", source: "Carte PRA Firenze, dossier n°969886 (1970)" },
     notes: "Carte PRA Firenze, dossier n°969886, année 1970",
   },
   "b-505": {
