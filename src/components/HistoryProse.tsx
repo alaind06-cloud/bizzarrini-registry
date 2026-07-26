@@ -93,9 +93,9 @@ export function HistoryProse({
   const paragraphs = maxParagraphs ? all.slice(0, maxParagraphs) : all;
 
   return (
-    <div className={`max-w-[46rem] space-y-4 ${className}`}>
+    <div className={`max-w-[46rem] min-w-0 space-y-4 ${className}`}>
       {paragraphs.map((p, i) => (
-        <p key={i} className="text-[1.0625rem] leading-[1.8] text-foreground/90">
+        <p key={i} className="text-[1.0625rem] leading-[1.8] text-foreground/90 [overflow-wrap:anywhere] hyphens-auto">
           {highlight(p, `p${i}`)}
         </p>
       ))}
