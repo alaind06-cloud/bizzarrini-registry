@@ -156,6 +156,9 @@ const fr: Dict = {
 
   // Voiture detail
   "car.backCatalog": "← Retour au registre",
+  "car.pager.label": "Navigation entre châssis",
+  "car.pager.prev": "Précédent",
+  "car.pager.next": "Suivant",
   "car.chassisLabel": "Châssis",
   "car.history": "Historique",
   "car.gallery": "Galerie",
@@ -352,6 +355,9 @@ const en: Dict = {
   "reset.ok": "Password updated.",
 
   "car.backCatalog": "← Back to register",
+  "car.pager.label": "Chassis navigation",
+  "car.pager.prev": "Previous",
+  "car.pager.next": "Next",
   "car.chassisLabel": "Chassis",
   "car.history": "History",
   "car.gallery": "Gallery",
@@ -547,6 +553,9 @@ const it: Dict = {
   "reset.ok": "Password aggiornata.",
 
   "car.backCatalog": "← Torna al registro",
+  "car.pager.label": "Navigazione telai",
+  "car.pager.prev": "Precedente",
+  "car.pager.next": "Successivo",
   "car.chassisLabel": "Telaio",
   "car.history": "Storia",
   "car.gallery": "Galleria",

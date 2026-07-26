@@ -362,6 +362,12 @@ function CarDetail() {
       )}
 
 
+      <section className="container-page pb-16">
+        <div className="border-t border-border pt-6">
+          <ChassisPager {...neighbours} filters={filters} wide />
+        </div>
+      </section>
+
       {lightboxIdx !== null && (
         <Lightbox
           photos={orderedPhotos}
@@ -372,6 +378,67 @@ function CarDetail() {
         />
       )}
     </div>
+  );
+}
+
+function ChassisPager({
+  prev,
+  next,
+  index,
+  total,
+  filters,
+  wide = false,
+}: {
+  prev: Voiture | null;
+  next: Voiture | null;
+  index: number;
+  total: number;
+  filters: RegistryFilters;
+  wide?: boolean;
+}) {
+  const { t } = useI18n();
+  if (!prev && !next) return null;
+
+  const label = (v: Voiture) => v.chassis?.trim() || v.titre?.trim() || "—";
+
+  const base =
+    "inline-flex items-center gap-2 border border-border bg-surface/60 px-3 py-2 text-[0.68rem] uppercase tracking-[0.18em] text-foreground/80 hover:border-brand hover:text-brand transition-colors max-w-[45vw] md:max-w-none";
+
+  return (
+    <nav
+      aria-label={t("car.pager.label")}
+      className={`flex items-center gap-3 ${wide ? "justify-between" : "justify-end"}`}
+    >
+      {prev ? (
+        <Link to="/chassis/$slug" params={{ slug: carSlug(prev) }} search={filters} className={base}>
+          <ChevronLeft aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">{wide ? `${t("car.pager.prev")} · ${label(prev)}` : label(prev)}</span>
+        </Link>
+      ) : (
+        <span className={`${base} opacity-40 pointer-events-none`} aria-disabled="true">
+          <ChevronLeft aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+          <span>{t("car.pager.prev")}</span>
+        </span>
+      )}
+
+      {index >= 0 && total > 0 && (
+        <span className="text-[0.62rem] uppercase tracking-[0.22em] text-muted-foreground whitespace-nowrap">
+          {index + 1} / {total}
+        </span>
+      )}
+
+      {next ? (
+        <Link to="/chassis/$slug" params={{ slug: carSlug(next) }} search={filters} className={base}>
+          <span className="truncate">{wide ? `${t("car.pager.next")} · ${label(next)}` : label(next)}</span>
+          <ChevronRight aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+        </Link>
+      ) : (
+        <span className={`${base} opacity-40 pointer-events-none`} aria-disabled="true">
+          <span>{t("car.pager.next")}</span>
+          <ChevronRight aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+        </span>
+      )}
+    </nav>
   );
 }
 
