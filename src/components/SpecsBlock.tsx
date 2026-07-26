@@ -1,11 +1,26 @@
 import { useI18n } from "@/lib/i18n";
-import { SPEC_FIELDS, type ArchiveSpecs } from "@/data/chassis-specs";
+import {
+  SPEC_FIELDS,
+  specSource,
+  specText,
+  type ArchiveSpecs,
+} from "@/data/chassis-specs";
 
 /**
  * Rendu générique du bloc « Spécifications ».
  * Il parcourt `SPEC_FIELDS` (src/data/chassis-specs.ts) : ajouter un nouveau
  * type de champ ne demande aucune modification ici ni dans la page châssis.
+ *
+ * Chaque valeur peut être une simple chaîne, ou un objet
+ * `{ value, source }` — la source (référence du document scanné) est alors
+ * affichée en petit sous la valeur.
  */
+const SOURCE_LABEL: Record<string, string> = {
+  fr: "Source",
+  en: "Source",
+  it: "Fonte",
+};
+
 export function SpecsBlock({ specs }: { specs: ArchiveSpecs }) {
   const { t, lang } = useI18n();
 
@@ -18,10 +33,21 @@ export function SpecsBlock({ specs }: { specs: ArchiveSpecs }) {
     return field.label[lang] ?? field.label.fr;
   };
 
-  const present = SPEC_FIELDS.filter((f) => {
-    const value = specs[f.key];
-    return typeof value === "string" && value.trim().length > 0;
-  });
+  const sourceLabel = (() => {
+    const key = "car.specs.source";
+    const translated = t(key);
+    if (translated && translated !== key) return translated;
+    return SOURCE_LABEL[lang] ?? SOURCE_LABEL.fr;
+  })();
+
+  const Source = ({ source }: { source?: string }) =>
+    source ? (
+      <p className="mt-1 text-[0.65rem] leading-snug text-muted-foreground/80 italic">
+        {sourceLabel} : {source}
+      </p>
+    ) : null;
+
+  const present = SPEC_FIELDS.filter((f) => specText(specs[f.key]).trim().length > 0);
   const pairs = present.filter((f) => f.layout !== "full");
   const fullWidth = present.filter((f) => f.layout === "full");
 
@@ -39,7 +65,10 @@ export function SpecsBlock({ specs }: { specs: ArchiveSpecs }) {
               <dt className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">
                 {labelOf(field)}
               </dt>
-              <dd className="text-foreground font-semibold">{specs[field.key]}</dd>
+              <dd className="text-foreground font-semibold">
+                {specText(specs[field.key])}
+                <Source source={specSource(specs[field.key])} />
+              </dd>
             </div>
           ))}
         </dl>
@@ -52,7 +81,10 @@ export function SpecsBlock({ specs }: { specs: ArchiveSpecs }) {
           <p className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">
             {labelOf(field)}
           </p>
-          <p className="mt-1 text-foreground/90 leading-relaxed">{specs[field.key]}</p>
+          <p className="mt-1 text-foreground/90 leading-relaxed">
+            {specText(specs[field.key])}
+          </p>
+          <Source source={specSource(specs[field.key])} />
         </div>
       ))}
     </div>

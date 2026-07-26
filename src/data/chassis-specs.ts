@@ -49,7 +49,27 @@ export type ArchiveSpecKey = (typeof RAW_SPEC_FIELDS)[number]["key"];
 export const SPEC_FIELDS: ReadonlyArray<SpecField & { key: ArchiveSpecKey }> =
   RAW_SPEC_FIELDS;
 
-export type ArchiveSpecs = Partial<Record<ArchiveSpecKey, string>>;
+/**
+ * Une valeur de spécification : soit une simple chaîne, soit une chaîne
+ * accompagnée de la référence du document scanné dont elle provient.
+ * Ex. : { value: "330 ch / 5400 tr/min", source: "Carte grise italienne, 1966" }
+ */
+export type SpecValue = string | { value: string; source?: string };
+
+export type ArchiveSpecs = Partial<Record<ArchiveSpecKey, SpecValue>>;
+
+/** Texte affiché d'une valeur de spécification. */
+export function specText(value: SpecValue | undefined): string {
+  if (!value) return "";
+  return typeof value === "string" ? value : (value.value ?? "");
+}
+
+/** Référence du document source, si renseignée. */
+export function specSource(value: SpecValue | undefined): string | undefined {
+  if (!value || typeof value === "string") return undefined;
+  const source = value.source?.trim();
+  return source ? source : undefined;
+}
 
 /** Normalise un n° de châssis ou un slug pour la comparaison. */
 export function normalizeChassisKey(value: string | null | undefined): string {
@@ -79,15 +99,21 @@ const ARCHIVE_SPECS: Record<string, ArchiveSpecs> = {
     notes: "1ère mise en circulation 15.05.1968",
   },
   "b-0213": {
-    displacement: "~5354 cm³ (illisible)",
+    displacement: {
+      value: "~5354 cm³ (illisible)",
+      source: "Fiche technique Auto-Supermarket Düsseldorf",
+    },
     notes: "Fiche technique Auto-Supermarket Düsseldorf",
   },
   "b-0221": {
-    displacement: "~5354 cm³ (illisible)",
+    displacement: {
+      value: "~5354 cm³ (illisible)",
+      source: "Fiche technique Auto-Supermarket Düsseldorf",
+    },
     notes: "Fiche technique Auto-Supermarket Düsseldorf",
   },
   "b-0509": {
-    seats: "2",
+    seats: { value: "2", source: "Carte PRA Firenze, dossier n°969886 (1970)" },
     notes: "Carte PRA Firenze, dossier n°969886, année 1970",
   },
   "b-505": {
