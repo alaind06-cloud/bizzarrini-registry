@@ -5,6 +5,8 @@ import { useAuth } from "@/lib/auth";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { bz2001Content, isBz2001 } from "@/data/bz2001-dossier";
 import { archiveSpecs, type ArchiveSpecKey } from "@/data/chassis-specs";
+import { SpecsBlock } from "@/components/SpecsBlock";
+
 
 export const Route = createFileRoute("/chassis/$slug")({
   head: () => ({
@@ -135,35 +137,7 @@ function CarDetail() {
   }
 
   const cover = photoUrl(voiture.cover_photo);
-  const specLabels: Record<SpecKey, string> = {
-    engine: t("car.specs.engine"),
-    color: t("car.specs.color"),
-    gearbox: t("car.specs.gearbox"),
-    bodywork: t("car.specs.bodywork"),
-    registration: t("car.specs.registration"),
-    interior: t("car.specs.interior"),
-    engineNumber: t("car.specs.engineNumber"),
-    gearboxNumber: t("car.specs.gearboxNumber"),
-    coachbuilder: t("car.specs.coachbuilder"),
-    condition: t("car.specs.condition"),
-    power: t("car.specs.power"),
-    displacement: t("car.specs.displacement"),
-    seats: t("car.specs.seats"),
-    notes: t("car.specs.notes"),
-  };
-  // Ordered pairs for a two-column grid (paired for visual balance).
-  // "notes" est rendu à part, sur toute la largeur.
-  const specOrder: SpecKey[] = [
-    "engine", "engineNumber",
-    "power", "displacement",
-    "gearbox", "gearboxNumber",
-    "bodywork", "coachbuilder",
-    "color", "interior",
-    "seats", "condition",
-    "registration",
-  ];
-  const specEntries = specOrder.filter((k) => specs[k]);
-  const specNotes = specs.notes;
+
 
   return (
     <div>
@@ -202,35 +176,8 @@ function CarDetail() {
                   </div>
                 )}
               </div>
+              <SpecsBlock specs={specs} />
 
-
-              {(specEntries.length > 0 || specNotes) && (
-                <div className="border border-border bg-surface/50 rounded-sm p-5">
-                  <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
-                    {t("car.specs.title")}
-                  </p>
-                  {specEntries.length > 0 && (
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
-                      {specEntries.map((key) => (
-                        <div key={key} className="flex flex-col gap-0.5">
-                          <dt className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">{specLabels[key]}</dt>
-                          <dd className="text-foreground font-semibold">{specs[key]}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  )}
-                  {specNotes && (
-                    <div
-                      className={`text-sm ${specEntries.length > 0 ? "mt-4 pt-4 border-t border-border/70" : ""}`}
-                    >
-                      <p className="text-[0.7rem] uppercase tracking-wider text-muted-foreground">
-                        {specLabels.notes}
-                      </p>
-                      <p className="mt-1 text-foreground/90 leading-relaxed">{specNotes}</p>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
           </div>
         </div>

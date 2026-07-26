@@ -1,29 +1,53 @@
 /**
- * Données techniques relevées dans les archives (cartes grises, fiches
- * d'homologation, dossiers de presse) et rattachées à un châssis.
+ * Registre des champs techniques + données relevées dans les archives
+ * (cartes grises, fiches d'homologation, dossiers de presse).
  *
- * Pour ajouter un châssis : ajoutez une entrée ci-dessous. Les clés acceptées
- * sont celles de `ArchiveSpecKey`. Un champ absent n'est simplement pas affiché.
- * Pour un nouveau type de champ : ajoutez la clé dans `ARCHIVE_SPEC_KEYS`
- * (src/routes/chassis.$slug.tsx utilise l'ordre d'affichage) puis son libellé
- * traduit `car.specs.<clé>` dans src/lib/i18n.tsx.
+ * AJOUTER UN NOUVEAU TYPE DE CHAMP (ex. couple, transmission, type de
+ * carrosserie) : ajoutez simplement une entrée dans `SPEC_FIELDS` ci-dessous.
+ * Rien d'autre à toucher — ni la page `chassis/$slug`, ni le composant de
+ * rendu. La traduction est facultative : si la clé i18n
+ * `car.specs.<clé>` n'existe pas, le libellé de secours (`label`) est utilisé.
+ *
+ * AJOUTER UN CHÂSSIS : ajoutez une entrée dans `ARCHIVE_SPECS`.
  */
 
-export type ArchiveSpecKey =
-  | "engine"
-  | "engineNumber"
-  | "power"
-  | "displacement"
-  | "gearbox"
-  | "gearboxNumber"
-  | "bodywork"
-  | "coachbuilder"
-  | "color"
-  | "interior"
-  | "seats"
-  | "registration"
-  | "condition"
-  | "notes";
+export type SpecFieldLayout = "half" | "full";
+
+export type SpecField = {
+  /** Clé technique, aussi utilisée pour la traduction `car.specs.<key>`. */
+  key: string;
+  /** Libellés de secours si aucune traduction n'existe pour la clé. */
+  label: { fr: string; en: string; it: string };
+  /** "full" = affiché sur toute la largeur, sous les paires. */
+  layout?: SpecFieldLayout;
+};
+
+/** Ordre d'affichage du bloc « Spécifications ». */
+const RAW_SPEC_FIELDS = [
+  { key: "engine", label: { fr: "Moteur", en: "Engine", it: "Motore" } },
+  { key: "engineNumber", label: { fr: "N° Moteur", en: "Engine no.", it: "N° Motore" } },
+  { key: "power", label: { fr: "Puissance / régime", en: "Power / rpm", it: "Potenza / regime" } },
+  { key: "displacement", label: { fr: "Cylindrée", en: "Displacement", it: "Cilindrata" } },
+  { key: "gearbox", label: { fr: "Boîte", en: "Gearbox", it: "Cambio" } },
+  { key: "gearboxNumber", label: { fr: "N° Boîte", en: "Gearbox no.", it: "N° Cambio" } },
+  { key: "bodywork", label: { fr: "Carrosserie", en: "Bodywork", it: "Carrozzeria" } },
+  { key: "coachbuilder", label: { fr: "Carrossier", en: "Coachbuilder", it: "Carrozziere" } },
+  { key: "color", label: { fr: "Couleur d'origine", en: "Original colour", it: "Colore originale" } },
+  { key: "interior", label: { fr: "Intérieur", en: "Interior", it: "Interni" } },
+  { key: "seats", label: { fr: "Places", en: "Seats", it: "Posti" } },
+  { key: "condition", label: { fr: "État", en: "Condition", it: "Stato" } },
+  { key: "registration", label: { fr: "Immatriculation", en: "Registration", it: "Targa" } },
+  {
+    key: "notes",
+    label: { fr: "Autres données d'archives", en: "Other archive data", it: "Altri dati d'archivio" },
+    layout: "full",
+  },
+] as const;
+
+export type ArchiveSpecKey = (typeof RAW_SPEC_FIELDS)[number]["key"];
+
+export const SPEC_FIELDS: ReadonlyArray<SpecField & { key: ArchiveSpecKey }> =
+  RAW_SPEC_FIELDS;
 
 export type ArchiveSpecs = Partial<Record<ArchiveSpecKey, string>>;
 
@@ -32,6 +56,7 @@ export function normalizeChassisKey(value: string | null | undefined): string {
   if (!value) return "";
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
+
 
 /**
  * Clés = n° de châssis (ou identifiant de fiche) normalisés.
