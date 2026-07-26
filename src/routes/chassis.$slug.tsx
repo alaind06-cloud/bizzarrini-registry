@@ -665,22 +665,37 @@ function HistoryTimeline({
             )}
 
             <div className="mt-3 space-y-2">
-              {entry.events.map((event, eidx) =>
-                event.key ? (
-                  <div
-                    key={eidx}
-                    className="grid grid-cols-[minmax(90px,140px)_1fr] gap-3 items-baseline pl-1 border-l border-border/60 py-1"
-                  >
-                    <span className="text-xs uppercase tracking-wider text-muted-foreground">{event.key}</span>
-                    <span className="text-foreground/90 leading-relaxed">{event.value}</span>
+              {entry.events.map((event, eidx) => {
+                if (event.key) {
+                  return (
+                    <div
+                      key={eidx}
+                      className="grid grid-cols-[minmax(90px,140px)_1fr] gap-3 items-baseline pl-1 border-l border-border/60 py-1"
+                    >
+                      <span className="text-xs uppercase tracking-wider text-muted-foreground">{event.key}</span>
+                      <span className="text-foreground/90 leading-relaxed">{event.value}</span>
+                    </div>
+                  );
+                }
+                const long = wordCount(event.value) > 120;
+                const truncate = long && mode === "summary";
+                return (
+                  <div key={eidx} className="pl-4 border-l border-border/60">
+                    <HistoryProse text={event.value} maxParagraphs={truncate ? 2 : undefined} />
+                    {truncate && onExpand && (
+                      <button
+                        type="button"
+                        onClick={onExpand}
+                        className="mt-3 text-[0.7rem] uppercase tracking-[0.18em] text-brand hover:text-brand/80 underline underline-offset-4"
+                      >
+                        {t("car.history.readFull")}
+                      </button>
+                    )}
                   </div>
-                ) : (
-                  <p key={eidx} className="text-foreground/90 leading-relaxed pl-1 border-l border-border/60">
-                    {event.value}
-                  </p>
-                ),
-              )}
+                );
+              })}
             </div>
+
           </div>
         ))}
       </div>
