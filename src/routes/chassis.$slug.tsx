@@ -365,22 +365,12 @@ function CarDetail() {
   );
 }
 
-type SpecKey =
-  | "engine"
-  | "color"
-  | "gearbox"
-  | "bodywork"
-  | "registration"
-  | "interior"
-  | "engineNumber"
-  | "gearboxNumber"
-  | "coachbuilder"
-  | "condition";
+type SpecKey = ArchiveSpecKey;
 
 // Two families per key:
 //  - labelled line: "Colour: red", "Interior: black leather"
 //  - inline prose:  "Engine # 447 F 0815 RE.", 'Reg. no.: "SNK 899M"'
-const SPEC_PATTERNS: Record<SpecKey, RegExp[]> = {
+const SPEC_PATTERNS: Partial<Record<SpecKey, RegExp[]>> = {
   engine: [/^\s*(?:engine|moteur|motore)\s*[:\-–]\s*(.+)$/im],
   color: [
     /^\s*(?:original\s+colou?r|colou?r|couleur(?:\s+d['']origine)?|colore(?:\s+originale)?)\s*[:\-–]\s*(.+)$/im,
