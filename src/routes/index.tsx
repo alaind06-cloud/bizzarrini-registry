@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
 import { Search } from "lucide-react";
+import { MODEL_GROUPS, type RegistryFilters } from "@/data/model-groups";
 const heroVideo = { url: "/hero-bizzarrini.mp4" };
 const heroPoster = { url: "/hero-poster.jpg" };
 
@@ -95,20 +96,8 @@ function HomePage() {
     })();
   }, []);
 
-  const MODEL_GROUPS: { key: string; label: string; test: (m: string) => boolean }[] = [
-    { key: "iso-grifo-a3c", label: "Iso Grifo A3/C", test: (m) => /iso\s*grifo.*a3\s*\/?\s*c/i.test(m) || /^a3\/?c/i.test(m) },
-    { key: "iso-grifo-a3l", label: "Iso Grifo A3/L", test: (m) => /iso\s*grifo.*a3\s*\/?\s*l/i.test(m) || /^a3\/?l/i.test(m) },
-    { key: "iso-grifo", label: "Iso Grifo", test: (m) => /iso\s*grifo/i.test(m) },
-    { key: "5300-gt", label: "5300 GT", test: (m) => /5300\s*gt/i.test(m) },
-    { key: "america", label: "America", test: (m) => /\bamerica\b/i.test(m) },
-    { key: "europa", label: "Europa", test: (m) => /\beuropa\b/i.test(m) },
-    { key: "p538", label: "P538", test: (m) => /p\s*538/i.test(m) },
-    { key: "amx3", label: "AMX/3", test: (m) => /amx\s*\/?\s*3/i.test(m) },
-    { key: "1900", label: "1900", test: (m) => /\b1900\b/i.test(m) },
-    { key: "manta", label: "Manta", test: (m) => /\bmanta\b/i.test(m) },
-    { key: "gt-strada", label: "GT Strada", test: (m) => /gt\s*strada/i.test(m) },
-    { key: "bz2000", label: "BZ 2000", test: (m) => /bz\s*2000|barchetta/i.test(m) },
-  ];
+  // Groupes de modèles partagés avec la fiche châssis
+
 
   const availableGroups = useMemo(() => {
     return MODEL_GROUPS.filter((g) => voitures.some((v) => v.modele && g.test(v.modele)));
@@ -389,7 +378,7 @@ function HomePage() {
           {loading
             ? Array.from({ length: PAGE_SIZE }).map((_, i) => <CarCardSkeleton key={i} />)
             : currentItems.map((v) => (
-                <CarCard key={v.id} v={v} canAccess={canAccess} />
+                <CarCard key={v.id} v={v} canAccess={canAccess} filters={{ g: modele !== "all" ? modele : undefined, m: modelQuery, d: annee !== "all" ? annee : undefined, q: q.trim() || undefined }} />
               ))}
           {!loading && currentItems.length === 0 && (
             <p className="col-span-full text-center text-muted-foreground py-16">
@@ -449,12 +438,12 @@ function FilterChip({
   );
 }
 
-function CarCard({ v, canAccess }: { v: Voiture; canAccess: boolean }) {
+function CarCard({ v, canAccess, filters }: { v: Voiture; canAccess: boolean; filters: RegistryFilters }) {
 
   const { t } = useI18n();
   const cover = photoUrl(v.cover_photo);
   const slug = carSlug(v);
-  const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug } } : { to: "/auth" };
+  const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug }, search: filters } : { to: "/auth" };
 
   // Strip model/year echo from the title to avoid repetition on the card
   const rawTitle = (v.titre ?? "").trim();
