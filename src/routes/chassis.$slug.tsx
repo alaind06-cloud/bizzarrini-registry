@@ -135,35 +135,7 @@ function CarDetail() {
   }
 
   const cover = photoUrl(voiture.cover_photo);
-  const specLabels: Record<SpecKey, string> = {
-    engine: t("car.specs.engine"),
-    color: t("car.specs.color"),
-    gearbox: t("car.specs.gearbox"),
-    bodywork: t("car.specs.bodywork"),
-    registration: t("car.specs.registration"),
-    interior: t("car.specs.interior"),
-    engineNumber: t("car.specs.engineNumber"),
-    gearboxNumber: t("car.specs.gearboxNumber"),
-    coachbuilder: t("car.specs.coachbuilder"),
-    condition: t("car.specs.condition"),
-    power: t("car.specs.power"),
-    displacement: t("car.specs.displacement"),
-    seats: t("car.specs.seats"),
-    notes: t("car.specs.notes"),
-  };
-  // Ordered pairs for a two-column grid (paired for visual balance).
-  // "notes" est rendu à part, sur toute la largeur.
-  const specOrder: SpecKey[] = [
-    "engine", "engineNumber",
-    "power", "displacement",
-    "gearbox", "gearboxNumber",
-    "bodywork", "coachbuilder",
-    "color", "interior",
-    "seats", "condition",
-    "registration",
-  ];
-  const specEntries = specOrder.filter((k) => specs[k]);
-  const specNotes = specs.notes;
+
 
   return (
     <div>
