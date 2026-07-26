@@ -6,9 +6,15 @@ import { useI18n, type Lang } from "@/lib/i18n";
 import { bz2001Content, isBz2001 } from "@/data/bz2001-dossier";
 import { archiveSpecs, type ArchiveSpecKey } from "@/data/chassis-specs";
 import { SpecsBlock } from "@/components/SpecsBlock";
+import { filterCars, hasFilters, type RegistryFilters } from "@/data/model-groups";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 
 export const Route = createFileRoute("/chassis/$slug")({
+  validateSearch: (search: Record<string, unknown>): RegistryFilters => {
+    const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : undefined);
+    return { g: str(search.g), m: str(search.m), d: str(search.d), q: str(search.q) };
+  },
   head: () => ({
     meta: [
       { title: "Fiche châssis — Bizzarrini Register" },
@@ -42,6 +48,7 @@ const CHASSIS_DOC_FILENAMES = new Set<string>([
 
 function CarDetail() {
   const { slug } = Route.useParams();
+  const filters = Route.useSearch();
   const router = useRouter();
   const { user, isValide, loading: authLoading } = useAuth();
   const { t, lang } = useI18n();
@@ -94,6 +101,34 @@ function CarDetail() {
     })();
   }, [slug, user, isValide, authLoading, router]);
 
+  const [siblings, setSiblings] = useState<Voiture[]>([]);
+  useEffect(() => {
+    if (!user || !isValide) return;
+    (async () => {
+      const { data } = await supabase
+        .from("voitures")
+        .select("id, titre, modele, annee, chassis")
+        .order("id", { ascending: true });
+      const clean = ((data as Voiture[]) ?? []).filter(
+        (v) => (v.titre ?? "").trim().toUpperCase() !== "COVER" && (v.modele ?? "").trim().toUpperCase() !== "COVER",
+      );
+      setSiblings(clean);
+    })();
+  }, [user, isValide]);
+
+  const neighbours = useMemo(() => {
+    if (!siblings.length) return { prev: null as Voiture | null, next: null as Voiture | null, index: -1, total: 0 };
+    const scoped = hasFilters(filters) ? filterCars(siblings, filters) : siblings;
+    const list = scoped.some((v) => carSlug(v) === slug) ? scoped : siblings;
+    const i = list.findIndex((v) => carSlug(v) === slug);
+    return {
+      prev: i > 0 ? list[i - 1] : null,
+      next: i >= 0 && i < list.length - 1 ? list[i + 1] : null,
+      index: i,
+      total: list.length,
+    };
+  }, [siblings, filters, slug]);
+
   const description = pickDescription(detail, lang);
   const specs = useMemo(() => {
     const extracted = extractSpecs(description ?? "");
@@ -144,9 +179,12 @@ function CarDetail() {
       {/* Hero */}
       <section className="border-b border-border">
         <div className="container-page py-10 md:py-16">
-          <Link to="/" className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground">
-            {t("car.backCatalog")}
-          </Link>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <Link to="/" search={filters} className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground">
+              {t("car.backCatalog")}
+            </Link>
+            <ChassisPager {...neighbours} filters={filters} />
+          </div>
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
             <div className="art-frame w-full">
               <div className="bg-surface-2 overflow-hidden flex items-center justify-center">
