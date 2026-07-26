@@ -23,7 +23,7 @@ export type SpecField = {
 };
 
 /** Ordre d'affichage du bloc « Spécifications ». */
-export const SPEC_FIELDS = [
+const RAW_SPEC_FIELDS = [
   { key: "engine", label: { fr: "Moteur", en: "Engine", it: "Motore" } },
   { key: "engineNumber", label: { fr: "N° Moteur", en: "Engine no.", it: "N° Motore" } },
   { key: "power", label: { fr: "Puissance / régime", en: "Power / rpm", it: "Potenza / regime" } },
@@ -42,9 +42,12 @@ export const SPEC_FIELDS = [
     label: { fr: "Autres données d'archives", en: "Other archive data", it: "Altri dati d'archivio" },
     layout: "full",
   },
-] as const satisfies ReadonlyArray<SpecField>;
+] as const;
 
-export type ArchiveSpecKey = (typeof SPEC_FIELDS)[number]["key"];
+export type ArchiveSpecKey = (typeof RAW_SPEC_FIELDS)[number]["key"];
+
+export const SPEC_FIELDS: ReadonlyArray<SpecField & { key: ArchiveSpecKey }> =
+  RAW_SPEC_FIELDS;
 
 export type ArchiveSpecs = Partial<Record<ArchiveSpecKey, string>>;
 
