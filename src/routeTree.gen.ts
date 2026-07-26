@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VideosRouteImport } from './routes/videos'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as HistoryLabRouteImport } from './routes/history-lab'
 import { Route as GiottoBizzarriniRouteImport } from './routes/giotto-bizzarrini'
 import { Route as ExpertCertificateRouteImport } from './routes/expert-certificate'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -30,6 +31,11 @@ const VideosRoute = VideosRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryLabRoute = HistoryLabRouteImport.update({
+  id: '/history-lab',
+  path: '/history-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GiottoBizzarriniRoute = GiottoBizzarriniRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/expert-certificate': typeof ExpertCertificateRoute
   '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
+  '/history-lab': typeof HistoryLabRoute
   '/reset-password': typeof ResetPasswordRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/expert-certificate': typeof ExpertCertificateRoute
   '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
+  '/history-lab': typeof HistoryLabRoute
   '/reset-password': typeof ResetPasswordRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/expert-certificate': typeof ExpertCertificateRoute
   '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
+  '/history-lab': typeof HistoryLabRoute
   '/reset-password': typeof ResetPasswordRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/expert-certificate'
     | '/giotto-bizzarrini'
+    | '/history-lab'
     | '/reset-password'
     | '/videos'
     | '/api/notify-signup'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/expert-certificate'
     | '/giotto-bizzarrini'
+    | '/history-lab'
     | '/reset-password'
     | '/videos'
     | '/api/notify-signup'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/expert-certificate'
     | '/giotto-bizzarrini'
+    | '/history-lab'
     | '/reset-password'
     | '/videos'
     | '/api/notify-signup'
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   ExpertCertificateRoute: typeof ExpertCertificateRoute
   GiottoBizzarriniRoute: typeof GiottoBizzarriniRoute
+  HistoryLabRoute: typeof HistoryLabRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   VideosRoute: typeof VideosRoute
   ApiNotifySignupRoute: typeof ApiNotifySignupRoute
@@ -200,6 +213,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history-lab': {
+      id: '/history-lab'
+      path: '/history-lab'
+      fullPath: '/history-lab'
+      preLoaderRoute: typeof HistoryLabRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/giotto-bizzarrini': {
@@ -283,6 +303,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   ExpertCertificateRoute: ExpertCertificateRoute,
   GiottoBizzarriniRoute: GiottoBizzarriniRoute,
+  HistoryLabRoute: HistoryLabRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   VideosRoute: VideosRoute,
   ApiNotifySignupRoute: ApiNotifySignupRoute,
@@ -292,3 +313,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
