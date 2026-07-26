@@ -6,6 +6,7 @@ import { useI18n, type Lang } from "@/lib/i18n";
 import { bz2001Content, isBz2001 } from "@/data/bz2001-dossier";
 import { archiveSpecs, type ArchiveSpecKey } from "@/data/chassis-specs";
 import { SpecsBlock } from "@/components/SpecsBlock";
+import { HistoryProse, wordCount } from "@/components/HistoryProse";
 import { filterCars, hasFilters, type RegistryFilters } from "@/data/model-groups";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -257,6 +258,7 @@ function CarDetail() {
           chassis={voiture.chassis}
           mode={mode}
           extraMilestones={bz2001 ? bz2001.timeline : undefined}
+          onExpand={() => setMode("full")}
         />
       </section>
 
@@ -609,6 +611,7 @@ function HistoryTimeline({
   chassis,
   mode,
   extraMilestones,
+  onExpand,
 }: {
   description?: string | null;
   modele?: string | null;
@@ -616,6 +619,7 @@ function HistoryTimeline({
   chassis?: string | null;
   mode: "summary" | "full";
   extraMilestones?: Array<{ year: string; text: string }>;
+  onExpand?: () => void;
 }) {
   const { t } = useI18n();
   const parsed = description?.trim() ? parseHistory(description) : [];
@@ -635,12 +639,15 @@ function HistoryTimeline({
     );
   }
 
+  const summarised = allEntries
+    .filter((e) => e.year)
+    .map((e) => ({ ...e, events: e.events.slice(0, 1) }));
   const entries =
-    mode === "summary"
-      ? allEntries
-          .filter((e) => e.year)
-          .map((e) => ({ ...e, events: e.events.slice(0, 1) }))
-      : allEntries;
+    mode === "summary" && summarised.length > 0
+      ? summarised
+      : mode === "summary"
+        ? allEntries.map((e) => ({ ...e, events: e.events.slice(0, 1) }))
+        : allEntries;
 
 
   return (
@@ -665,22 +672,37 @@ function HistoryTimeline({
             )}
 
             <div className="mt-3 space-y-2">
-              {entry.events.map((event, eidx) =>
-                event.key ? (
-                  <div
-                    key={eidx}
-                    className="grid grid-cols-[minmax(90px,140px)_1fr] gap-3 items-baseline pl-1 border-l border-border/60 py-1"
-                  >
-                    <span className="text-xs uppercase tracking-wider text-muted-foreground">{event.key}</span>
-                    <span className="text-foreground/90 leading-relaxed">{event.value}</span>
+              {entry.events.map((event, eidx) => {
+                if (event.key) {
+                  return (
+                    <div
+                      key={eidx}
+                      className="grid grid-cols-[minmax(90px,140px)_1fr] gap-3 items-baseline pl-1 border-l border-border/60 py-1"
+                    >
+                      <span className="text-xs uppercase tracking-wider text-muted-foreground">{event.key}</span>
+                      <span className="text-foreground/90 leading-relaxed">{event.value}</span>
+                    </div>
+                  );
+                }
+                const long = wordCount(event.value) > 120;
+                const truncate = long && mode === "summary";
+                return (
+                  <div key={eidx} className="pl-4 border-l border-border/60">
+                    <HistoryProse text={event.value} maxParagraphs={truncate ? 2 : undefined} />
+                    {truncate && onExpand && (
+                      <button
+                        type="button"
+                        onClick={onExpand}
+                        className="mt-3 text-[0.7rem] uppercase tracking-[0.18em] text-brand hover:text-brand/80 underline underline-offset-4"
+                      >
+                        {t("car.history.readFull")}
+                      </button>
+                    )}
                   </div>
-                ) : (
-                  <p key={eidx} className="text-foreground/90 leading-relaxed pl-1 border-l border-border/60">
-                    {event.value}
-                  </p>
-                ),
-              )}
+                );
+              })}
             </div>
+
           </div>
         ))}
       </div>
