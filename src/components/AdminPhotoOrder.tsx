@@ -59,16 +59,20 @@ export function AdminPhotoOrder() {
       setLoading(true);
       setSave("idle");
       setError(null);
-      const { data } = await supabase
-        .from("photos")
-        .select("*")
-        .eq("voiture_id", carId)
-        .order("ordre", { ascending: true });
+      const [{ data }, { data: car }] = await Promise.all([
+        supabase
+          .from("photos")
+          .select("*")
+          .eq("voiture_id", carId)
+          .order("ordre", { ascending: true }),
+        supabase.from("voitures").select("cover_photo").eq("id", carId).maybeSingle(),
+      ]);
       setPhotos((data as Photo[]) ?? []);
-      setCover(cars.find((c) => c.id === carId)?.cover_photo ?? null);
+      setCover((car as { cover_photo: string | null } | null)?.cover_photo ?? null);
       setLoading(false);
     })();
-  }, [carId, cars]);
+  }, [carId]);
+
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
