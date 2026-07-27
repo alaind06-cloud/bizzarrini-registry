@@ -194,9 +194,14 @@ function CarDetail() {
                 {cover ? (
                   <img
                     src={cover}
+                    srcSet={coverSmall ? `${coverSmall} 640w, ${cover} 1000w` : undefined}
+                    sizes="(min-width: 1024px) 62vw, 100vw"
                     alt={voiture.titre}
+                    fetchPriority="high"
+                    decoding="async"
                     className="w-full h-auto max-h-[70vh] object-contain"
                   />
+
                 ) : (
                   <div className="w-full aspect-[3/2] grid place-items-center text-muted-foreground">{t("card.noPhoto")}</div>
                 )}
