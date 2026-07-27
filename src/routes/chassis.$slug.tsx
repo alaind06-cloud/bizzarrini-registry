@@ -172,7 +172,9 @@ function CarDetail() {
     );
   }
 
-  const cover = photoUrl(voiture.cover_photo);
+  const cover = photoUrl(voiture.cover_photo, { width: 1000, quality: 72 });
+  const coverSmall = photoUrl(voiture.cover_photo, { width: 640, quality: 68 });
+
 
 
   return (
