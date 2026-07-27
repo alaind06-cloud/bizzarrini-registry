@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-const ADMIN_EMAIL = "alaind06@gmail.com";
+const ADMIN_EMAIL = "registerbizz@gmail.com";
 
 export const Route = createFileRoute("/api/notify-signup")({
   server: {
