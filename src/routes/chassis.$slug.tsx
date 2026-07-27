@@ -373,14 +373,14 @@ function CarDetail() {
         <section className="container-page py-12 pb-16">
           <h2 className="font-display text-2xl md:text-3xl mb-6">{t("car.gallery")} · {orderedPhotos.length} {t("car.photos")}</h2>
 
-          {chassisDocs.length > 0 && (
+          {orderedDocs.length > 0 && (
             <div className="mb-10">
               <h3 className="text-xs tracking-[0.18em] uppercase text-muted-foreground mb-4">{t("car.docs.chassis")}</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {chassisDocs.map((ph, idx) => (
+                {orderedDocs.map((ph) => (
                   <figure key={ph.id}>
                     <button
-                      onClick={() => setLightboxIdx(idx)}
+                      onClick={() => setLightboxIdx(orderedPhotos.indexOf(ph))}
                       className="aspect-square w-full bg-surface-2 overflow-hidden group block"
                     >
                       <img
@@ -402,7 +402,7 @@ function CarDetail() {
             </div>
           )}
 
-          {chassisDocs.length > 0 && pressDocs.length > 0 && (
+          {orderedDocs.length > 0 && orderedPress.length > 0 && (
             <div className="mb-4">
               <h3 className="text-xs tracking-[0.18em] uppercase text-muted-foreground">{t("car.docs.press")}</h3>
               <p className="mt-1 text-xs text-muted-foreground/80 italic">{t("car.docs.pressNote")}</p>
@@ -410,9 +410,10 @@ function CarDetail() {
           )}
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {pressDocs.map((ph, i) => {
-              const idx = chassisDocs.length + i;
+            {orderedPress.map((ph) => {
+              const idx = orderedPhotos.indexOf(ph);
               const src = photoUrl(ph.filename, { width: 400 })!;
+
               return (
                 <button
                   key={ph.id}
