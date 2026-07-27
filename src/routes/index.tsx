@@ -214,7 +214,7 @@ function HomePage() {
             decoding="async"
             width={1600}
             height={1000}
-            className="absolute inset-0 w-full h-full object-cover opacity-80 contrast-125 saturate-110"
+            className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85]"
           />
 
           {enableVideo && (
@@ -227,14 +227,15 @@ function HomePage() {
               preload="none"
               poster={heroPoster.url}
               aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover opacity-90 contrast-125 saturate-110"
+              className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85]"
             >
               <source src={heroVideo.url} type="video/mp4" />
             </video>
           )}
-          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/24 to-background/82" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/34 via-transparent to-background/34" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,transparent_58%,var(--color-background)_100%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/55 via-background/45 to-background/95" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/25 to-background/60" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,transparent_45%,var(--color-background)_100%)]" />
+
           {/* Center vertical accent hairline */}
           <div className="absolute top-0 bottom-0 left-1/2 w-px bg-gradient-to-b from-transparent via-brand/25 to-transparent pointer-events-none" />
         </div>
