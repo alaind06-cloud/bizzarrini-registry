@@ -93,7 +93,7 @@ const fr: Dict = {
   "videos.featuredBadge": "Interview exclusive",
   "videos.featuredTitle": "BIZZARRINI — L'interview exclusive de Giotto Bizzarrini par Genepifilm",
   "videos.featuredLead": "Série documentaire en six parties consacrée à Giotto Bizzarrini, réalisée par Genepifilm.",
-  "videos.featuredNote": "Philippe Olczyk est le seul expert au monde à détenir un certificat d'authentification délivré personnellement par Giotto Bizzarrini. C'est lui qui a mené cette interview exclusive.",
+  "videos.featuredNote": "Cette interview exclusive a été menée par un expert officiellement reconnu par Giotto Bizzarrini, détenteur d'un certificat d'authentification délivré personnellement par l'ingénieur.",
   "videos.partLabel": "Partie",
   "videos.othersTitle": "Autres vidéos",
 
@@ -102,7 +102,7 @@ const fr: Dict = {
   "books.title": "Livres",
   "books.lead": "Les ouvrages de référence publiés par Philippe Olczyk sur les grandes voitures de course.",
   "books.bizzarriniTitle": "Les livres Bizzarrini",
-  "books.bizzarriniNote": "Ces trois ouvrages sont écrits par Philippe Olczyk, le même expert détenteur du certificat d'authentification Giotto Bizzarrini.",
+  "books.bizzarriniNote": "Ces trois ouvrages sont écrits par un expert détenteur du certificat d'authentification Giotto Bizzarrini.",
   "books.othersTitle": "Autres ouvrages",
   "books.buy": "Acheter →",
   "books.relatedGiotto": "En lien avec Giotto Bizzarrini →",
@@ -197,7 +197,7 @@ const fr: Dict = {
   "car.timeline.summary": "Vue résumée",
   "car.timeline.full": "Vue complète",
   "car.provenance.title": "Provenance & documentation historique",
-  "car.provenance.body": "Chaque châssis du registre est authentifié selon la méthode établie par Philippe Olczyk, expert officiellement reconnu par Giotto Bizzarrini : croisement des archives personnelles de l'ingénieur, des registres d'usine de Livourne et des documents de livraison d'époque.",
+  "car.provenance.body": "Chaque châssis du registre est authentifié selon la méthode établie par les experts officiellement reconnus par Giotto Bizzarrini : croisement des archives personnelles de l'ingénieur, des registres d'usine de Livourne et des documents de livraison d'époque.",
   "car.provenance.link": "En savoir plus sur le certificat d'expertise →",
 
   // Expert & Certificat
@@ -301,7 +301,7 @@ const en: Dict = {
   "videos.featuredBadge": "Exclusive interview",
   "videos.featuredTitle": "BIZZARRINI — The exclusive interview of Giotto Bizzarrini by Genepifilm",
   "videos.featuredLead": "A six-part documentary series dedicated to Giotto Bizzarrini, produced by Genepifilm.",
-  "videos.featuredNote": "Philippe Olczyk is the only expert in the world to hold an authentication certificate personally delivered by Giotto Bizzarrini. He is the one who conducted this exclusive interview.",
+  "videos.featuredNote": "This exclusive interview was conducted by an expert officially recognised by Giotto Bizzarrini, holder of an authentication certificate personally issued by the engineer.",
   "videos.partLabel": "Part",
   "videos.othersTitle": "Other videos",
 
@@ -309,7 +309,7 @@ const en: Dict = {
   "books.title": "Books",
   "books.lead": "Reference works published by Philippe Olczyk on the great racing cars.",
   "books.bizzarriniTitle": "The Bizzarrini books",
-  "books.bizzarriniNote": "These three books are written by Philippe Olczyk, the same expert holder of the Giotto Bizzarrini authentication certificate.",
+  "books.bizzarriniNote": "These three books are written by an expert holding the Giotto Bizzarrini authentication certificate.",
   "books.othersTitle": "Other works",
   "books.buy": "Buy →",
   "books.relatedGiotto": "Related to Giotto Bizzarrini →",
@@ -400,7 +400,7 @@ const en: Dict = {
   "car.timeline.summary": "Summary view",
   "car.timeline.full": "Full view",
   "car.provenance.title": "Provenance & Historical Documentation",
-  "car.provenance.body": "Every chassis in the register is authenticated using the method established by Philippe Olczyk, an expert formally recognised by Giotto Bizzarrini himself: cross-referencing the engineer's personal archives, the Livorno factory registers and period delivery documents.",
+  "car.provenance.body": "Every chassis in the register is authenticated using the method established by the experts officially recognised by Giotto Bizzarrini: cross-referencing the engineer's personal archives, the Livorno factory registers and period delivery documents.",
   "car.provenance.link": "Learn more about the expert certificate →",
 
   "expert.kicker": "Recognised expert",
@@ -503,7 +503,7 @@ const it: Dict = {
   "videos.featuredBadge": "Intervista esclusiva",
   "videos.featuredTitle": "BIZZARRINI — L'intervista esclusiva a Giotto Bizzarrini di Genepifilm",
   "videos.featuredLead": "Serie documentaria in sei parti dedicata a Giotto Bizzarrini, realizzata da Genepifilm.",
-  "videos.featuredNote": "Philippe Olczyk è l'unico esperto al mondo a detenere un certificato di autenticazione rilasciato personalmente da Giotto Bizzarrini. È lui ad aver condotto questa intervista esclusiva.",
+  "videos.featuredNote": "Questa intervista esclusiva è stata condotta da un esperto ufficialmente riconosciuto da Giotto Bizzarrini, detentore di un certificato di autenticazione rilasciato personalmente dall'ingegnere.",
   "videos.partLabel": "Parte",
   "videos.othersTitle": "Altri video",
 
@@ -511,7 +511,7 @@ const it: Dict = {
   "books.title": "Libri",
   "books.lead": "Le opere di riferimento pubblicate da Philippe Olczyk sulle grandi vetture da corsa.",
   "books.bizzarriniTitle": "I libri Bizzarrini",
-  "books.bizzarriniNote": "Questi tre volumi sono scritti da Philippe Olczyk, lo stesso esperto detentore del certificato di autenticazione Giotto Bizzarrini.",
+  "books.bizzarriniNote": "Questi tre volumi sono scritti da un esperto detentore del certificato di autenticazione Giotto Bizzarrini.",
   "books.othersTitle": "Altre opere",
   "books.buy": "Acquista →",
   "books.relatedGiotto": "Correlato a Giotto Bizzarrini →",
@@ -602,7 +602,7 @@ const it: Dict = {
   "car.timeline.summary": "Vista sintetica",
   "car.timeline.full": "Vista completa",
   "car.provenance.title": "Provenienza e documentazione storica",
-  "car.provenance.body": "Ogni telaio del registro è autenticato secondo il metodo stabilito da Philippe Olczyk, esperto ufficialmente riconosciuto da Giotto Bizzarrini: incrocio degli archivi personali dell'ingegnere, dei registri di fabbrica di Livorno e dei documenti di consegna d'epoca.",
+  "car.provenance.body": "Ogni telaio del registro è autenticato secondo il metodo stabilito dagli esperti ufficialmente riconosciuti da Giotto Bizzarrini: incrocio degli archivi personali dell'ingegnere, dei registri di fabbrica di Livorno e dei documenti di consegna d'epoca.",
   "car.provenance.link": "Scopri di più sul certificato di perizia →",
 
   "expert.kicker": "Esperto riconosciuto",
