@@ -1,3 +1,4 @@
+import { canonical } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 
@@ -16,7 +17,9 @@ export const Route = createFileRoute("/expert-certificate")({
         content:
           "Reconnaissance directe par Giotto Bizzarrini, signatures conjointes sur les certificats d'authenticité, accès aux registres d'usine de Livourne.",
       },
+      { property: "og:url", content: canonical("/expert-certificate") },
     ],
+    links: [{ rel: "canonical", href: canonical("/expert-certificate") }],
   }),
   component: ExpertCertificatePage,
 });

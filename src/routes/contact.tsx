@@ -1,3 +1,4 @@
+import { canonical } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { z } from "zod";
@@ -10,7 +11,9 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "Contactez le registre pour l'authentification, l'expertise ou l'ajout d'un châssis Bizzarrini." },
       { property: "og:title", content: "Contact — Bizzarrini Register" },
       { property: "og:description", content: "Écrivez à l'équipe du registre officiel Bizzarrini." },
+      { property: "og:url", content: canonical("/contact") },
     ],
+    links: [{ rel: "canonical", href: canonical("/contact") }],
   }),
   component: ContactPage,
 });

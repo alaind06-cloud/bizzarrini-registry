@@ -1,3 +1,4 @@
+import { canonical } from "@/lib/seo";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
@@ -17,14 +18,15 @@ export const Route = createFileRoute("/chassis/$slug")({
     const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : undefined);
     return { g: str(search.g), m: str(search.m), d: str(search.d), q: str(search.q) };
   },
-  head: () => ({
+  head: ({ params }) => ({
     meta: [
       { title: "Fiche châssis — Bizzarrini Register" },
       { name: "description", content: "Galerie complète et historique d'un châssis Bizzarrini authentifié." },
       { property: "og:title", content: "Fiche châssis — Bizzarrini Register" },
       { property: "og:description", content: "Galerie et historique réservés aux membres validés." },
-      { name: "robots", content: "noindex" },
+      { property: "og:url", content: canonical(`/chassis/${params.slug}`) },
     ],
+    links: [{ rel: "canonical", href: canonical(`/chassis/${params.slug}`) }],
   }),
   component: CarDetail,
 });
