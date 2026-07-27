@@ -9,6 +9,8 @@ import { Search } from "lucide-react";
 import { MODEL_GROUPS, type RegistryFilters } from "@/data/model-groups";
 const heroVideo = { url: "/hero-bizzarrini.mp4" };
 const heroPoster = { url: "/hero-poster.jpg" };
+const heroPosterMobile = { url: "/hero-poster-mobile.jpg" };
+
 
 
 
