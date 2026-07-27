@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n, type Lang } from "@/lib/i18n";
@@ -742,11 +742,71 @@ function Lightbox({
   const prev = () => onChange((index - 1 + total) % total);
   const next = () => onChange((index + 1) % total);
 
+  const MIN = 1;
+  const MAX = 5;
+  const [scale, setScale] = useState(1);
+  const [tx, setTx] = useState(0);
+  const [ty, setTy] = useState(0);
+  const zoomed = scale > 1.01;
+
+  const reset = () => {
+    setScale(1);
+    setTx(0);
+    setTy(0);
+  };
+
+  // Reset zoom when changing photo
+  useEffect(() => {
+    reset();
+  }, [index]);
+
+  const clampPan = (s: number, x: number, y: number) => {
+    const el = imgRef.current;
+    if (!el) return { x, y };
+    const r = el.getBoundingClientRect();
+    const maxX = Math.max(0, (r.width * s - r.width) / 2) / s;
+    const maxY = Math.max(0, (r.height * s - r.height) / 2) / s;
+    return {
+      x: Math.min(maxX, Math.max(-maxX, x)),
+      y: Math.min(maxY, Math.max(-maxY, y)),
+    };
+  };
+
+  const imgRef = useRef<HTMLImageElement | null>(null);
+
+  const applyZoom = (nextScale: number, originX?: number, originY?: number) => {
+    const s = Math.min(MAX, Math.max(MIN, nextScale));
+    if (s <= 1.01) {
+      reset();
+      return;
+    }
+    let nx = tx;
+    let ny = ty;
+    const el = imgRef.current;
+    if (el && originX !== undefined && originY !== undefined) {
+      const r = el.getBoundingClientRect();
+      const cx = originX - (r.left + r.width / 2);
+      const cy = originY - (r.top + r.height / 2);
+      // keep point under cursor roughly stable
+      nx = tx - cx * (1 / scale - 1 / s);
+      ny = ty - cy * (1 / scale - 1 / s);
+    }
+    const p = clampPan(s, nx, ny);
+    setScale(s);
+    setTx(p.x);
+    setTy(p.y);
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      else if (e.key === "ArrowLeft") prev();
+      if (e.key === "Escape") {
+        if (zoomed) reset();
+        else onClose();
+      } else if (e.key === "ArrowLeft") prev();
       else if (e.key === "ArrowRight") next();
+      else if (e.key === "+" || e.key === "=") applyZoom(scale + 0.5);
+      else if (e.key === "-") applyZoom(scale - 0.5);
+      else if (e.key === "0") reset();
     };
     window.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
@@ -755,25 +815,118 @@ function Lightbox({
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [index, total]);
+  }, [index, total, scale, zoomed]);
 
-  const touchStartX = useMemo(() => ({ x: 0 }), []);
+  // Wheel zoom (non-passive so we can preventDefault)
+  useEffect(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const factor = Math.exp(-e.deltaY / 300);
+      applyZoom(scale * factor, e.clientX, e.clientY);
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [scale, tx, ty]);
+
+  // --- Touch: swipe (unzoomed), pinch + pan (zoomed) ---
+  const touch = useRef({
+    x: 0,
+    y: 0,
+    dist: 0,
+    startScale: 1,
+    startTx: 0,
+    startTy: 0,
+    pinching: false,
+    moved: false,
+  });
+
+  const dist2 = (t: React.TouchList) =>
+    Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+
   const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.x = e.touches[0].clientX;
+    const t = e.touches;
+    touch.current.moved = false;
+    if (t.length === 2) {
+      touch.current.pinching = true;
+      touch.current.dist = dist2(t);
+      touch.current.startScale = scale;
+    } else if (t.length === 1) {
+      touch.current.pinching = false;
+      touch.current.x = t[0].clientX;
+      touch.current.y = t[0].clientY;
+      touch.current.startTx = tx;
+      touch.current.startTy = ty;
+    }
   };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    const t = e.touches;
+    if (t.length === 2 && touch.current.pinching) {
+      const d = dist2(t);
+      if (touch.current.dist > 0) {
+        const mid = {
+          x: (t[0].clientX + t[1].clientX) / 2,
+          y: (t[0].clientY + t[1].clientY) / 2,
+        };
+        applyZoom((touch.current.startScale * d) / touch.current.dist, mid.x, mid.y);
+      }
+      touch.current.moved = true;
+    } else if (t.length === 1 && zoomed) {
+      const dx = (t[0].clientX - touch.current.x) / scale;
+      const dy = (t[0].clientY - touch.current.y) / scale;
+      const p = clampPan(scale, touch.current.startTx + dx, touch.current.startTy + dy);
+      setTx(p.x);
+      setTy(p.y);
+      touch.current.moved = true;
+    }
+  };
+
   const onTouchEnd = (e: React.TouchEvent) => {
-    const dx = e.changedTouches[0].clientX - touchStartX.x;
+    if (touch.current.pinching) {
+      if (e.touches.length === 0) touch.current.pinching = false;
+      return;
+    }
+    if (zoomed) return;
+    const dx = e.changedTouches[0].clientX - touch.current.x;
     if (Math.abs(dx) > 40) {
       if (dx > 0) prev();
       else next();
     }
   };
 
+  // --- Mouse drag pan when zoomed ---
+  const drag = useRef({ active: false, x: 0, y: 0, tx: 0, ty: 0 });
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (!zoomed) return;
+    e.preventDefault();
+    drag.current = { active: true, x: e.clientX, y: e.clientY, tx, ty };
+  };
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      if (!drag.current.active) return;
+      const dx = (e.clientX - drag.current.x) / scale;
+      const dy = (e.clientY - drag.current.y) / scale;
+      const p = clampPan(scale, drag.current.tx + dx, drag.current.ty + dy);
+      setTx(p.x);
+      setTy(p.y);
+    };
+    const onUp = () => (drag.current.active = false);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, [scale]);
+
   const src = photoUrl(photos[index].filename, { width: 1400, quality: 78 })!;
+  const srcHi = photoUrl(photos[index].filename)!;
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/95 backdrop-blur flex items-center justify-center"
+      className="fixed inset-0 z-50 bg-black/95 backdrop-blur flex items-center justify-center overflow-hidden"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -792,8 +945,38 @@ function Lightbox({
         {index + 1} / {total}
       </div>
 
+      {/* Zoom controls */}
+      <div
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1 rounded-full bg-white/10 px-1.5 py-1"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={() => applyZoom(scale - 0.5)}
+          aria-label="Dézoomer"
+          className="h-9 w-9 rounded-full text-white text-xl leading-none hover:bg-white/20 disabled:opacity-40"
+          disabled={scale <= MIN}
+        >
+          −
+        </button>
+        <button
+          onClick={reset}
+          aria-label="Réinitialiser le zoom"
+          className="px-3 h-9 rounded-full text-white text-xs tracking-widest hover:bg-white/20"
+        >
+          {Math.round(scale * 100)}%
+        </button>
+        <button
+          onClick={() => applyZoom(scale + 0.5)}
+          aria-label="Zoomer"
+          className="h-9 w-9 rounded-full text-white text-xl leading-none hover:bg-white/20 disabled:opacity-40"
+          disabled={scale >= MAX}
+        >
+          +
+        </button>
+      </div>
+
       {/* Prev */}
-      {total > 1 && (
+      {total > 1 && !zoomed && (
         <button
           onClick={(e) => { e.stopPropagation(); prev(); }}
           aria-label="Précédent"
@@ -804,7 +987,7 @@ function Lightbox({
       )}
 
       {/* Next */}
-      {total > 1 && (
+      {total > 1 && !zoomed && (
         <button
           onClick={(e) => { e.stopPropagation(); next(); }}
           aria-label="Suivant"
@@ -815,11 +998,26 @@ function Lightbox({
       )}
 
       <img
-        src={src}
+        ref={imgRef}
+        src={zoomed ? srcHi : src}
         alt={alt}
-        className="max-w-[92vw] max-h-[88vh] object-contain select-none"
+        draggable={false}
+        className="max-w-[92vw] max-h-[88vh] object-contain select-none touch-none"
+        style={{
+          transform: `scale(${scale}) translate(${tx}px, ${ty}px)`,
+          transition: drag.current.active || touch.current.pinching ? "none" : "transform 120ms ease-out",
+          cursor: zoomed ? "grab" : "zoom-in",
+          willChange: "transform",
+        }}
         onClick={(e) => e.stopPropagation()}
+        onDoubleClick={(e) => {
+          e.stopPropagation();
+          if (zoomed) reset();
+          else applyZoom(2.5, e.clientX, e.clientY);
+        }}
+        onMouseDown={onMouseDown}
         onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       />
     </div>
