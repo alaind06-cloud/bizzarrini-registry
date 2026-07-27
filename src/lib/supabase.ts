@@ -45,10 +45,23 @@ export const supabase = createClient(
   },
 );
 
-export const photoUrl = (filename: string | null | undefined) =>
-  filename && SUPABASE_URL
-    ? `${SUPABASE_URL}/storage/v1/object/public/Bizzarrini%20Photos/photos_flat/${filename}`
-    : null;
+const PHOTO_PATH = "Bizzarrini%20Photos/photos_flat";
+
+/**
+ * URL d'une photo. Si `width` est fourni, on passe par le service de
+ * transformation d'images (redimensionnement + WebP négocié) : bien plus léger
+ * sur mobile que le fichier original.
+ */
+export const photoUrl = (
+  filename: string | null | undefined,
+  opts?: { width?: number; quality?: number },
+) => {
+  if (!filename || !SUPABASE_URL) return null;
+  if (!opts?.width) return `${SUPABASE_URL}/storage/v1/object/public/${PHOTO_PATH}/${filename}`;
+  const q = opts.quality ?? 70;
+  return `${SUPABASE_URL}/storage/v1/render/image/public/${PHOTO_PATH}/${filename}?width=${opts.width}&quality=${q}&resize=contain`;
+};
+
 
 
 
