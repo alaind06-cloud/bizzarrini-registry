@@ -162,6 +162,12 @@ export function Footer() {
           <p className="text-[10px] uppercase tracking-[0.35em]">{t("footer.tagline")}</p>
           <span className="inline-block h-px w-8 bg-border" />
         </div>
+        <a
+          href="mailto:registerbizz@gmail.com"
+          className="text-xs text-brand transition-colors hover:text-brand/80"
+        >
+          registerbizz@gmail.com
+        </a>
         <p className="text-xs text-muted-foreground">{t("footer.rights", { year: new Date().getFullYear() })}</p>
       </div>
     </footer>
