@@ -188,11 +188,24 @@ function CarDetail() {
     const color = list.filter((p) => !monoMap[p.id]);
     return [...mono, ...color];
   };
-  const orderedPhotos = useMemo(
-    () => applyManualPin(slug, [...sortMono(chassisDocs), ...sortMono(pressDocs)]),
+  const orderedPhotos = useMemo(() => {
+    const base = [...chassisDocs, ...pressDocs];
+    // Ordre manuel prioritaire (positions dans l'ordre d'origine de la galerie).
+    if (MANUAL_PHOTO_PIN[slug.toLowerCase()]) return applyManualPin(slug, base);
+    return [...sortMono(chassisDocs), ...sortMono(pressDocs)];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [chassisDocs, pressDocs, monoMap, slug],
+  }, [chassisDocs, pressDocs, monoMap, slug]);
+
+  // Les grilles doivent suivre exactement l'ordre calculé ci-dessus.
+  const orderedDocs = useMemo(
+    () => orderedPhotos.filter((p) => CHASSIS_DOC_FILENAMES.has(p.filename ?? "")),
+    [orderedPhotos],
   );
+  const orderedPress = useMemo(
+    () => orderedPhotos.filter((p) => !CHASSIS_DOC_FILENAMES.has(p.filename ?? "")),
+    [orderedPhotos],
+  );
+
 
 
 
@@ -363,14 +376,14 @@ function CarDetail() {
         <section className="container-page py-12 pb-16">
           <h2 className="font-display text-2xl md:text-3xl mb-6">{t("car.gallery")} · {orderedPhotos.length} {t("car.photos")}</h2>
 
-          {chassisDocs.length > 0 && (
+          {orderedDocs.length > 0 && (
             <div className="mb-10">
               <h3 className="text-xs tracking-[0.18em] uppercase text-muted-foreground mb-4">{t("car.docs.chassis")}</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {chassisDocs.map((ph, idx) => (
+                {orderedDocs.map((ph) => (
                   <figure key={ph.id}>
                     <button
-                      onClick={() => setLightboxIdx(idx)}
+                      onClick={() => setLightboxIdx(orderedPhotos.indexOf(ph))}
                       className="aspect-square w-full bg-surface-2 overflow-hidden group block"
                     >
                       <img
@@ -392,7 +405,7 @@ function CarDetail() {
             </div>
           )}
 
-          {chassisDocs.length > 0 && pressDocs.length > 0 && (
+          {orderedDocs.length > 0 && orderedPress.length > 0 && (
             <div className="mb-4">
               <h3 className="text-xs tracking-[0.18em] uppercase text-muted-foreground">{t("car.docs.press")}</h3>
               <p className="mt-1 text-xs text-muted-foreground/80 italic">{t("car.docs.pressNote")}</p>
@@ -400,9 +413,10 @@ function CarDetail() {
           )}
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {pressDocs.map((ph, i) => {
-              const idx = chassisDocs.length + i;
+            {orderedPress.map((ph) => {
+              const idx = orderedPhotos.indexOf(ph);
               const src = photoUrl(ph.filename, { width: 400 })!;
+
               return (
                 <button
                   key={ph.id}
