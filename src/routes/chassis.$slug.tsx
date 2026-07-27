@@ -47,6 +47,23 @@ const CHASSIS_DOC_FILENAMES = new Set<string>([
   "bizzarrini-iso-grifo-a3c-b-0225-1965-10.jpg", // Tableau "Le Bizzarrini telaio per telaio" — AutoCapital, 1982
 ]);
 
+/**
+ * Réordonnancement manuel (positions 1-based dans la galerie affichée) :
+ * ces photos sont remontées en tête, dans l'ordre indiqué.
+ */
+const MANUAL_PHOTO_PIN: Record<string, number[]> = {
+  "b-0201": [8, 9, 14, 15, 23, 24, 26, 27, 28, 29, 30, 31, 32, 36, 37, 39, 40, 42, 43, 44],
+};
+
+function applyManualPin<T>(slug: string, list: T[]): T[] {
+  const pins = MANUAL_PHOTO_PIN[slug.toLowerCase()];
+  if (!pins) return list;
+  const idx = new Set(pins.map((n) => n - 1).filter((i) => i >= 0 && i < list.length));
+  const pinned = [...idx].sort((a, b) => a - b).map((i) => list[i]);
+  const rest = list.filter((_, i) => !idx.has(i));
+  return [...pinned, ...rest];
+}
+
 
 function CarDetail() {
   const { slug } = Route.useParams();
@@ -172,10 +189,11 @@ function CarDetail() {
     return [...mono, ...color];
   };
   const orderedPhotos = useMemo(
-    () => [...sortMono(chassisDocs), ...sortMono(pressDocs)],
+    () => applyManualPin(slug, [...sortMono(chassisDocs), ...sortMono(pressDocs)]),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [chassisDocs, pressDocs, monoMap],
+    [chassisDocs, pressDocs, monoMap, slug],
   );
+
 
 
 
