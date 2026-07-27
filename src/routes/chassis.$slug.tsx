@@ -172,10 +172,11 @@ function CarDetail() {
     return [...mono, ...color];
   };
   const orderedPhotos = useMemo(
-    () => [...sortMono(chassisDocs), ...sortMono(pressDocs)],
+    () => applyManualPin(slug, [...sortMono(chassisDocs), ...sortMono(pressDocs)]),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [chassisDocs, pressDocs, monoMap],
+    [chassisDocs, pressDocs, monoMap, slug],
   );
+
 
 
 
