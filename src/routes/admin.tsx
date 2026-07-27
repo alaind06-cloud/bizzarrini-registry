@@ -99,20 +99,42 @@ function AdminPage() {
         <p className="text-muted-foreground py-12 text-center">{t("admin.empty")}</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm min-w-[880px]">
             <thead className="text-xs uppercase tracking-widest text-muted-foreground text-left">
               <tr className="border-b border-border">
                 <th className="py-3 pr-4">{t("admin.col.name")}</th>
+                <th className="py-3 pr-4">{t("admin.col.email")}</th>
                 <th className="py-3 pr-4">{t("admin.col.phone")}</th>
+                <th className="py-3 pr-4">{t("admin.col.raison")}</th>
+                <th className="py-3 pr-4">{t("admin.col.date")}</th>
                 <th className="py-3 pr-4">{t("admin.col.status")}</th>
                 <th className="py-3">{t("admin.col.actions")}</th>
               </tr>
             </thead>
             <tbody>
               {profils.map((p) => (
-                <tr key={p.id} className="border-b border-border/60">
+                <tr key={p.id} className="border-b border-border/60 align-top">
                   <td className="py-3 pr-4">{[p.prenom, p.nom].filter(Boolean).join(" ") || "—"}</td>
+                  <td className="py-3 pr-4 break-all">
+                    {p.email ? (
+                      <a href={`mailto:${p.email}`} className="hover:text-brand underline-offset-2 hover:underline">
+                        {p.email}
+                      </a>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
                   <td className="py-3 pr-4">{p.telephone ?? "—"}</td>
+                  <td className="py-3 pr-4 max-w-[16rem]">{p.raison ?? "—"}</td>
+                  <td className="py-3 pr-4 whitespace-nowrap">
+                    {p.created_at
+                      ? new Date(p.created_at).toLocaleDateString(undefined, {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })
+                      : "—"}
+                  </td>
                   <td className="py-3 pr-4">
                     <span className={`inline-block px-2 py-0.5 text-xs uppercase tracking-wider ${
                       p.statut === "valide" ? "bg-brand/20 text-brand" :
@@ -120,7 +142,7 @@ function AdminPage() {
                       "bg-gold/20 text-gold"
                     }`}>{t(`admin.status.${p.statut}`)}</span>
                   </td>
-                  <td className="py-3 space-x-2">
+                  <td className="py-3 space-x-2 whitespace-nowrap">
                     {p.statut !== "valide" && (
                       <button disabled={busy === p.id} onClick={() => updateStatut(p.id, "valide")} className="btn-brand !py-1.5 !px-3 !text-xs">
                         {t("admin.action.validate")}
@@ -137,6 +159,7 @@ function AdminPage() {
             </tbody>
           </table>
         </div>
+
       )}
     </div>
   );
