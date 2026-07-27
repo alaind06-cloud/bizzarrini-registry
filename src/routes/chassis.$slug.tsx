@@ -325,12 +325,16 @@ function CarDetail() {
                       className="aspect-square w-full bg-surface-2 overflow-hidden group block"
                     >
                       <img
-                        src={photoUrl(ph.filename)!}
+                        src={photoUrl(ph.filename, { width: 400 })!}
                         alt={t("car.docs.chassisCaption")}
                         loading="lazy"
+                        decoding="async"
+                        width={400}
+                        height={400}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
                       />
+
                     </button>
                     <figcaption className="mt-2 text-xs text-muted-foreground">{t("car.docs.chassisCaption")}</figcaption>
                   </figure>
