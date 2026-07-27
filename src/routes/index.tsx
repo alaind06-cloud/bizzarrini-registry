@@ -7,9 +7,9 @@ import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
 import { Search } from "lucide-react";
 import { MODEL_GROUPS, type RegistryFilters } from "@/data/model-groups";
-const heroVideo = { url: "/hero-bizzarrini.mp4" };
-const heroPoster = { url: "/hero-poster.jpg" };
-const heroPosterMobile = { url: "/hero-poster-mobile.jpg" };
+import heroVideo from "@/assets/hero-interview.mp4.asset.json";
+import heroPoster from "@/assets/hero-interview-poster.jpg.asset.json";
+import heroPosterMobile from "@/assets/hero-interview-poster-mobile.jpg.asset.json";
 
 
 
