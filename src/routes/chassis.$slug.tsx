@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n, type Lang } from "@/lib/i18n";
