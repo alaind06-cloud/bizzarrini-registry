@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase, type Profil } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
+import { AdminPhotoOrder } from "@/components/AdminPhotoOrder";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
