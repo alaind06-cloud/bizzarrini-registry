@@ -769,7 +769,7 @@ function Lightbox({
     }
   };
 
-  const src = photoUrl(photos[index].filename)!;
+  const src = photoUrl(photos[index].filename, { width: 1400, quality: 78 })!;
 
   return (
     <div
