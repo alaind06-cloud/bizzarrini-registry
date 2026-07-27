@@ -9,6 +9,8 @@ import { Search } from "lucide-react";
 import { MODEL_GROUPS, type RegistryFilters } from "@/data/model-groups";
 const heroVideo = { url: "/hero-bizzarrini.mp4" };
 const heroPoster = { url: "/hero-poster.jpg" };
+const heroPosterMobile = { url: "/hero-poster-mobile.jpg" };
+
 
 
 
@@ -35,8 +37,17 @@ export const Route = createFileRoute("/")({
       },
     ],
     links: [
-      { rel: "preload", as: "image", href: heroPoster.url, fetchpriority: "high" },
+      {
+        rel: "preload",
+        as: "image",
+        href: heroPoster.url,
+        imageSrcSet: `${heroPosterMobile.url} 900w, ${heroPoster.url} 1600w`,
+        imageSizes: "100vw",
+        fetchPriority: "high",
+      },
     ],
+
+
   }),
   component: HomePage,
 });
@@ -196,6 +207,8 @@ function HomePage() {
         <div className="absolute inset-0">
           <img
             src={heroPoster.url}
+            srcSet={`${heroPosterMobile.url} 900w, ${heroPoster.url} 1600w`}
+            sizes="100vw"
             alt=""
             fetchPriority="high"
             decoding="async"
@@ -203,6 +216,7 @@ function HomePage() {
             height={1000}
             className="absolute inset-0 w-full h-full object-cover"
           />
+
           {enableVideo && (
             <video
               src={heroVideo.url}
@@ -377,9 +391,10 @@ function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" aria-busy={loading}>
           {loading
             ? Array.from({ length: PAGE_SIZE }).map((_, i) => <CarCardSkeleton key={i} />)
-            : currentItems.map((v) => (
-                <CarCard key={v.id} v={v} canAccess={canAccess} filters={{ g: modele !== "all" ? modele : undefined, m: modelQuery, d: annee !== "all" ? annee : undefined, q: q.trim() || undefined }} />
+            : currentItems.map((v, i) => (
+                <CarCard key={v.id} v={v} canAccess={canAccess} priority={i < 4} filters={{ g: modele !== "all" ? modele : undefined, m: modelQuery, d: annee !== "all" ? annee : undefined, q: q.trim() || undefined }} />
               ))}
+
           {!loading && currentItems.length === 0 && (
             <p className="col-span-full text-center text-muted-foreground py-16">
               {t("home.noResults")}
@@ -438,10 +453,12 @@ function FilterChip({
   );
 }
 
-function CarCard({ v, canAccess, filters }: { v: Voiture; canAccess: boolean; filters: RegistryFilters }) {
+function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canAccess: boolean; filters: RegistryFilters; priority?: boolean }) {
 
   const { t } = useI18n();
-  const cover = photoUrl(v.cover_photo);
+  const cover = photoUrl(v.cover_photo, { width: 480 });
+  const cover2x = photoUrl(v.cover_photo, { width: 900, quality: 62 });
+
   const slug = carSlug(v);
   const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug }, search: filters } : { to: "/auth" };
 
@@ -469,11 +486,18 @@ function CarCard({ v, canAccess, filters }: { v: Voiture; canAccess: boolean; fi
           {cover ? (
             <img
               src={cover}
+              srcSet={cover2x ? `${cover} 480w, ${cover2x} 900w` : undefined}
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
               alt={v.titre}
-              loading="lazy"
+              width={480}
+              height={360}
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "low"}
+              decoding="async"
               className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
               onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
             />
+
           ) : (
             <div className="w-full h-full grid place-items-center text-muted-foreground text-xs uppercase tracking-widest">
               {t("card.noPhoto")}

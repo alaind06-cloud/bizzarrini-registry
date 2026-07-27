@@ -172,7 +172,9 @@ function CarDetail() {
     );
   }
 
-  const cover = photoUrl(voiture.cover_photo);
+  const cover = photoUrl(voiture.cover_photo, { width: 1000, quality: 72 });
+  const coverSmall = photoUrl(voiture.cover_photo, { width: 640, quality: 68 });
+
 
 
   return (
@@ -192,9 +194,14 @@ function CarDetail() {
                 {cover ? (
                   <img
                     src={cover}
+                    srcSet={coverSmall ? `${coverSmall} 640w, ${cover} 1000w` : undefined}
+                    sizes="(min-width: 1024px) 62vw, 100vw"
                     alt={voiture.titre}
+                    fetchPriority="high"
+                    decoding="async"
                     className="w-full h-auto max-h-[70vh] object-contain"
                   />
+
                 ) : (
                   <div className="w-full aspect-[3/2] grid place-items-center text-muted-foreground">{t("card.noPhoto")}</div>
                 )}
@@ -318,12 +325,16 @@ function CarDetail() {
                       className="aspect-square w-full bg-surface-2 overflow-hidden group block"
                     >
                       <img
-                        src={photoUrl(ph.filename)!}
+                        src={photoUrl(ph.filename, { width: 400 })!}
                         alt={t("car.docs.chassisCaption")}
                         loading="lazy"
+                        decoding="async"
+                        width={400}
+                        height={400}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
                       />
+
                     </button>
                     <figcaption className="mt-2 text-xs text-muted-foreground">{t("car.docs.chassisCaption")}</figcaption>
                   </figure>
@@ -342,7 +353,7 @@ function CarDetail() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {pressDocs.map((ph, i) => {
               const idx = chassisDocs.length + i;
-              const src = photoUrl(ph.filename)!;
+              const src = photoUrl(ph.filename, { width: 400 })!;
               return (
                 <button
                   key={ph.id}
@@ -353,11 +364,15 @@ function CarDetail() {
                     src={src}
                     alt={voiture.titre}
                     loading="lazy"
+                    decoding="async"
+                    width={400}
+                    height={400}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
                   />
                 </button>
               );
+
             })}
           </div>
         </section>
@@ -754,7 +769,7 @@ function Lightbox({
     }
   };
 
-  const src = photoUrl(photos[index].filename)!;
+  const src = photoUrl(photos[index].filename, { width: 1400, quality: 78 })!;
 
   return (
     <div
