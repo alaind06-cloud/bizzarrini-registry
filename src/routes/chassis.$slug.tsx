@@ -193,6 +193,16 @@ function CarDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [chassisDocs, pressDocs, monoMap, slug],
   );
+  // Les grilles doivent suivre exactement l'ordre calculé ci-dessus.
+  const orderedDocs = useMemo(
+    () => orderedPhotos.filter((p) => CHASSIS_DOC_FILENAMES.has(p.filename ?? "")),
+    [orderedPhotos],
+  );
+  const orderedPress = useMemo(
+    () => orderedPhotos.filter((p) => !CHASSIS_DOC_FILENAMES.has(p.filename ?? "")),
+    [orderedPhotos],
+  );
+
 
 
 
