@@ -80,10 +80,8 @@ function AuthPage() {
               prenom,
               email,
               telephone,
-              raison:
-                raison === t("auth.raison.autre") && raisonAutre.trim()
-                  ? `${raison} — ${raisonAutre.trim()}`
-                  : raison,
+              raison: raisonComplete,
+
             }),
           });
           if (!notifyRes.ok) {
