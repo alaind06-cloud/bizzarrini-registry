@@ -82,6 +82,8 @@ export type Profil = {
   nom: string | null;
   prenom: string | null;
   telephone: string | null;
+  email?: string | null;
+  raison?: string | null;
   statut: "en_attente" | "valide" | "refuse";
   est_admin: boolean;
   created_at?: string;
