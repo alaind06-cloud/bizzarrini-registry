@@ -15,11 +15,20 @@ export const Route = createFileRoute("/api/notify-signup")({
             raison?: string;
           };
 
-          const resendKey = process.env.RESEND_API_KEY;
+          const resendKey =
+            process.env.RESEND_API_KEY ||
+            process.env.RESEND_KEY ||
+            process.env.VITE_RESEND_API_KEY;
           if (!resendKey) {
-            // Non bloquant : on log et on renvoie ok pour ne pas casser l'inscription.
-            console.warn("[notify-signup] RESEND_API_KEY manquant, email non envoyé");
-            return Response.json({ ok: true, emailed: false, reason: "no_resend_key" });
+            // Non bloquant pour l'inscription, mais l'échec doit être VISIBLE (logs + statut HTTP).
+            console.error(
+              "[notify-signup] RESEND_API_KEY absente de l'environnement serveur : aucune notification envoyée. " +
+                "Ajouter la variable d'environnement RESEND_API_KEY sur l'hébergeur (Vercel > Settings > Environment Variables) puis redéployer.",
+            );
+            return Response.json(
+              { ok: false, emailed: false, reason: "no_resend_key" },
+              { status: 500 },
+            );
           }
 
           const fullName = [prenom, nom].filter(Boolean).join(" ") || email || "Inconnu";
