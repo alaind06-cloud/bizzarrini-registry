@@ -70,27 +70,28 @@ function AuthPage() {
         }
         console.info("[signup] ok, user id:", data.user?.id);
 
-        // Notification admin — best-effort, ne doit jamais faire échouer l'inscription.
-        try {
-          const notifyRes = await fetch("/api/notify-signup", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              nom,
-              prenom,
-              email,
-              telephone,
-              raison: raisonComplete,
-
-            }),
-          });
-          if (!notifyRes.ok) {
+        // Notification admin — best-effort (2 tentatives), ne doit jamais faire échouer l'inscription.
+        const payload = JSON.stringify({ nom, prenom, email, telephone, raison: raisonComplete });
+        for (let attempt = 1; attempt <= 2; attempt++) {
+          try {
+            const notifyRes = await fetch("/api/notify-signup", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: payload,
+              keepalive: true,
+            });
+            if (notifyRes.ok) {
+              console.info("[notify-signup] notification admin envoyée");
+              break;
+            }
             const body = await notifyRes.text().catch(() => "");
-            console.warn("[notify-signup] HTTP", notifyRes.status, body);
+            console.error("[notify-signup] HTTP", notifyRes.status, body);
+          } catch (err) {
+            console.error("[notify-signup] network error", err);
           }
-        } catch (err) {
-          console.warn("[notify-signup] network error", err);
+          if (attempt === 1) await new Promise((r) => setTimeout(r, 1200));
         }
+
 
         setMsg({ type: "ok", text: t("auth.msg.signupOk") });
       } else {
