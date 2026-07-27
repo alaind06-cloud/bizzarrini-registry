@@ -37,8 +37,16 @@ export const Route = createFileRoute("/")({
       },
     ],
     links: [
-      { rel: "preload", as: "image", href: heroPoster.url, fetchpriority: "high" },
+      {
+        rel: "preload",
+        as: "image",
+        href: heroPoster.url,
+        imagesrcset: `${heroPosterMobile.url} 900w, ${heroPoster.url} 1600w`,
+        imagesizes: "100vw",
+        fetchpriority: "high",
+      },
     ],
+
   }),
   component: HomePage,
 });
