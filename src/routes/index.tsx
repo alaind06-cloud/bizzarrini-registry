@@ -41,11 +41,12 @@ export const Route = createFileRoute("/")({
         rel: "preload",
         as: "image",
         href: heroPoster.url,
-        imagesrcset: `${heroPosterMobile.url} 900w, ${heroPoster.url} 1600w`,
-        imagesizes: "100vw",
-        fetchpriority: "high",
+        imageSrcSet: `${heroPosterMobile.url} 900w, ${heroPoster.url} 1600w`,
+        imageSizes: "100vw",
+        fetchPriority: "high",
       },
     ],
+
 
   }),
   component: HomePage,
