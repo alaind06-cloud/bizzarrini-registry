@@ -186,6 +186,8 @@ function AdminPage() {
         </div>
 
       )}
+        </>
+      )}
     </div>
   );
 }
