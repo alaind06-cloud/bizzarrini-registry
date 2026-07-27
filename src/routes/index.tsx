@@ -439,10 +439,12 @@ function FilterChip({
   );
 }
 
-function CarCard({ v, canAccess, filters }: { v: Voiture; canAccess: boolean; filters: RegistryFilters }) {
+function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canAccess: boolean; filters: RegistryFilters; priority?: boolean }) {
 
   const { t } = useI18n();
-  const cover = photoUrl(v.cover_photo);
+  const cover = photoUrl(v.cover_photo, { width: 480 });
+  const cover2x = photoUrl(v.cover_photo, { width: 900, quality: 62 });
+
   const slug = carSlug(v);
   const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug }, search: filters } : { to: "/auth" };
 
