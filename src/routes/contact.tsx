@@ -54,6 +54,15 @@ function ContactPage() {
               <p className="text-muted-foreground">{t("contact.expertSubtitle")}</p>
             </div>
             <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Email</p>
+              <a
+                href="mailto:registerbizz@gmail.com"
+                className="mt-1 inline-block text-foreground/90 transition-colors hover:text-brand"
+              >
+                registerbizz@gmail.com
+              </a>
+            </div>
+            <div>
               <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">{t("contact.response")}</p>
               <p className="mt-1 text-foreground/90">{t("contact.responseValue")}</p>
             </div>
