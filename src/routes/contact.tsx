@@ -7,7 +7,7 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Bizzarrini Register" },
-      { name: "description", content: "Contactez Lucas Bizzarrini pour l'authentification, l'expertise ou l'ajout d'un châssis Bizzarrini." },
+      { name: "description", content: "Contactez le registre pour l'authentification, l'expertise ou l'ajout d'un châssis Bizzarrini." },
       { property: "og:title", content: "Contact — Bizzarrini Register" },
       { property: "og:description", content: "Écrivez à l'équipe du registre officiel Bizzarrini." },
     ],

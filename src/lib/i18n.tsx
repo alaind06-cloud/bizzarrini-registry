@@ -197,7 +197,7 @@ const fr: Dict = {
   "car.timeline.summary": "Vue résumée",
   "car.timeline.full": "Vue complète",
   "car.provenance.title": "Provenance & documentation historique",
-  "car.provenance.body": "Chaque châssis du registre est authentifié selon la méthode établie par les experts officiellement reconnus par Giotto Bizzarrini : croisement des archives personnelles de l'ingénieur, des registres d'usine de Livourne et des documents de livraison d'époque.",
+  "car.provenance.body": "Chaque châssis du registre est authentifié selon la méthode établie avec les experts que Giotto Bizzarrini avait officiellement reconnus de son vivant : croisement des archives personnelles de l'ingénieur, des registres d'usine de Livourne et des documents de livraison d'époque.",
   "car.provenance.link": "En savoir plus sur le certificat d'expertise →",
 
   // Expert & Certificat
@@ -405,7 +405,7 @@ const en: Dict = {
   "car.timeline.summary": "Summary view",
   "car.timeline.full": "Full view",
   "car.provenance.title": "Provenance & Historical Documentation",
-  "car.provenance.body": "Every chassis in the register is authenticated using the method established by the experts officially recognised by Giotto Bizzarrini: cross-referencing the engineer's personal archives, the Livorno factory registers and period delivery documents.",
+  "car.provenance.body": "Every chassis in the register is authenticated using the method established with the experts Giotto Bizzarrini officially recognised during his lifetime: cross-referencing the engineer's personal archives, the Livorno factory registers and period delivery documents.",
   "car.provenance.link": "Learn more about the expert certificate →",
 
   "expert.kicker": "Recognised expert",
@@ -612,7 +612,7 @@ const it: Dict = {
   "car.timeline.summary": "Vista sintetica",
   "car.timeline.full": "Vista completa",
   "car.provenance.title": "Provenienza e documentazione storica",
-  "car.provenance.body": "Ogni telaio del registro è autenticato secondo il metodo stabilito dagli esperti ufficialmente riconosciuti da Giotto Bizzarrini: incrocio degli archivi personali dell'ingegnere, dei registri di fabbrica di Livorno e dei documenti di consegna d'epoca.",
+  "car.provenance.body": "Ogni telaio del registro è autenticato secondo il metodo stabilito con gli esperti che Giotto Bizzarrini aveva ufficialmente riconosciuto in vita: incrocio degli archivi personali dell'ingegnere, dei registri di fabbrica di Livorno e dei documenti di consegna d'epoca.",
   "car.provenance.link": "Scopri di più sul certificato di perizia →",
 
   "expert.kicker": "Esperto riconosciuto",

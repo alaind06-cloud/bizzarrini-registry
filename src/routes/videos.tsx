@@ -9,7 +9,7 @@ export const Route = createFileRoute("/videos")({
       { title: "Vidéos — Bizzarrini Register" },
       {
         name: "description",
-        content: "Vidéos documentaires, essais et courses des Bizzarrini authentifiées par l'expert Lucas Bizzarrini.",
+        content: "Vidéos documentaires, essais et courses des Bizzarrini authentifiées par le registre.",
       },
       { property: "og:title", content: "Vidéos Bizzarrini — Registre officiel" },
       { property: "og:description", content: "Archive vidéo des Bizzarrini de compétition et de route." },
