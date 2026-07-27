@@ -66,13 +66,20 @@ export const Route = createFileRoute("/api/notify-signup")({
           if (!emailRes.ok) {
             const body = await emailRes.text();
             console.error("[notify-signup] Resend error", emailRes.status, body);
-            return Response.json({ ok: true, emailed: false, status: emailRes.status });
+            return Response.json(
+              { ok: false, emailed: false, status: emailRes.status, error: body.slice(0, 500) },
+              { status: 502 },
+            );
           }
 
+          console.info("[notify-signup] email envoyé à", ADMIN_EMAIL);
           return Response.json({ ok: true, emailed: true });
         } catch (e: any) {
           console.error("[notify-signup]", e);
-          return Response.json({ ok: true, emailed: false, error: e?.message });
+          return Response.json(
+            { ok: false, emailed: false, error: e?.message },
+            { status: 500 },
+          );
         }
       },
     },
