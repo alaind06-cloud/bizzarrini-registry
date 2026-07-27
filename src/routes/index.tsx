@@ -196,6 +196,8 @@ function HomePage() {
         <div className="absolute inset-0">
           <img
             src={heroPoster.url}
+            srcSet={`${heroPosterMobile.url} 900w, ${heroPoster.url} 1600w`}
+            sizes="100vw"
             alt=""
             fetchPriority="high"
             decoding="async"
@@ -203,6 +205,7 @@ function HomePage() {
             height={1000}
             className="absolute inset-0 w-full h-full object-cover"
           />
+
           {enableVideo && (
             <video
               src={heroVideo.url}
