@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase, photoUrl, type Photo, type Voiture } from "@/lib/supabase";
+import { MANUAL_ORDER_BASE } from "@/lib/photo-order";
 
 /**
  * Tri manuel des photos d'une fiche châssis (glisser-déposer).
@@ -7,7 +8,6 @@ import { supabase, photoUrl, type Photo, type Voiture } from "@/lib/supabase";
  * (MANUAL_ORDER_BASE) : la fiche publique détecte ainsi un ordre validé
  * manuellement et désactive le tri automatique (NB / couleur).
  */
-export const MANUAL_ORDER_BASE = 1000;
 
 export function AdminPhotoOrder() {
   const [cars, setCars] = useState<Voiture[]>([]);
