@@ -353,7 +353,7 @@ function CarDetail() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {pressDocs.map((ph, i) => {
               const idx = chassisDocs.length + i;
-              const src = photoUrl(ph.filename)!;
+              const src = photoUrl(ph.filename, { width: 400 })!;
               return (
                 <button
                   key={ph.id}
@@ -364,11 +364,15 @@ function CarDetail() {
                     src={src}
                     alt={voiture.titre}
                     loading="lazy"
+                    decoding="async"
+                    width={400}
+                    height={400}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
                   />
                 </button>
               );
+
             })}
           </div>
         </section>
