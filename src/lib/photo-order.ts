@@ -84,3 +84,14 @@ export function isMonochrome(url: string | null | undefined): Promise<boolean> {
   cache.set(url, p);
   return p;
 }
+
+/**
+ * Ordre validé manuellement depuis /admin : les valeurs de `photos.ordre`
+ * sont écrites avec ce décalage sentinelle pour distinguer un tri choisi
+ * par le webmaster d'un ordre d'import brut.
+ */
+export const MANUAL_ORDER_BASE = 1000;
+
+export function hasManualOrder(list: { ordre: number | null }[]): boolean {
+  return list.length > 0 && list.every((p) => (p.ordre ?? -1) >= MANUAL_ORDER_BASE);
+}
