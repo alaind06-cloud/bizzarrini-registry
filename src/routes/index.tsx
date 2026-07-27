@@ -377,9 +377,10 @@ function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" aria-busy={loading}>
           {loading
             ? Array.from({ length: PAGE_SIZE }).map((_, i) => <CarCardSkeleton key={i} />)
-            : currentItems.map((v) => (
-                <CarCard key={v.id} v={v} canAccess={canAccess} filters={{ g: modele !== "all" ? modele : undefined, m: modelQuery, d: annee !== "all" ? annee : undefined, q: q.trim() || undefined }} />
+            : currentItems.map((v, i) => (
+                <CarCard key={v.id} v={v} canAccess={canAccess} priority={i < 4} filters={{ g: modele !== "all" ? modele : undefined, m: modelQuery, d: annee !== "all" ? annee : undefined, q: q.trim() || undefined }} />
               ))}
+
           {!loading && currentItems.length === 0 && (
             <p className="col-span-full text-center text-muted-foreground py-16">
               {t("home.noResults")}
