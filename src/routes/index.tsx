@@ -472,11 +472,18 @@ function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canA
           {cover ? (
             <img
               src={cover}
+              srcSet={cover2x ? `${cover} 480w, ${cover2x} 900w` : undefined}
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
               alt={v.titre}
-              loading="lazy"
+              width={480}
+              height={360}
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "low"}
+              decoding="async"
               className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
               onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
             />
+
           ) : (
             <div className="w-full h-full grid place-items-center text-muted-foreground text-xs uppercase tracking-widest">
               {t("card.noPhoto")}
