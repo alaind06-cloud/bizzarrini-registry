@@ -21,9 +21,11 @@ function AdminPage() {
   const { t } = useI18n();
   const router = useRouter();
   const [profils, setProfils] = useState<Profil[]>([]);
+  const [section, setSection] = useState<"membres" | "photos">("membres");
   const [tab, setTab] = useState<"en_attente" | "valide" | "refuse">("en_attente");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
+
 
   useEffect(() => {
     if (authLoading) return;
