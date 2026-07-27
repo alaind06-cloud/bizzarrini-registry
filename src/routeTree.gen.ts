@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VideosRouteImport } from './routes/videos'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as GiottoBizzarriniRouteImport } from './routes/giotto-bizzarrini'
 import { Route as ExpertCertificateRouteImport } from './routes/expert-certificate'
@@ -25,6 +26,11 @@ import { Route as ApiNotifySignupRouteImport } from './routes/api/notify-signup'
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
   path: '/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/expert-certificate': typeof ExpertCertificateRoute
   '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/chassis/$slug': typeof ChassisSlugRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByTo {
   '/expert-certificate': typeof ExpertCertificateRoute
   '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/chassis/$slug': typeof ChassisSlugRoute
@@ -121,6 +129,7 @@ export interface FileRoutesById {
   '/expert-certificate': typeof ExpertCertificateRoute
   '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/chassis/$slug': typeof ChassisSlugRoute
@@ -137,6 +146,7 @@ export interface FileRouteTypes {
     | '/expert-certificate'
     | '/giotto-bizzarrini'
     | '/reset-password'
+    | '/sitemap.xml'
     | '/videos'
     | '/api/notify-signup'
     | '/chassis/$slug'
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
     | '/expert-certificate'
     | '/giotto-bizzarrini'
     | '/reset-password'
+    | '/sitemap.xml'
     | '/videos'
     | '/api/notify-signup'
     | '/chassis/$slug'
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/expert-certificate'
     | '/giotto-bizzarrini'
     | '/reset-password'
+    | '/sitemap.xml'
     | '/videos'
     | '/api/notify-signup'
     | '/chassis/$slug'
@@ -180,6 +192,7 @@ export interface RootRouteChildren {
   ExpertCertificateRoute: typeof ExpertCertificateRoute
   GiottoBizzarriniRoute: typeof GiottoBizzarriniRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VideosRoute: typeof VideosRoute
   ApiNotifySignupRoute: typeof ApiNotifySignupRoute
   ChassisSlugRoute: typeof ChassisSlugRoute
@@ -193,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/videos'
       fullPath: '/videos'
       preLoaderRoute: typeof VideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -284,6 +304,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExpertCertificateRoute: ExpertCertificateRoute,
   GiottoBizzarriniRoute: GiottoBizzarriniRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   VideosRoute: VideosRoute,
   ApiNotifySignupRoute: ApiNotifySignupRoute,
   ChassisSlugRoute: ChassisSlugRoute,
