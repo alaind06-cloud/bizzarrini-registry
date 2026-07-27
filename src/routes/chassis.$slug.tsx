@@ -189,12 +189,16 @@ function CarDetail() {
     return [...mono, ...color];
   };
   const orderedPhotos = useMemo(() => {
+    // Ordre enregistré manuellement depuis /admin : prioritaire sur tout le reste.
+    if (hasManualOrder(photos)) {
+      return [...photos].sort((a, b) => (a.ordre ?? 0) - (b.ordre ?? 0));
+    }
     const base = [...chassisDocs, ...pressDocs];
     // Ordre manuel prioritaire (positions dans l'ordre d'origine de la galerie).
     if (MANUAL_PHOTO_PIN[slug.toLowerCase()]) return applyManualPin(slug, base);
     return [...sortMono(chassisDocs), ...sortMono(pressDocs)];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chassisDocs, pressDocs, monoMap, slug]);
+  }, [photos, chassisDocs, pressDocs, monoMap, slug]);
 
   // Les grilles doivent suivre exactement l'ordre calculé ci-dessus.
   const orderedDocs = useMemo(
