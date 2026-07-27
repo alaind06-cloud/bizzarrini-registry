@@ -145,7 +145,37 @@ function CarDetail() {
     () => photos.filter((p) => !CHASSIS_DOC_FILENAMES.has(p.filename ?? "")),
     [photos],
   );
-  const orderedPhotos = useMemo(() => [...chassisDocs, ...pressDocs], [chassisDocs, pressDocs]);
+
+  // Chronologie approximative : NB / documents d'abord, puis les photos couleur.
+  const [monoMap, setMonoMap] = useState<Record<string, boolean>>({});
+  useEffect(() => {
+    let cancelled = false;
+    if (!photos.length) return;
+    (async () => {
+      const entries = await Promise.all(
+        photos.map(async (p) => {
+          const url = photoUrl(p.filename, { width: 64, quality: 50 });
+          return [p.id, await isMonochrome(url)] as const;
+        }),
+      );
+      if (!cancelled) setMonoMap(Object.fromEntries(entries));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [photos]);
+
+  const sortMono = <T extends Photo>(list: T[]) => {
+    const mono = list.filter((p) => monoMap[p.id]);
+    const color = list.filter((p) => !monoMap[p.id]);
+    return [...mono, ...color];
+  };
+  const orderedPhotos = useMemo(
+    () => [...sortMono(chassisDocs), ...sortMono(pressDocs)],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [chassisDocs, pressDocs, monoMap],
+  );
+
 
 
   if (authLoading || (user && isValide && loading)) {
