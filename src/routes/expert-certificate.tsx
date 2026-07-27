@@ -52,7 +52,36 @@ function ExpertCertificatePage() {
           ))}
         </ul>
 
+        <div className="mt-14 pt-10 border-t border-border">
+          <h2 className="font-display text-2xl md:text-3xl">{t("expert.deed.title")}</h2>
+          <p className="mt-4 text-sm text-foreground/85 leading-relaxed">{t("expert.deed.body")}</p>
+
+          <div className="mt-6 grid gap-6 sm:grid-cols-2">
+            {[
+              { src: "/documents/acte-notarie-p1.jpg", caption: t("expert.deed.caption1") },
+              { src: "/documents/acte-notarie-p2.jpg", caption: t("expert.deed.caption2") },
+            ].map((d) => (
+              <figure key={d.src} className="m-0">
+                <img
+                  src={d.src}
+                  alt={d.caption}
+                  loading="lazy"
+                  className="w-full h-auto border border-border bg-surface"
+                />
+                <figcaption className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                  {d.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
+          <p className="mt-4 text-[0.7rem] uppercase tracking-[0.2em] text-muted-foreground">
+            {t("expert.deed.privacy")}
+          </p>
+        </div>
+
         <div className="mt-12 flex flex-wrap gap-3">
+
           <Link to="/books" className="btn-ghost">{t("expert.cta.books")}</Link>
           <Link to="/videos" className="btn-ghost">{t("expert.cta.videos")}</Link>
           <Link to="/contact" className="btn-brand">{t("expert.cta.contact")}</Link>
