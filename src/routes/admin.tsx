@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase, type Profil } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
+import { AdminPhotoOrder } from "@/components/AdminPhotoOrder";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -20,9 +21,11 @@ function AdminPage() {
   const { t } = useI18n();
   const router = useRouter();
   const [profils, setProfils] = useState<Profil[]>([]);
+  const [section, setSection] = useState<"membres" | "photos">("membres");
   const [tab, setTab] = useState<"en_attente" | "valide" | "refuse">("en_attente");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
+
 
   useEffect(() => {
     if (authLoading) return;
@@ -79,7 +82,29 @@ function AdminPage() {
         <h1 className="mt-3 font-display text-4xl">{t("admin.title")}</h1>
       </header>
 
+      <div className="flex gap-6 mb-8">
+        {([
+          { k: "membres" as const, label: "Membres" },
+          { k: "photos" as const, label: "Ordre des photos" },
+        ]).map((s) => (
+          <button
+            key={s.k}
+            onClick={() => setSection(s.k)}
+            className={`text-xs uppercase tracking-[0.2em] transition-colors ${
+              section === s.k ? "text-brand" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+
+      {section === "photos" ? (
+        <AdminPhotoOrder />
+      ) : (
+        <>
       <div className="flex gap-2 mb-6 border-b border-border">
+
         {tabs.map((tb) => (
           <button
             key={tb.k}
@@ -160,6 +185,8 @@ function AdminPage() {
           </table>
         </div>
 
+      )}
+        </>
       )}
     </div>
   );

@@ -2,7 +2,7 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
-import { isMonochrome } from "@/lib/photo-order";
+import { isMonochrome, hasManualOrder } from "@/lib/photo-order";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { bz2001Content, isBz2001 } from "@/data/bz2001-dossier";
 import { archiveSpecs, type ArchiveSpecKey } from "@/data/chassis-specs";
@@ -189,12 +189,16 @@ function CarDetail() {
     return [...mono, ...color];
   };
   const orderedPhotos = useMemo(() => {
+    // Ordre enregistré manuellement depuis /admin : prioritaire sur tout le reste.
+    if (hasManualOrder(photos)) {
+      return [...photos].sort((a, b) => (a.ordre ?? 0) - (b.ordre ?? 0));
+    }
     const base = [...chassisDocs, ...pressDocs];
     // Ordre manuel prioritaire (positions dans l'ordre d'origine de la galerie).
     if (MANUAL_PHOTO_PIN[slug.toLowerCase()]) return applyManualPin(slug, base);
     return [...sortMono(chassisDocs), ...sortMono(pressDocs)];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chassisDocs, pressDocs, monoMap, slug]);
+  }, [photos, chassisDocs, pressDocs, monoMap, slug]);
 
   // Les grilles doivent suivre exactement l'ordre calculé ci-dessus.
   const orderedDocs = useMemo(
