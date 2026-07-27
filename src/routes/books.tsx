@@ -1,3 +1,4 @@
+import { canonical } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { books, type Book } from "@/data/books-data";
 import { useI18n } from "@/lib/i18n";
@@ -12,7 +13,9 @@ export const Route = createFileRoute("/books")({
       },
       { property: "og:title", content: "Livres — Philippe Olczyk" },
       { property: "og:description", content: "Bibliographie de référence sur les voitures de course historiques." },
+      { property: "og:url", content: canonical("/books") },
     ],
+    links: [{ rel: "canonical", href: canonical("/books") }],
   }),
   component: BooksPage,
 });

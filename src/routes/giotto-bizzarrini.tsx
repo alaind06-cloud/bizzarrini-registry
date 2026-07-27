@@ -4,7 +4,9 @@ import { FilterPills, type ActivePill } from "@/components/FilterPills";
 import giottoPhoto from "@/assets/giotto-bizzarrini-workshop.jpg.asset.json";
 
 
-const CANONICAL = "https://bizzarrini-registry.lovable.app/giotto-bizzarrini";
+import { canonical } from "@/lib/seo";
+
+const CANONICAL = canonical("/giotto-bizzarrini");
 
 const TITLES: Record<Lang, string> = {
   fr: "Giotto Bizzarrini & Registre des Châssis — Historique & Provenance",

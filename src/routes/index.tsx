@@ -1,3 +1,4 @@
+import { canonical } from "@/lib/seo";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { carSlug } from "./chassis.$slug";
 import { useEffect, useMemo, useState } from "react";
@@ -24,19 +25,21 @@ export const Route = createFileRoute("/")({
   }),
   head: () => ({
     meta: [
-      { title: "Bizzarrini Register - Official Chassis Registry & Provenance | Iso Grifo, A3/C, 5300 GT" },
+      { title: "Bizzarrini Register — Registre officiel des châssis" },
       {
         name: "description",
         content:
           "Registre complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
       },
-      { property: "og:title", content: "Bizzarrini Register - Official Chassis Registry & Provenance | Iso Grifo, A3/C, 5300 GT" },
+      { property: "og:title", content: "Bizzarrini Register — Registre officiel des châssis" },
       {
         property: "og:description",
         content: "Registre complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
       },
+      { property: "og:url", content: canonical("/") },
     ],
     links: [
+      { rel: "canonical", href: canonical("/") },
       {
         rel: "preload",
         as: "image",
