@@ -82,7 +82,29 @@ function AdminPage() {
         <h1 className="mt-3 font-display text-4xl">{t("admin.title")}</h1>
       </header>
 
+      <div className="flex gap-6 mb-8">
+        {([
+          { k: "membres" as const, label: "Membres" },
+          { k: "photos" as const, label: "Ordre des photos" },
+        ]).map((s) => (
+          <button
+            key={s.k}
+            onClick={() => setSection(s.k)}
+            className={`text-xs uppercase tracking-[0.2em] transition-colors ${
+              section === s.k ? "text-brand" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+
+      {section === "photos" ? (
+        <AdminPhotoOrder />
+      ) : (
+        <>
       <div className="flex gap-2 mb-6 border-b border-border">
+
         {tabs.map((tb) => (
           <button
             key={tb.k}
