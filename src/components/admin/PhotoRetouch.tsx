@@ -25,7 +25,7 @@ type Props = {
 };
 
 
-export function PhotoRetouch({ photo, isCover, onClose, onRenamed }: Props) {
+export function PhotoRetouch({ photo, isCover, onClose, onRenamed, onRetouched }: Props) {
   const [source, setSource] = useState<HTMLCanvasElement | null>(null);
   const [crop, setCrop] = useState<CropRect | null>(null);
   const [auto, setAuto] = useState<CropRect | null>(null);
