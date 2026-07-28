@@ -117,6 +117,9 @@ export type RegistryFilters = {
   d?: string;
   /** recherche sur le numéro de châssis */
   q?: string;
+  /** page courante du registre (pagination) */
+  p?: string;
+
 };
 
 export function hasFilters(f: RegistryFilters): boolean {
