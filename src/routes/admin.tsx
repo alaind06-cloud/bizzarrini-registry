@@ -6,6 +6,7 @@ import { useI18n } from "@/lib/i18n";
 import { AdminPhotoOrder } from "@/components/AdminPhotoOrder";
 import { AdminChassisOrder } from "@/components/AdminChassisOrder";
 import { AdminAddChassis } from "@/components/admin/AdminAddChassis";
+import { AdminHistoryEdit } from "@/components/admin/AdminHistoryEdit";
 
 
 export const Route = createFileRoute("/admin")({
@@ -25,7 +26,7 @@ function AdminPage() {
   const router = useRouter();
   const [profils, setProfils] = useState<Profil[]>([]);
   const [zone, setZone] = useState<"validations" | "gestion">("validations");
-  const [section, setSection] = useState<"ajout" | "chassis" | "photos">("ajout");
+  const [section, setSection] = useState<"ajout" | "chassis" | "photos" | "historique">("ajout");
   const [tab, setTab] = useState<"en_attente" | "valide" | "refuse">("en_attente");
 
   const [loading, setLoading] = useState(true);
@@ -129,6 +130,7 @@ function AdminPage() {
               { k: "ajout" as const, label: "Ajouter un châssis" },
               { k: "chassis" as const, label: "Ordre des châssis" },
               { k: "photos" as const, label: "Ordre & retouche des photos" },
+              { k: "historique" as const, label: "Historique (FR/EN/IT)" },
             ]).map((s) => (
               <button
                 key={s.k}
@@ -146,6 +148,8 @@ function AdminPage() {
             <AdminAddChassis />
           ) : section === "chassis" ? (
             <AdminChassisOrder />
+          ) : section === "historique" ? (
+            <AdminHistoryEdit />
           ) : (
             <AdminPhotoOrder />
           )}
