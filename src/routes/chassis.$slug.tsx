@@ -7,6 +7,7 @@ import { isMonochrome, hasManualOrder } from "@/lib/photo-order";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { bz2001Content, isBz2001 } from "@/data/bz2001-dossier";
 import { archiveSpecs, type ArchiveSpecKey } from "@/data/chassis-specs";
+import { cleanChassis, displayChassis } from "@/data/chassis-clean";
 import { SpecsBlock } from "@/components/SpecsBlock";
 import { HistoryProse, wordCount } from "@/components/HistoryProse";
 import { filterCars, hasFilters, sortCars, type RegistryFilters } from "@/data/model-groups";
@@ -135,7 +136,7 @@ function CarDetail() {
     (async () => {
       const { data } = await supabase
         .from("voitures")
-        .select("id, titre, modele, annee, chassis")
+        .select("*")
         .order("id", { ascending: true });
       const clean = ((data as Voiture[]) ?? []).filter(
         (v) => (v.titre ?? "").trim().toUpperCase() !== "COVER" && (v.modele ?? "").trim().toUpperCase() !== "COVER",
@@ -161,7 +162,9 @@ function CarDetail() {
   const specs = useMemo(() => {
     const extracted = extractSpecs(description ?? "");
     // Les relevés d'archives sont prioritaires sur l'extraction automatique.
-    return { ...extracted, ...archiveSpecs(voiture?.chassis, slug, voiture?.titre) };
+    const cleaned = cleanChassis(voiture?.chassis);
+    const fromChassis = cleaned.engineNumber ? { engineNumber: cleaned.engineNumber } : {};
+    return { ...extracted, ...fromChassis, ...archiveSpecs(voiture?.chassis, slug, voiture?.titre) };
   }, [description, voiture?.chassis, voiture?.titre, slug]);
   const bz2001 = voiture && isBz2001(voiture) ? bz2001Content(lang) : null;
   const chassisDocs = useMemo(
@@ -292,7 +295,7 @@ function CarDetail() {
                   <div className="mt-5">
                     <span className="chassis-plaque">
                       <span className="text-muted-foreground">{t("car.chassisLabel")}</span>
-                      <span>{voiture.chassis}</span>
+                      <span>{displayChassis(voiture.chassis)}</span>
                     </span>
                   </div>
                 )}
@@ -337,7 +340,7 @@ function CarDetail() {
           description={description}
           modele={voiture.modele}
           annee={voiture.annee}
-          chassis={voiture.chassis}
+          chassis={displayChassis(voiture.chassis)}
           mode={mode}
           extraMilestones={bz2001 ? bz2001.timeline : undefined}
           onExpand={() => setMode("full")}
@@ -492,7 +495,7 @@ function ChassisPager({
   const { t } = useI18n();
   if (!prev && !next) return null;
 
-  const label = (v: Voiture) => v.chassis?.trim() || v.titre?.trim() || "—";
+  const label = (v: Voiture) => displayChassis(v.chassis) || v.titre?.trim() || "—";
 
   const base =
     "inline-flex items-center gap-2 border border-border bg-surface/60 px-3 py-2 text-[0.68rem] uppercase tracking-[0.18em] text-foreground/80 hover:border-brand hover:text-brand transition-colors max-w-[45vw] md:max-w-none";

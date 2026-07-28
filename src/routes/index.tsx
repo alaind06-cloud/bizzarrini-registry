@@ -8,6 +8,7 @@ import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
 import { Search } from "lucide-react";
 import { MODEL_GROUPS, sortCars, type RegistryFilters } from "@/data/model-groups";
+import { displayChassis, matchesChassis } from "@/data/chassis-clean";
 const heroVideo = { url: "/hero-interview.mp4" };
 const heroPoster = { url: "/hero-interview-poster.jpg" };
 const heroPosterMobile = { url: "/hero-interview-poster-mobile.jpg" };
@@ -111,7 +112,7 @@ function HomePage() {
       setLoading(true);
       const { data, error } = await supabase
         .from("voitures")
-        .select("id, titre, modele, annee, chassis, cover_photo, photo_prefix")
+        .select("*")
         .order("id", { ascending: true });
       if (error) setErr(error.message);
       else {
@@ -148,7 +149,7 @@ function HomePage() {
         const dec = parseInt(annee, 10);
         if (!v.annee || v.annee < dec || v.annee >= dec + 10) return false;
       }
-      if (q.trim() && !(v.chassis ?? "").toLowerCase().includes(q.trim().toLowerCase())) return false;
+      if (q.trim() && !matchesChassis(v.chassis, q)) return false;
       return true;
     });
   }, [voitures, selectedGroup, annee, q, modelQuery]);
@@ -555,7 +556,7 @@ function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canA
           <div className="mt-3">
             <span className="chassis-plaque">
               <span className="text-muted-foreground">N°</span>
-              <span>{v.chassis}</span>
+              <span>{displayChassis(v.chassis)}</span>
             </span>
           </div>
         )}
