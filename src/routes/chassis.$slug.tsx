@@ -15,7 +15,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/chassis/$slug")({
   validateSearch: (search: Record<string, unknown>): RegistryFilters => {
-    const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : undefined);
+    const str = (v: unknown) =>
+      typeof v === "number" ? String(v) : typeof v === "string" && v.trim() ? v.trim() : undefined;
     return { g: str(search.g), m: str(search.m), d: str(search.d), q: str(search.q), p: str(search.p) };
   },
   head: ({ params }) => ({

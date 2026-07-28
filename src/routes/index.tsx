@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
     d: typeof search.d === "string" && search.d.trim() ? search.d.trim() : undefined,
     q: typeof search.q === "string" && search.q.trim() ? search.q.trim() : undefined,
     g: typeof search.g === "string" && search.g.trim() ? search.g.trim() : undefined,
-    p: typeof search.p === "string" && search.p.trim() ? search.p.trim() : undefined,
+    p: typeof search.p === "number" ? String(search.p) : typeof search.p === "string" && search.p.trim() ? search.p.trim() : undefined,
   }),
   head: () => ({
     meta: [
