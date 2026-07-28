@@ -58,6 +58,7 @@ export const Route = createFileRoute("/")({
 });
 
 const PAGE_SIZE = 24;
+const REGISTRY_SCROLL_KEY = "registry:scroll";
 
 function HomePage() {
   const { user, isValide, loading: authLoading } = useAuth();
