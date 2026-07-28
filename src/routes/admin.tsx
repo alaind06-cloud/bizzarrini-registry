@@ -4,6 +4,7 @@ import { supabase, type Profil } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { AdminPhotoOrder } from "@/components/AdminPhotoOrder";
+import { AdminChassisOrder } from "@/components/AdminChassisOrder";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -21,7 +22,7 @@ function AdminPage() {
   const { t } = useI18n();
   const router = useRouter();
   const [profils, setProfils] = useState<Profil[]>([]);
-  const [section, setSection] = useState<"membres" | "photos">("membres");
+  const [section, setSection] = useState<"membres" | "photos" | "chassis">("membres");
   const [tab, setTab] = useState<"en_attente" | "valide" | "refuse">("en_attente");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
@@ -86,6 +87,7 @@ function AdminPage() {
         {([
           { k: "membres" as const, label: "Membres" },
           { k: "photos" as const, label: "Ordre des photos" },
+          { k: "chassis" as const, label: "Ordre des châssis" },
         ]).map((s) => (
           <button
             key={s.k}
@@ -99,7 +101,9 @@ function AdminPage() {
         ))}
       </div>
 
-      {section === "photos" ? (
+      {section === "chassis" ? (
+        <AdminChassisOrder />
+      ) : section === "photos" ? (
         <AdminPhotoOrder />
       ) : (
         <>
