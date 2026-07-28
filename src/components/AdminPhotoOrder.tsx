@@ -181,6 +181,31 @@ export function AdminPhotoOrder() {
     setSave("saved");
   };
 
+  const currentCar = cars.find((c) => c.id === carId);
+  const uploadPrefix =
+    currentCar?.photo_prefix ||
+    photos[0]?.filename.replace(/\.[a-z0-9]+$/i, "").replace(/[-_]?\d+$/, "") ||
+    "photo";
+
+  const retouchedCount = photos.filter((p) => p.retouchee).length;
+
+  /** Bascule le statut « retouchée » d'une photo (enregistré aussitôt en base). */
+  const toggleRetouched = async (p: Photo) => {
+    const value = !p.retouchee;
+    setPhotos((list) => list.map((x) => (x.id === p.id ? { ...x, retouchee: value } : x)));
+    const res = await setPhotoRetouched(p.id, value);
+    if (res.error) {
+      setPhotos((list) => list.map((x) => (x.id === p.id ? { ...x, retouchee: !value } : x)));
+      setSave("error");
+      setError(
+        res.missingColumn
+          ? "Colonne « retouchee » manquante : exécutez supabase_migration_photos_retouchee.sql."
+          : res.error.message,
+      );
+    }
+  };
+
+
   // Navigation clavier entre fiches + visionneuse
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
