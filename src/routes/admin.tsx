@@ -6,6 +6,7 @@ import { useI18n } from "@/lib/i18n";
 import { AdminPhotoOrder } from "@/components/AdminPhotoOrder";
 import { AdminChassisOrder } from "@/components/AdminChassisOrder";
 import { AdminAddChassis } from "@/components/admin/AdminAddChassis";
+import { AdminHistoryEdit } from "@/components/admin/AdminHistoryEdit";
 
 
 export const Route = createFileRoute("/admin")({
