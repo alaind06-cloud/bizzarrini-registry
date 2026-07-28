@@ -586,6 +586,9 @@ type SpecKey = ArchiveSpecKey;
 //  - inline prose:  "Engine # 447 F 0815 RE.", 'Reg. no.: "SNK 899M"'
 const SPEC_PATTERNS: Partial<Record<SpecKey, RegExp[]>> = {
   engine: [/^\s*(?:engine|moteur|motore)\s*[:\-–]\s*(.+)$/im],
+  power: [/^\s*(?:power|puissance|potenza)\s*(?:\/\s*(?:rpm|r[ée]gime|regime))?\s*[:\-–]\s*(.+)$/im],
+  displacement: [/^\s*(?:displacement|cylindr[ée]e|cilindrata)\s*[:\-–]\s*(.+)$/im],
+
   color: [
     /^\s*(?:original\s+colou?r|colou?r|couleur(?:\s+d['']origine)?|colore(?:\s+originale)?)\s*[:\-–]\s*(.+)$/im,
     /\brepainted\s+((?:in\s+)?[a-zà-ÿ][\w'’\- ]{2,30})/i,
