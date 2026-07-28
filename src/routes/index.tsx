@@ -190,7 +190,16 @@ function HomePage() {
     });
   }
 
-  useEffect(() => setPage(1), [modele, annee, q, modelQuery]);
+  // Restaure la position de défilement au retour depuis une fiche châssis
+  useEffect(() => {
+    if (loading || typeof window === "undefined") return;
+    const saved = sessionStorage.getItem(REGISTRY_SCROLL_KEY);
+    if (!saved) return;
+    sessionStorage.removeItem(REGISTRY_SCROLL_KEY);
+    const y = parseInt(saved, 10);
+    if (!Number.isFinite(y)) return;
+    requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "auto" }));
+  }, [loading]);
 
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
