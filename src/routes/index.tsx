@@ -62,23 +62,34 @@ const PAGE_SIZE = 24;
 function HomePage() {
   const { user, isValide, loading: authLoading } = useAuth();
   const { t } = useI18n();
-  const { m: modelQuery, d: decadeParam, q: qParam } = Route.useSearch();
+  const { m: modelQuery, d: decadeParam, q: qParam, g: groupParam, p: pageParam } = Route.useSearch();
   const navigate = useNavigate({ from: "/" });
   const [voitures, setVoitures] = useState<Voiture[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
-  const [modele, setModele] = useState<string>("all");
+  const modele = groupParam ?? "all";
   const annee = decadeParam ?? "all";
   const q = qParam ?? "";
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
 
+  const setModele = (v: string) =>
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, g: v === "all" ? undefined : v, p: undefined }), replace: true, resetScroll: false });
   const setAnnee = (v: string) =>
-    navigate({ search: (prev: RegisterSearch) => ({ ...prev, d: v === "all" ? undefined : v }), replace: true, resetScroll: false });
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, d: v === "all" ? undefined : v, p: undefined }), replace: true, resetScroll: false });
   const setQ = (v: string) =>
-    navigate({ search: (prev: RegisterSearch) => ({ ...prev, q: v.trim() ? v : undefined }), replace: true, resetScroll: false });
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, q: v.trim() ? v : undefined, p: undefined }), replace: true, resetScroll: false });
+  const setPage = (updater: (p: number) => number) =>
+    navigate({
+      search: (prev: RegisterSearch) => {
+        const n = updater(Math.max(1, parseInt(prev.p ?? "1", 10) || 1));
+        return { ...prev, p: n > 1 ? String(n) : undefined };
+      },
+      replace: true,
+      resetScroll: false,
+    });
 
 
-  const [page, setPage] = useState(1);
   const [enableVideo, setEnableVideo] = useState(false);
 
   useEffect(() => {
