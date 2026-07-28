@@ -3,6 +3,9 @@ import { supabase, photoUrl, type Photo, type Voiture } from "@/lib/supabase";
 import { MANUAL_ORDER_BASE } from "@/lib/photo-order";
 import { MODEL_GROUPS } from "@/data/model-groups";
 import { PhotoRetouch } from "@/components/admin/PhotoRetouch";
+import { PhotoBatchUpload } from "@/components/admin/PhotoBatchUpload";
+import { setPhotoRetouched } from "@/lib/photo-storage";
+
 
 
 /**
@@ -178,6 +181,31 @@ export function AdminPhotoOrder() {
     setSave("saved");
   };
 
+  const currentCar = cars.find((c) => c.id === carId);
+  const uploadPrefix =
+    currentCar?.photo_prefix ||
+    photos[0]?.filename.replace(/\.[a-z0-9]+$/i, "").replace(/[-_]?\d+$/, "") ||
+    "photo";
+
+  const retouchedCount = photos.filter((p) => p.retouchee).length;
+
+  /** Bascule le statut « retouchée » d'une photo (enregistré aussitôt en base). */
+  const toggleRetouched = async (p: Photo) => {
+    const value = !p.retouchee;
+    setPhotos((list) => list.map((x) => (x.id === p.id ? { ...x, retouchee: value } : x)));
+    const res = await setPhotoRetouched(p.id, value);
+    if (res.error) {
+      setPhotos((list) => list.map((x) => (x.id === p.id ? { ...x, retouchee: !value } : x)));
+      setSave("error");
+      setError(
+        res.missingColumn
+          ? "Colonne « retouchee » manquante : exécutez supabase_migration_photos_retouchee.sql."
+          : res.error.message,
+      );
+    }
+  };
+
+
   // Navigation clavier entre fiches + visionneuse
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -273,6 +301,15 @@ export function AdminPhotoOrder() {
         </p>
       </div>
 
+      {carId && !loading && (
+        <PhotoBatchUpload
+          voitureId={carId}
+          prefix={uploadPrefix}
+          existing={photos}
+          onUploaded={(added) => setPhotos((list) => [...list, ...added])}
+        />
+      )}
+
       {!carId ? (
         <p className="text-muted-foreground text-sm">
           Sélectionnez une fiche pour réordonner sa galerie par glisser-déposer.
@@ -283,10 +320,33 @@ export function AdminPhotoOrder() {
         <p className="text-muted-foreground text-sm">Aucune photo pour cette fiche.</p>
       ) : (
         <>
+          <div className="mb-4 border border-border bg-surface px-3 py-2">
+            <div className="flex flex-wrap items-baseline justify-between gap-2 text-xs">
+              <span>
+                <strong className="text-brand">{retouchedCount}</strong> / {photos.length} retouchées
+                {photos.length - retouchedCount > 0 && (
+                  <> · {photos.length - retouchedCount} à valider</>
+                )}
+              </span>
+              <span className="text-muted-foreground">
+                Le statut est enregistré au fur et à mesure (colonne <code>photos.retouchee</code>)
+              </span>
+            </div>
+            <div className="mt-2 h-1 w-full bg-border">
+              <div
+                className="h-1 bg-brand transition-all"
+                style={{
+                  width: `${photos.length ? Math.round((retouchedCount / photos.length) * 100) : 0}%`,
+                }}
+              />
+            </div>
+          </div>
+
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <span className="text-xs text-muted-foreground">
               {photos.length} photos · glissez une vignette (Ctrl+clic pour sélectionner plusieurs)
             </span>
+
             {selected.size > 0 && (
               <span className="text-xs text-brand">
                 {selected.size} sélectionnée{selected.size > 1 ? "s" : ""} ·{" "}
@@ -376,6 +436,20 @@ export function AdminPhotoOrder() {
                     Cover
                   </span>
                 )}
+
+                <button
+                  type="button"
+                  onClick={() => void toggleRetouched(p)}
+                  title={p.retouchee ? "Marquer comme à valider" : "Marquer comme retouchée"}
+                  className={`absolute bottom-9 right-1 px-1.5 py-0.5 text-[0.6rem] uppercase tracking-wider ${
+                    p.retouchee
+                      ? "bg-brand text-background"
+                      : "bg-background/85 text-muted-foreground"
+                  }`}
+                >
+                  {p.retouchee ? "✓ retouchée" : "à valider"}
+                </button>
+
 
                 <span className="pointer-events-none absolute inset-x-0 bottom-9 hidden group-hover:block bg-background/90 px-1 py-0.5 text-[0.6rem] break-all">
                   {p.filename}
@@ -494,6 +568,10 @@ export function AdminPhotoOrder() {
             setPhotos((list) => list.map((p) => (p.id === id ? { ...p, filename } : p)));
             setCover((c) => (c === retouch.filename ? filename : c));
           }}
+          onRetouched={(id) =>
+            setPhotos((list) => list.map((p) => (p.id === id ? { ...p, retouchee: true } : p)))
+          }
+
         />
       )}
     </div>

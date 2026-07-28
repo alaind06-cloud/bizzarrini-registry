@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { photoUrl, type Photo } from "@/lib/supabase";
 import { PhotoCropEditor } from "@/components/admin/PhotoCropEditor";
-import { renamePhoto, replacePhoto } from "@/lib/photo-storage";
+import { renamePhoto, replacePhoto, setPhotoRetouched } from "@/lib/photo-storage";
 import {
   canvasToJpeg,
   detectCrop,
@@ -21,9 +21,11 @@ type Props = {
   isCover: boolean;
   onClose: () => void;
   onRenamed: (photoId: string, filename: string) => void;
+  onRetouched?: (photoId: string) => void;
 };
 
-export function PhotoRetouch({ photo, isCover, onClose, onRenamed }: Props) {
+
+export function PhotoRetouch({ photo, isCover, onClose, onRenamed, onRetouched }: Props) {
   const [source, setSource] = useState<HTMLCanvasElement | null>(null);
   const [crop, setCrop] = useState<CropRect | null>(null);
   const [auto, setAuto] = useState<CropRect | null>(null);
@@ -74,7 +76,11 @@ export function PhotoRetouch({ photo, isCover, onClose, onRenamed }: Props) {
         if (res.error) throw new Error(res.error.message);
         onRenamed(photo.id, target);
       }
+      const mark = await setPhotoRetouched(photo.id, true);
+      if (mark.error && !mark.missingColumn) throw new Error(mark.error.message);
+      if (!mark.error) onRetouched?.(photo.id);
       onClose();
+
     } catch (e) {
       setError((e as Error).message);
     } finally {

@@ -83,7 +83,10 @@ export type Photo = {
   voiture_id: string;
   filename: string;
   ordre: number | null;
+  /** Statut de traitement : true si la photo a été recadrée/ajustée et validée. */
+  retouchee?: boolean | null;
 };
+
 
 export type VoitureDetail = {
   voiture_id: string;
