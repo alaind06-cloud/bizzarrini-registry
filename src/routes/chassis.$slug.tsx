@@ -493,7 +493,7 @@ function ChassisPager({
   return (
     <nav
       aria-label={t("car.pager.label")}
-      className={`flex items-center gap-3 ${wide ? "justify-between" : "justify-end"}`}
+      className={`flex flex-wrap items-center gap-3 ${wide ? "justify-between" : "justify-end"}`}
     >
       {prev ? (
         <Link to="/chassis/$slug" params={{ slug: carSlug(prev) }} search={filters} className={base}>
@@ -529,6 +529,44 @@ function ChassisPager({
     </nav>
   );
 }
+
+function GoToPage({ filters }: { filters: RegistryFilters }) {
+  const { t } = useI18n();
+  const navigate = useNavigate();
+  const [value, setValue] = useState("");
+
+  const go = (e: React.FormEvent) => {
+    e.preventDefault();
+    const n = parseInt(value, 10);
+    if (!Number.isFinite(n) || n < 1) return;
+    navigate({ to: "/", search: { ...filters, p: n > 1 ? String(n) : undefined }, hash: "registre" });
+  };
+
+  return (
+    <form onSubmit={go} className="flex items-center gap-2">
+      <label htmlFor="pager-goto" className="text-[0.62rem] uppercase tracking-[0.22em] text-muted-foreground">
+        {t("car.pager.goto")}
+      </label>
+      <input
+        id="pager-goto"
+        type="number"
+        min={1}
+        inputMode="numeric"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className="w-16 border border-border bg-surface/60 px-2 py-1.5 text-sm text-foreground focus:border-brand focus:outline-none"
+      />
+      <button
+        type="submit"
+        className="border border-border bg-surface/60 px-3 py-1.5 text-[0.68rem] uppercase tracking-[0.18em] text-foreground/80 hover:border-brand hover:text-brand transition-colors"
+      >
+        {t("car.pager.go")}
+      </button>
+    </form>
+  );
+}
+
+
 
 type SpecKey = ArchiveSpecKey;
 
