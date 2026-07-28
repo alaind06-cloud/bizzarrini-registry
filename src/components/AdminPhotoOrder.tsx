@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase, photoUrl, type Photo, type Voiture } from "@/lib/supabase";
 import { MANUAL_ORDER_BASE } from "@/lib/photo-order";
 import { MODEL_GROUPS } from "@/data/model-groups";
+import { PhotoRetouch } from "@/components/admin/PhotoRetouch";
+
 
 /**
  * Tri manuel des photos d'une fiche châssis (glisser-déposer).
@@ -25,6 +27,8 @@ export function AdminPhotoOrder() {
   const [cover, setCover] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [preview, setPreview] = useState<number | null>(null);
+  const [retouch, setRetouch] = useState<Photo | null>(null);
+
   const dragIdx = useRef<number | null>(null);
   const [overIdx, setOverIdx] = useState<number | null>(null);
 
@@ -404,6 +408,15 @@ export function AdminPhotoOrder() {
                     ★
                   </button>
                   <button
+                    onClick={() => setRetouch(p)}
+                    title="Retoucher / renommer cette photo"
+                    aria-label="Retoucher ou renommer cette photo"
+                    className="px-1 text-xs text-muted-foreground hover:text-brand"
+                  >
+                    ✂
+                  </button>
+
+                  <button
                     onClick={() => moveTo(i, i + 1)}
                     disabled={i === photos.length - 1}
                     aria-label="Déplacer après"
@@ -471,6 +484,19 @@ export function AdminPhotoOrder() {
           </div>
         </div>
       )}
+
+      {retouch && (
+        <PhotoRetouch
+          photo={retouch}
+          isCover={cover === retouch.filename}
+          onClose={() => setRetouch(null)}
+          onRenamed={(id, filename) => {
+            setPhotos((list) => list.map((p) => (p.id === id ? { ...p, filename } : p)));
+            setCover((c) => (c === retouch.filename ? filename : c));
+          }}
+        />
+      )}
     </div>
+
   );
 }
