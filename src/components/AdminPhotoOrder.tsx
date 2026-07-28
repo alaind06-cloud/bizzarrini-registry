@@ -301,6 +301,15 @@ export function AdminPhotoOrder() {
         </p>
       </div>
 
+      {carId && !loading && (
+        <PhotoBatchUpload
+          voitureId={carId}
+          prefix={uploadPrefix}
+          existing={photos}
+          onUploaded={(added) => setPhotos((list) => [...list, ...added])}
+        />
+      )}
+
       {!carId ? (
         <p className="text-muted-foreground text-sm">
           Sélectionnez une fiche pour réordonner sa galerie par glisser-déposer.
@@ -311,10 +320,33 @@ export function AdminPhotoOrder() {
         <p className="text-muted-foreground text-sm">Aucune photo pour cette fiche.</p>
       ) : (
         <>
+          <div className="mb-4 border border-border bg-surface px-3 py-2">
+            <div className="flex flex-wrap items-baseline justify-between gap-2 text-xs">
+              <span>
+                <strong className="text-brand">{retouchedCount}</strong> / {photos.length} retouchées
+                {photos.length - retouchedCount > 0 && (
+                  <> · {photos.length - retouchedCount} à valider</>
+                )}
+              </span>
+              <span className="text-muted-foreground">
+                Le statut est enregistré au fur et à mesure (colonne <code>photos.retouchee</code>)
+              </span>
+            </div>
+            <div className="mt-2 h-1 w-full bg-border">
+              <div
+                className="h-1 bg-brand transition-all"
+                style={{
+                  width: `${photos.length ? Math.round((retouchedCount / photos.length) * 100) : 0}%`,
+                }}
+              />
+            </div>
+          </div>
+
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <span className="text-xs text-muted-foreground">
               {photos.length} photos · glissez une vignette (Ctrl+clic pour sélectionner plusieurs)
             </span>
+
             {selected.size > 0 && (
               <span className="text-xs text-brand">
                 {selected.size} sélectionnée{selected.size > 1 ? "s" : ""} ·{" "}
