@@ -73,7 +73,10 @@ export type Voiture = {
   chassis: string | null;
   cover_photo: string | null;
   photo_prefix: string | null;
+  /** Ordre manuel du registre, défini depuis /admin (peut être absent). */
+  ordre_affichage?: number | null;
 };
+
 
 export type Photo = {
   id: string;
