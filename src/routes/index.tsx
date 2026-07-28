@@ -15,13 +15,15 @@ const heroPosterMobile = { url: "/hero-interview-poster-mobile.jpg" };
 
 
 
-type RegisterSearch = { m?: string; d?: string; q?: string };
+type RegisterSearch = { m?: string; d?: string; q?: string; g?: string; p?: string };
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): RegisterSearch => ({
     m: typeof search.m === "string" && search.m.trim() ? search.m.trim() : undefined,
     d: typeof search.d === "string" && search.d.trim() ? search.d.trim() : undefined,
     q: typeof search.q === "string" && search.q.trim() ? search.q.trim() : undefined,
+    g: typeof search.g === "string" && search.g.trim() ? search.g.trim() : undefined,
+    p: typeof search.p === "string" && search.p.trim() ? search.p.trim() : undefined,
   }),
   head: () => ({
     meta: [
