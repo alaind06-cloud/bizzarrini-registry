@@ -437,6 +437,20 @@ export function AdminPhotoOrder() {
                   </span>
                 )}
 
+                <button
+                  type="button"
+                  onClick={() => void toggleRetouched(p)}
+                  title={p.retouchee ? "Marquer comme à valider" : "Marquer comme retouchée"}
+                  className={`absolute bottom-9 right-1 px-1.5 py-0.5 text-[0.6rem] uppercase tracking-wider ${
+                    p.retouchee
+                      ? "bg-brand text-background"
+                      : "bg-background/85 text-muted-foreground"
+                  }`}
+                >
+                  {p.retouchee ? "✓ retouchée" : "à valider"}
+                </button>
+
+
                 <span className="pointer-events-none absolute inset-x-0 bottom-9 hidden group-hover:block bg-background/90 px-1 py-0.5 text-[0.6rem] break-all">
                   {p.filename}
                 </span>
