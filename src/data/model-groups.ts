@@ -54,7 +54,10 @@ type SortableCar = {
   annee?: number | string | null;
   chassis?: string | null;
   id?: number | string;
+  /** Ordre manuel défini depuis /admin (prioritaire sur le tri automatique). */
+  ordre_affichage?: number | null;
 };
+
 
 /** Clé de série : famille distincte si applicable, sinon préfixe de châssis. */
 function seriesKey(v: SortableCar): string {
