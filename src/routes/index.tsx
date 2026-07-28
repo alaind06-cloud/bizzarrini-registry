@@ -15,13 +15,15 @@ const heroPosterMobile = { url: "/hero-interview-poster-mobile.jpg" };
 
 
 
-type RegisterSearch = { m?: string; d?: string; q?: string };
+type RegisterSearch = { m?: string; d?: string; q?: string; g?: string; p?: number };
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): RegisterSearch => ({
     m: typeof search.m === "string" && search.m.trim() ? search.m.trim() : undefined,
     d: typeof search.d === "string" && search.d.trim() ? search.d.trim() : undefined,
     q: typeof search.q === "string" && search.q.trim() ? search.q.trim() : undefined,
+    g: typeof search.g === "string" && search.g.trim() ? search.g.trim() : undefined,
+    p: Number.isFinite(Number(search.p)) && Number(search.p) > 1 ? Math.floor(Number(search.p)) : undefined,
   }),
   head: () => ({
     meta: [
@@ -56,27 +58,39 @@ export const Route = createFileRoute("/")({
 });
 
 const PAGE_SIZE = 24;
+const REGISTRY_SCROLL_KEY = "registry:scroll";
 
 function HomePage() {
   const { user, isValide, loading: authLoading } = useAuth();
   const { t } = useI18n();
-  const { m: modelQuery, d: decadeParam, q: qParam } = Route.useSearch();
+  const { m: modelQuery, d: decadeParam, q: qParam, g: groupParam, p: pageParam } = Route.useSearch();
   const navigate = useNavigate({ from: "/" });
   const [voitures, setVoitures] = useState<Voiture[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
-  const [modele, setModele] = useState<string>("all");
+  const modele = groupParam ?? "all";
   const annee = decadeParam ?? "all";
   const q = qParam ?? "";
+  const page = Math.max(1, pageParam ?? 1);
 
+  const setModele = (v: string) =>
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, g: v === "all" ? undefined : v, p: undefined }), replace: true, resetScroll: false });
   const setAnnee = (v: string) =>
-    navigate({ search: (prev: RegisterSearch) => ({ ...prev, d: v === "all" ? undefined : v }), replace: true, resetScroll: false });
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, d: v === "all" ? undefined : v, p: undefined }), replace: true, resetScroll: false });
   const setQ = (v: string) =>
-    navigate({ search: (prev: RegisterSearch) => ({ ...prev, q: v.trim() ? v : undefined }), replace: true, resetScroll: false });
+    navigate({ search: (prev: RegisterSearch) => ({ ...prev, q: v.trim() ? v : undefined, p: undefined }), replace: true, resetScroll: false });
+  const setPage = (updater: (p: number) => number) =>
+    navigate({
+      search: (prev: RegisterSearch) => {
+        const n = updater(Math.max(1, prev.p ?? 1));
+        return { ...prev, p: n > 1 ? n : undefined };
+      },
+      replace: true,
+      resetScroll: false,
+    });
 
 
-  const [page, setPage] = useState(1);
   const [enableVideo, setEnableVideo] = useState(false);
 
   useEffect(() => {
@@ -177,7 +191,16 @@ function HomePage() {
     });
   }
 
-  useEffect(() => setPage(1), [modele, annee, q, modelQuery]);
+  // Restaure la position de défilement au retour depuis une fiche châssis
+  useEffect(() => {
+    if (loading || typeof window === "undefined") return;
+    const saved = sessionStorage.getItem(REGISTRY_SCROLL_KEY);
+    if (!saved) return;
+    sessionStorage.removeItem(REGISTRY_SCROLL_KEY);
+    const y = parseInt(saved, 10);
+    if (!Number.isFinite(y)) return;
+    requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "auto" }));
+  }, [loading]);
 
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
@@ -396,7 +419,7 @@ function HomePage() {
           {loading
             ? Array.from({ length: PAGE_SIZE }).map((_, i) => <CarCardSkeleton key={i} />)
             : currentItems.map((v, i) => (
-                <CarCard key={v.id} v={v} canAccess={canAccess} priority={i < 4} filters={{ g: modele !== "all" ? modele : undefined, m: modelQuery, d: annee !== "all" ? annee : undefined, q: q.trim() || undefined }} />
+                <CarCard key={v.id} v={v} canAccess={canAccess} priority={i < 4} filters={{ g: modele !== "all" ? modele : undefined, m: modelQuery, d: annee !== "all" ? annee : undefined, q: q.trim() || undefined, p: page > 1 ? page : undefined }} />
               ))}
 
           {!loading && currentItems.length === 0 && (
@@ -483,6 +506,9 @@ function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canA
   return (
     <Link
       {...(href as any)}
+      onClick={() => {
+        if (typeof window !== "undefined") sessionStorage.setItem(REGISTRY_SCROLL_KEY, String(window.scrollY));
+      }}
       className="group block"
     >
       <div className="art-frame">

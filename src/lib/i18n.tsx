@@ -162,6 +162,9 @@ const fr: Dict = {
   "car.pager.label": "Navigation entre châssis",
   "car.pager.prev": "Précédent",
   "car.pager.next": "Suivant",
+  "car.pager.goto": "Aller à la page",
+  "car.pager.go": "OK",
+
   "car.chassisLabel": "Châssis",
   "car.history": "Historique",
   "car.gallery": "Galerie",
@@ -370,6 +373,9 @@ const en: Dict = {
   "car.pager.label": "Chassis navigation",
   "car.pager.prev": "Previous",
   "car.pager.next": "Next",
+  "car.pager.goto": "Go to page",
+  "car.pager.go": "Go",
+
   "car.chassisLabel": "Chassis",
   "car.history": "History",
   "car.gallery": "Gallery",
@@ -577,6 +583,9 @@ const it: Dict = {
   "car.pager.label": "Navigazione telai",
   "car.pager.prev": "Precedente",
   "car.pager.next": "Successivo",
+  "car.pager.goto": "Vai alla pagina",
+  "car.pager.go": "Vai",
+
   "car.chassisLabel": "Telaio",
   "car.history": "Storia",
   "car.gallery": "Galleria",
