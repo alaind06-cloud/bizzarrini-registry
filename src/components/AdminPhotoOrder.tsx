@@ -568,6 +568,10 @@ export function AdminPhotoOrder() {
             setPhotos((list) => list.map((p) => (p.id === id ? { ...p, filename } : p)));
             setCover((c) => (c === retouch.filename ? filename : c));
           }}
+          onRetouched={(id) =>
+            setPhotos((list) => list.map((p) => (p.id === id ? { ...p, retouchee: true } : p)))
+          }
+
         />
       )}
     </div>
