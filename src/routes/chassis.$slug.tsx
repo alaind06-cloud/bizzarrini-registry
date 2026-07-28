@@ -9,7 +9,7 @@ import { bz2001Content, isBz2001 } from "@/data/bz2001-dossier";
 import { archiveSpecs, type ArchiveSpecKey } from "@/data/chassis-specs";
 import { SpecsBlock } from "@/components/SpecsBlock";
 import { HistoryProse, wordCount } from "@/components/HistoryProse";
-import { filterCars, hasFilters, type RegistryFilters } from "@/data/model-groups";
+import { filterCars, hasFilters, sortCars, type RegistryFilters } from "@/data/model-groups";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 
@@ -133,7 +133,7 @@ function CarDetail() {
       const clean = ((data as Voiture[]) ?? []).filter(
         (v) => (v.titre ?? "").trim().toUpperCase() !== "COVER" && (v.modele ?? "").trim().toUpperCase() !== "COVER",
       );
-      setSiblings(clean);
+      setSiblings(sortCars(clean));
     })();
   }, [user, isValide]);
 

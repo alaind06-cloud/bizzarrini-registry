@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
 import { Search } from "lucide-react";
-import { MODEL_GROUPS, type RegistryFilters } from "@/data/model-groups";
+import { MODEL_GROUPS, sortCars, type RegistryFilters } from "@/data/model-groups";
 const heroVideo = { url: "/hero-interview.mp4" };
 const heroPoster = { url: "/hero-interview-poster.jpg" };
 const heroPosterMobile = { url: "/hero-interview-poster-mobile.jpg" };
@@ -104,7 +104,7 @@ function HomePage() {
         const clean = ((data as Voiture[]) ?? []).filter(
           (v) => (v.titre ?? "").trim().toUpperCase() !== "COVER" && (v.modele ?? "").trim().toUpperCase() !== "COVER",
         );
-        setVoitures(clean);
+        setVoitures(sortCars(clean));
       }
       setLoading(false);
     })();
