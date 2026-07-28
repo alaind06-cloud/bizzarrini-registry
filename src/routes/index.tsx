@@ -104,7 +104,7 @@ function HomePage() {
         const clean = ((data as Voiture[]) ?? []).filter(
           (v) => (v.titre ?? "").trim().toUpperCase() !== "COVER" && (v.modele ?? "").trim().toUpperCase() !== "COVER",
         );
-        setVoitures(clean);
+        setVoitures(sortCars(clean));
       }
       setLoading(false);
     })();
