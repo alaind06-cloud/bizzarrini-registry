@@ -506,6 +506,9 @@ function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canA
   return (
     <Link
       {...(href as any)}
+      onClick={() => {
+        if (typeof window !== "undefined") sessionStorage.setItem(REGISTRY_SCROLL_KEY, String(window.scrollY));
+      }}
       className="group block"
     >
       <div className="art-frame">
