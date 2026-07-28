@@ -25,6 +25,16 @@ export async function replacePhoto(filename: string, blob: Blob) {
 }
 
 /**
+ * Marque une photo comme retouchée (ou non) — colonne `photos.retouchee`.
+ * Si la migration n'a pas encore été exécutée, l'erreur est signalée pour que
+ * l'interface puisse l'afficher sans bloquer le reste.
+ */
+export async function setPhotoRetouched(photoId: string, value: boolean) {
+  const { error } = await supabase.from("photos").update({ retouchee: value }).eq("id", photoId);
+  return { error, missingColumn: Boolean(error && /retouchee/i.test(error.message)) };
+}
+
+/**
  * Renomme une photo : déplace le fichier dans le stockage puis met à jour la
  * référence en base (table `photos`, et `voitures.cover_photo` si besoin).
  */

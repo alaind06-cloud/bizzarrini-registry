@@ -21,7 +21,9 @@ type Props = {
   isCover: boolean;
   onClose: () => void;
   onRenamed: (photoId: string, filename: string) => void;
+  onRetouched?: (photoId: string) => void;
 };
+
 
 export function PhotoRetouch({ photo, isCover, onClose, onRenamed }: Props) {
   const [source, setSource] = useState<HTMLCanvasElement | null>(null);
