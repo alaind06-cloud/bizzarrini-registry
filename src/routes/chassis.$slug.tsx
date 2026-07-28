@@ -17,7 +17,13 @@ export const Route = createFileRoute("/chassis/$slug")({
   validateSearch: (search: Record<string, unknown>): RegistryFilters => {
     const str = (v: unknown) =>
       typeof v === "number" ? String(v) : typeof v === "string" && v.trim() ? v.trim() : undefined;
-    return { g: str(search.g), m: str(search.m), d: str(search.d), q: str(search.q), p: str(search.p) };
+    return {
+      g: str(search.g),
+      m: str(search.m),
+      d: str(search.d),
+      q: str(search.q),
+      p: Number.isFinite(Number(search.p)) && Number(search.p) > 1 ? Math.floor(Number(search.p)) : undefined,
+    };
   },
   head: ({ params }) => ({
     meta: [
@@ -541,7 +547,7 @@ function GoToPage({ filters }: { filters: RegistryFilters }) {
     const n = parseInt(value, 10);
     if (!Number.isFinite(n) || n < 1) return;
     if (typeof window !== "undefined") sessionStorage.removeItem("registry:scroll");
-    navigate({ to: "/", search: { ...filters, p: n > 1 ? String(n) : undefined }, hash: "registre" });
+    navigate({ to: "/", search: { ...filters, p: n > 1 ? n : undefined }, hash: "registre" });
   };
 
   return (

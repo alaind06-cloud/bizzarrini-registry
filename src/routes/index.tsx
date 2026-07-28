@@ -15,7 +15,7 @@ const heroPosterMobile = { url: "/hero-interview-poster-mobile.jpg" };
 
 
 
-type RegisterSearch = { m?: string; d?: string; q?: string; g?: string; p?: string };
+type RegisterSearch = { m?: string; d?: string; q?: string; g?: string; p?: number };
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): RegisterSearch => ({
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
     d: typeof search.d === "string" && search.d.trim() ? search.d.trim() : undefined,
     q: typeof search.q === "string" && search.q.trim() ? search.q.trim() : undefined,
     g: typeof search.g === "string" && search.g.trim() ? search.g.trim() : undefined,
-    p: typeof search.p === "number" ? String(search.p) : typeof search.p === "string" && search.p.trim() ? search.p.trim() : undefined,
+    p: Number.isFinite(Number(search.p)) && Number(search.p) > 1 ? Math.floor(Number(search.p)) : undefined,
   }),
   head: () => ({
     meta: [
@@ -72,7 +72,7 @@ function HomePage() {
   const modele = groupParam ?? "all";
   const annee = decadeParam ?? "all";
   const q = qParam ?? "";
-  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+  const page = Math.max(1, pageParam ?? 1);
 
   const setModele = (v: string) =>
     navigate({ search: (prev: RegisterSearch) => ({ ...prev, g: v === "all" ? undefined : v, p: undefined }), replace: true, resetScroll: false });
@@ -83,8 +83,8 @@ function HomePage() {
   const setPage = (updater: (p: number) => number) =>
     navigate({
       search: (prev: RegisterSearch) => {
-        const n = updater(Math.max(1, parseInt(prev.p ?? "1", 10) || 1));
-        return { ...prev, p: n > 1 ? String(n) : undefined };
+        const n = updater(Math.max(1, prev.p ?? 1));
+        return { ...prev, p: n > 1 ? n : undefined };
       },
       replace: true,
       resetScroll: false,
@@ -419,7 +419,7 @@ function HomePage() {
           {loading
             ? Array.from({ length: PAGE_SIZE }).map((_, i) => <CarCardSkeleton key={i} />)
             : currentItems.map((v, i) => (
-                <CarCard key={v.id} v={v} canAccess={canAccess} priority={i < 4} filters={{ g: modele !== "all" ? modele : undefined, m: modelQuery, d: annee !== "all" ? annee : undefined, q: q.trim() || undefined, p: page > 1 ? String(page) : undefined }} />
+                <CarCard key={v.id} v={v} canAccess={canAccess} priority={i < 4} filters={{ g: modele !== "all" ? modele : undefined, m: modelQuery, d: annee !== "all" ? annee : undefined, q: q.trim() || undefined, p: page > 1 ? page : undefined }} />
               ))}
 
           {!loading && currentItems.length === 0 && (
