@@ -74,10 +74,23 @@ const yearOf = (v: SortableCar): number => {
   return typeof y === "number" && Number.isFinite(y) ? y : Number.MAX_SAFE_INTEGER;
 };
 
+const manualOrder = (v: SortableCar): number =>
+  typeof v.ordre_affichage === "number" && Number.isFinite(v.ordre_affichage)
+    ? v.ordre_affichage
+    : Number.MAX_SAFE_INTEGER;
+
+/** Vrai dès qu'au moins une voiture porte un ordre manuel. */
+export function hasManualCarOrder(cars: SortableCar[]): boolean {
+  return cars.some((v) => manualOrder(v) !== Number.MAX_SAFE_INTEGER);
+}
+
 /**
- * Trie les voitures par série (famille ou préfixe de châssis), les séries étant
- * ordonnées selon l'année de production la plus ancienne rencontrée (calculée
- * dynamiquement). À l'intérieur d'une série : tri numérique du châssis.
+ * Trie les voitures. L'ordre manuel défini depuis /admin
+ * (`voitures.ordre_affichage`) prime sur tout : les fiches qui en ont un
+ * viennent d'abord, dans l'ordre choisi. Les autres retombent sur le tri
+ * automatique par série (famille ou préfixe de châssis), les séries étant
+ * ordonnées selon l'année de production la plus ancienne rencontrée.
+ * À l'intérieur d'une série : tri numérique du châssis.
  */
 export function sortCars<T extends SortableCar>(cars: T[]): T[] {
   const earliest = new Map<string, number>();
@@ -88,6 +101,11 @@ export function sortCars<T extends SortableCar>(cars: T[]): T[] {
     if (cur === undefined || y < cur) earliest.set(k, y);
   }
   return [...cars].sort((a, b) => {
+    const oa = manualOrder(a);
+    const ob = manualOrder(b);
+    if (oa !== ob) return oa - ob;
+    if (oa !== Number.MAX_SAFE_INTEGER) return 0;
+
     const ka = seriesKey(a);
     const kb = seriesKey(b);
     if (ka !== kb) {
