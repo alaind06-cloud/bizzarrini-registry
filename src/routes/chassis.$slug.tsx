@@ -539,6 +539,7 @@ function GoToPage({ filters }: { filters: RegistryFilters }) {
     e.preventDefault();
     const n = parseInt(value, 10);
     if (!Number.isFinite(n) || n < 1) return;
+    if (typeof window !== "undefined") sessionStorage.removeItem("registry:scroll");
     navigate({ to: "/", search: { ...filters, p: n > 1 ? String(n) : undefined }, hash: "registre" });
   };
 
