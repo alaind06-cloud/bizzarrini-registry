@@ -16,52 +16,97 @@ export const MODEL_GROUPS: ModelGroup[] = [
   { key: "bz2000", label: "BZ 2000", test: (m) => /bz\s*2000|barchetta/i.test(m) },
 ];
 
-/** Extrait le préfixe de série d'un numéro de châssis (ex: "B-0201" -> "B", "P538-002" -> "P538"). */
-export function chassisPrefix(chassis?: string | null): string {
-  const c = (chassis ?? "").trim().toUpperCase();
-  if (!c) return "";
-  const m = c.match(/^(.*?)[\s-]*(\d+)\s*$/);
-  return (m ? m[1] : c).replace(/[\s-]+$/, "");
-}
+/** Familles qui constituent une série à part entière, quel que soit le préfixe de châssis. */
+const DISTINCT_FAMILIES = new Set(["1900", "manta", "amx3", "p538", "bz2000", "europa"]);
 
-/** Partie numérique finale d'un numéro de châssis, pour un tri numérique. */
-export function chassisNumber(chassis?: string | null): number {
-  const m = (chassis ?? "").trim().match(/(\d+)\s*$/);
-  return m ? parseInt(m[1], 10) : Number.MAX_SAFE_INTEGER;
+/** Repère l'entrée d'ouverture du registre (Fiat Topolino, « the first car »). */
+export function isFirstCar(v: { titre?: string | null; modele?: string | null }): boolean {
+  const s = `${v.titre ?? ""} ${v.modele ?? ""}`.toLowerCase();
+  return /topolino|first car/.test(s);
 }
 
 /**
- * Trie les voitures par groupe de série (préfixe de châssis), les groupes étant
- * ordonnés selon l'année de production la plus ancienne rencontrée dans le groupe
- * (calculée dynamiquement). À l'intérieur d'un groupe : tri numérique du châssis.
+ * Analyse un numéro de châssis bruité (« B-0222 - IA30222 », « 741373 BA4 0201 »,
+ * « IA3 0280 Replica ») et renvoie le préfixe de série + le numéro.
  */
-export function sortCars<T extends { annee?: number | null; chassis?: string | null; id?: number | string }>(
-  cars: T[],
-): T[] {
+function parseChassis(chassis?: string | null): { prefix: string; num: number } {
+  const c = (chassis ?? "").trim().toUpperCase();
+  if (!c) return { prefix: "", num: Number.MAX_SAFE_INTEGER };
+  const m = c.match(/\b([A-Z]{2,3}\d)\s*-?\s*(\d{2,5})\b/) ?? c.match(/\b([A-Z]{1,3})\s*-?\s*(\d{2,5})\b/);
+  if (m) return { prefix: m[1], num: parseInt(m[2], 10) };
+  const n = c.match(/\d{1,6}/);
+  return { prefix: "", num: n ? parseInt(n[0], 10) : Number.MAX_SAFE_INTEGER };
+}
+
+/** Extrait le préfixe de série d'un numéro de châssis (ex: "B-0201" -> "B", "IA3 0226" -> "IA3"). */
+export function chassisPrefix(chassis?: string | null): string {
+  return parseChassis(chassis).prefix;
+}
+
+/** Partie numérique du châssis, pour un tri numérique. */
+export function chassisNumber(chassis?: string | null): number {
+  return parseChassis(chassis).num;
+}
+
+type SortableCar = {
+  titre?: string | null;
+  modele?: string | null;
+  annee?: number | string | null;
+  chassis?: string | null;
+  id?: number | string;
+};
+
+/** Clé de série : famille distincte si applicable, sinon préfixe de châssis. */
+function seriesKey(v: SortableCar): string {
+  if (isFirstCar(v)) return "\u0000first";
+  const model = v.modele ?? "";
+  const fam = MODEL_GROUPS.find((g) => DISTINCT_FAMILIES.has(g.key) && model && g.test(model));
+  if (fam) return `fam:${fam.key}`;
+  const p = chassisPrefix(v.chassis);
+  return p ? `ch:${p}` : "zz:";
+}
+
+const yearOf = (v: SortableCar): number => {
+  const y = typeof v.annee === "string" ? parseInt(v.annee, 10) : v.annee;
+  return typeof y === "number" && Number.isFinite(y) ? y : Number.MAX_SAFE_INTEGER;
+};
+
+/**
+ * Trie les voitures par série (famille ou préfixe de châssis), les séries étant
+ * ordonnées selon l'année de production la plus ancienne rencontrée (calculée
+ * dynamiquement). À l'intérieur d'une série : tri numérique du châssis.
+ */
+export function sortCars<T extends SortableCar>(cars: T[]): T[] {
   const earliest = new Map<string, number>();
   for (const v of cars) {
-    const p = chassisPrefix(v.chassis);
-    const y = v.annee ?? Number.MAX_SAFE_INTEGER;
-    const cur = earliest.get(p);
-    if (cur === undefined || y < cur) earliest.set(p, y);
+    const k = seriesKey(v);
+    const y = yearOf(v);
+    const cur = earliest.get(k);
+    if (cur === undefined || y < cur) earliest.set(k, y);
   }
   return [...cars].sort((a, b) => {
-    const pa = chassisPrefix(a.chassis);
-    const pb = chassisPrefix(b.chassis);
-    if (pa !== pb) {
-      const ya = earliest.get(pa) ?? Number.MAX_SAFE_INTEGER;
-      const yb = earliest.get(pb) ?? Number.MAX_SAFE_INTEGER;
+    const ka = seriesKey(a);
+    const kb = seriesKey(b);
+    if (ka !== kb) {
+      if (ka === "\u0000first") return -1;
+      if (kb === "\u0000first") return 1;
+      const ya = earliest.get(ka) ?? Number.MAX_SAFE_INTEGER;
+      const yb = earliest.get(kb) ?? Number.MAX_SAFE_INTEGER;
       if (ya !== yb) return ya - yb;
-      if (!pa) return 1;
-      if (!pb) return -1;
-      return pa.localeCompare(pb);
+      if (ka === "zz:") return 1;
+      if (kb === "zz:") return -1;
+      return ka.localeCompare(kb);
     }
     const na = chassisNumber(a.chassis);
     const nb = chassisNumber(b.chassis);
     if (na !== nb) return na - nb;
-    return String(a.chassis ?? "").localeCompare(String(b.chassis ?? ""));
+    const ya = yearOf(a);
+    const yb = yearOf(b);
+    if (ya !== yb) return ya - yb;
+    return String(a.chassis ?? a.modele ?? "").localeCompare(String(b.chassis ?? b.modele ?? ""));
   });
 }
+
 
 export type RegistryFilters = {
   /** clé de groupe de modèle (pills) */
