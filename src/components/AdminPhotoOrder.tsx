@@ -3,6 +3,9 @@ import { supabase, photoUrl, type Photo, type Voiture } from "@/lib/supabase";
 import { MANUAL_ORDER_BASE } from "@/lib/photo-order";
 import { MODEL_GROUPS } from "@/data/model-groups";
 import { PhotoRetouch } from "@/components/admin/PhotoRetouch";
+import { PhotoBatchUpload } from "@/components/admin/PhotoBatchUpload";
+import { setPhotoRetouched } from "@/lib/photo-storage";
+
 
 
 /**
