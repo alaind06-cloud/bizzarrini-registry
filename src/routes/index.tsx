@@ -283,7 +283,7 @@ function HomePage() {
                 <span key={i}>
                   {part}
                   {i < arr.length - 1 && (
-                    <span className="text-brand italic">Bizzarrini</span>
+                    <span className="text-brand font-sans font-semibold tracking-normal not-italic">Bizzarrini</span>
                   )}
                 </span>
               ))}
