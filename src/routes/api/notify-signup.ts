@@ -56,7 +56,8 @@ export const Route = createFileRoute("/api/notify-signup")({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              from: "Bizzarrini Register <onboarding@resend.dev>",
+              from: "Bizzarrini Register <noreply@registerbizzarrini.com>",
+              reply_to: email || undefined,
               to: [ADMIN_EMAIL],
               subject: `Nouvelle demande d'accès - ${fullName}`,
               html,
