@@ -92,11 +92,44 @@ export function AdminHistoryEdit() {
       };
       setTexts(next);
       setInitial(next);
+      setPendingReview([]);
       setDetailLoading(false);
     })();
   }, [carId]);
 
   const dirty = LANGS.some((l) => texts[l.k] !== initial[l.k]);
+
+  /** Traduit le texte de la langue `from` vers les deux autres (relecture avant sauvegarde). */
+  const translateFrom = async (from: Lang): Promise<boolean> => {
+    const source = texts[from].trim();
+    if (!source) {
+      setError("Le texte source est vide.");
+      setSave("error");
+      return false;
+    }
+    setTranslating(true);
+    setError(null);
+    try {
+      const r = await fetch("/api/translate-history", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: source, source: from }),
+      });
+      const j = (await r.json()) as { ok?: boolean; reason?: string; fr?: string; en?: string; it?: string };
+      if (!r.ok || !j.ok) throw new Error(REASONS[j.reason ?? ""] ?? "Traduction indisponible.");
+      const targets = (["fr", "en", "it"] as Lang[]).filter((l) => l !== from);
+      setTexts((t) => ({ ...t, ...Object.fromEntries(targets.map((l) => [l, (j as any)[l] as string])) }));
+      setPendingReview(targets);
+      setSave("idle");
+      return true;
+    } catch (e) {
+      setError((e as Error).message);
+      setSave("error");
+      return false;
+    } finally {
+      setTranslating(false);
+    }
+  };
 
   const persist = async () => {
     if (!carId) return;
@@ -117,8 +150,24 @@ export function AdminHistoryEdit() {
       return;
     }
     setInitial({ ...texts });
+    setPendingReview([]);
     setSave("saved");
   };
+
+  /**
+   * Sauvegarde : si la langue saisie a changé et que les traductions n'ont pas
+   * encore été générées/relues, on traduit d'abord et on demande une relecture.
+   */
+  const handleSave = async () => {
+    if (!carId) return;
+    const editedChanged = texts[lang] !== initial[lang];
+    if (editedChanged && pendingReview.length === 0) {
+      await translateFrom(lang);
+      return; // l'utilisateur relit puis reclique sur « Enregistrer »
+    }
+    await persist();
+  };
+
 
   if (loading) return <p className="text-muted-foreground">Chargement…</p>;
 
