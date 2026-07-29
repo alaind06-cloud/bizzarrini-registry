@@ -227,14 +227,35 @@ export function AdminHistoryEdit() {
                 {save === "saved" && !dirty && <span className="text-xs text-brand">Enregistré</span>}
                 {save === "error" && <span className="text-xs text-destructive">{error}</span>}
                 <button
-                  onClick={persist}
-                  disabled={!dirty || save === "saving"}
+                  onClick={() => translateFrom(lang)}
+                  disabled={translating || !texts[lang].trim()}
+                  className="border border-border px-4 py-1.5 text-xs uppercase tracking-[0.15em] text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
+                >
+                  {translating ? "Traduction…" : `Traduire depuis ${lang.toUpperCase()}`}
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={!dirty || save === "saving" || translating}
                   className="btn-brand !px-4 !py-1.5 !text-xs disabled:opacity-40"
                 >
-                  {save === "saving" ? "Enregistrement…" : "Enregistrer"}
+                  {save === "saving"
+                    ? "Enregistrement…"
+                    : translating
+                      ? "Traduction…"
+                      : pendingReview.length
+                        ? "Valider et enregistrer"
+                        : "Traduire et enregistrer"}
                 </button>
               </div>
             </header>
+
+            {pendingReview.length > 0 && (
+              <div className="mb-4 border border-gold/40 bg-gold/5 px-4 py-3 text-xs text-foreground/80">
+                Traductions générées automatiquement en{" "}
+                <strong>{pendingReview.map((l) => l.toUpperCase()).join(" et ")}</strong>. Relisez et ajustez chaque
+                langue si besoin, puis cliquez sur « Valider et enregistrer ».
+              </div>
+            )}
 
             <div className="mb-4 flex gap-6 border-b border-border pb-2">
               {LANGS.map((l) => (
@@ -246,10 +267,14 @@ export function AdminHistoryEdit() {
                   }`}
                 >
                   {l.label}
-                  {texts[l.k] !== initial[l.k] && <span className="ml-1 text-gold">•</span>}
+                  {pendingReview.includes(l.k) && <span className="ml-1 text-gold">à relire</span>}
+                  {texts[l.k] !== initial[l.k] && !pendingReview.includes(l.k) && (
+                    <span className="ml-1 text-gold">•</span>
+                  )}
                 </button>
               ))}
             </div>
+
 
             {detailLoading ? (
               <p className="text-muted-foreground">Chargement de l'historique…</p>
