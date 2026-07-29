@@ -21,6 +21,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VoituresIdRouteImport } from './routes/voitures.$id'
 import { Route as ChassisSlugRouteImport } from './routes/chassis.$slug'
+import { Route as ApiTranslateHistoryRouteImport } from './routes/api/translate-history'
 import { Route as ApiNotifySignupRouteImport } from './routes/api/notify-signup'
 
 const VideosRoute = VideosRouteImport.update({
@@ -83,6 +84,11 @@ const ChassisSlugRoute = ChassisSlugRouteImport.update({
   path: '/chassis/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTranslateHistoryRoute = ApiTranslateHistoryRouteImport.update({
+  id: '/api/translate-history',
+  path: '/api/translate-history',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiNotifySignupRoute = ApiNotifySignupRouteImport.update({
   id: '/api/notify-signup',
   path: '/api/notify-signup',
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
+  '/api/translate-history': typeof ApiTranslateHistoryRoute
   '/chassis/$slug': typeof ChassisSlugRoute
   '/voitures/$id': typeof VoituresIdRoute
 }
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
+  '/api/translate-history': typeof ApiTranslateHistoryRoute
   '/chassis/$slug': typeof ChassisSlugRoute
   '/voitures/$id': typeof VoituresIdRoute
 }
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
+  '/api/translate-history': typeof ApiTranslateHistoryRoute
   '/chassis/$slug': typeof ChassisSlugRoute
   '/voitures/$id': typeof VoituresIdRoute
 }
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/videos'
     | '/api/notify-signup'
+    | '/api/translate-history'
     | '/chassis/$slug'
     | '/voitures/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/videos'
     | '/api/notify-signup'
+    | '/api/translate-history'
     | '/chassis/$slug'
     | '/voitures/$id'
   id:
@@ -179,6 +190,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/videos'
     | '/api/notify-signup'
+    | '/api/translate-history'
     | '/chassis/$slug'
     | '/voitures/$id'
   fileRoutesById: FileRoutesById
@@ -195,6 +207,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VideosRoute: typeof VideosRoute
   ApiNotifySignupRoute: typeof ApiNotifySignupRoute
+  ApiTranslateHistoryRoute: typeof ApiTranslateHistoryRoute
   ChassisSlugRoute: typeof ChassisSlugRoute
   VoituresIdRoute: typeof VoituresIdRoute
 }
@@ -285,6 +298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChassisSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/translate-history': {
+      id: '/api/translate-history'
+      path: '/api/translate-history'
+      fullPath: '/api/translate-history'
+      preLoaderRoute: typeof ApiTranslateHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/notify-signup': {
       id: '/api/notify-signup'
       path: '/api/notify-signup'
@@ -307,19 +327,10 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VideosRoute: VideosRoute,
   ApiNotifySignupRoute: ApiNotifySignupRoute,
+  ApiTranslateHistoryRoute: ApiTranslateHistoryRoute,
   ChassisSlugRoute: ChassisSlugRoute,
   VoituresIdRoute: VoituresIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

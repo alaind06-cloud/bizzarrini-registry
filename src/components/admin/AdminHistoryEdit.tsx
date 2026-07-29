@@ -19,6 +19,15 @@ const LANGS: { k: Lang; label: string; col: keyof VoitureDetail }[] = [
 
 type SaveState = "idle" | "saving" | "saved" | "error";
 
+const REASONS: Record<string, string> = {
+  no_api_key: "Clé IA absente côté serveur.",
+  rate_limit: "Trop de requêtes, réessayez dans un instant.",
+  gateway_error: "Le service de traduction a renvoyé une erreur.",
+  bad_json: "Réponse de traduction illisible.",
+  incomplete: "Traduction incomplète.",
+  empty_text: "Texte source vide.",
+};
+
 export function AdminHistoryEdit() {
   const [cars, setCars] = useState<Voiture[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,6 +41,9 @@ export function AdminHistoryEdit() {
   const [detailLoading, setDetailLoading] = useState(false);
   const [save, setSave] = useState<SaveState>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [translating, setTranslating] = useState(false);
+  const [pendingReview, setPendingReview] = useState<Lang[]>([]);
+
 
   useEffect(() => {
     (async () => {
