@@ -1,7 +1,16 @@
 import { canonical } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { videos, genepifilmSeries, toYoutubeEmbed, toFacebookEmbed, type Video } from "@/data/videos-data";
+import {
+  videos,
+  genepifilmSeries,
+  toYoutubeEmbed,
+  toYoutubeId,
+  toYoutubeThumb,
+  toFacebookEmbed,
+  type Video,
+} from "@/data/videos-data";
 import { useI18n } from "@/lib/i18n";
+import { useState } from "react";
 
 
 export const Route = createFileRoute("/videos")({
@@ -23,14 +32,45 @@ export const Route = createFileRoute("/videos")({
 
 function VideoCard({ v, label }: { v: Video; label?: string }) {
   const { t } = useI18n();
-  const src = v.plateforme === "youtube" ? toYoutubeEmbed(v.url) : toFacebookEmbed(v.url);
+  const [playing, setPlaying] = useState(false);
+  const ytId = v.plateforme === "youtube" ? toYoutubeId(v.url) : null;
+  const title = label ?? v.titre;
+
+  const embedSrc =
+    v.plateforme === "youtube"
+      ? ytId
+        ? `${toYoutubeEmbed(v.url)}?autoplay=1&rel=0`
+        : null
+      : toFacebookEmbed(v.url);
+
   return (
     <article className="group bg-card border border-border overflow-hidden hover:border-brand/60 transition-colors">
       <div className="aspect-video bg-surface-2 relative">
-        {src ? (
+        {ytId && !playing ? (
+          <button
+            type="button"
+            onClick={() => setPlaying(true)}
+            aria-label={title}
+            className="absolute inset-0 w-full h-full"
+          >
+            <img
+              src={toYoutubeThumb(ytId)}
+              alt={title}
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
+            <span className="absolute inset-0 grid place-items-center bg-black/20 group-hover:bg-black/10 transition-colors">
+              <span className="grid place-items-center w-16 h-10 rounded-md bg-brand/90 text-primary-foreground">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="w-6 h-6 fill-current">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+            </span>
+          </button>
+        ) : embedSrc ? (
           <iframe
-            src={src}
-            title={v.titre}
+            src={embedSrc}
+            title={title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="w-full h-full"
@@ -43,7 +83,7 @@ function VideoCard({ v, label }: { v: Video; label?: string }) {
       </div>
       <div className="p-4 border-t border-border flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="font-display text-lg leading-snug truncate">{label ?? v.titre}</h3>
+          <h3 className="font-display text-lg leading-snug truncate">{title}</h3>
           {v.sousTitre && (
             <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{v.sousTitre}</p>
           )}
