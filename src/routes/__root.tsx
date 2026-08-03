@@ -17,6 +17,11 @@ import { AuthProvider } from "@/lib/auth";
 import { I18nProvider } from "@/lib/i18n";
 import { Nav, Footer } from "@/components/Nav";
 
+/** Origine Supabase (Storage + API) — préconnexion pour sortir du chemin critique. */
+const SUPABASE_ORIGIN =
+  (import.meta.env?.VITE_SUPABASE_URL as string | undefined) ??
+  "https://rbrkzrtrlvihpjugksnb.supabase.co";
+
 function NotFoundComponent() {
   return (
     <div className="min-h-screen flex flex-col">
