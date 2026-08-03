@@ -12,7 +12,6 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import bodoniDisplayFont from "../assets/fonts/bodoni-moda-latin-wght-normal.woff2?url";
 import interBodyFont from "../assets/fonts/inter-latin-wght-normal.woff2?url";
-import monoFont from "../assets/fonts/jetbrains-mono-latin-wght-normal.woff2?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/lib/auth";
 import { I18nProvider } from "@/lib/i18n";
@@ -97,10 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "google-site-verification", content: "elihrHQuFba8ZXKMBbINktgQ3tDrMa4dKOskGVUqJyk" },
     ],
     links: [
-      // Feuille principale chargée sans bloquer le rendu : préchargée en tant que
-      // style puis activée (script inline ci-dessous). Le CSS critique du hero est
-      // inline dans le <head>, donc aucun flash de style.
-      { rel: "preload", as: "style", href: appCss, id: "main-css" },
+      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       {
         rel: "preload",
@@ -116,28 +112,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: interBodyFont,
         crossOrigin: "anonymous",
       },
-      {
-        rel: "preload",
-        as: "font",
-        type: "font/woff2",
-        href: monoFont,
-        crossOrigin: "anonymous",
-      },
-      // Les images du registre viennent de Supabase Storage (sans crossorigin) et
-      // sont sous la ligne de flottaison : un simple dns-prefetch suffit.
+      { rel: "preconnect", href: SUPABASE_ORIGIN, crossOrigin: "anonymous" },
       { rel: "dns-prefetch", href: SUPABASE_ORIGIN },
     ],
-    scripts: [
-      {
-        children:
-          "(function(){function a(){var l=document.getElementById('main-css');if(!l)return;" +
-          "if(l.rel==='stylesheet')return;var s=function(){l.rel='stylesheet'};" +
-          "if(l.sheet){s();return}l.addEventListener('load',s);setTimeout(s,2000)}" +
-          "a();document.addEventListener('DOMContentLoaded',a)})()",
-      },
-    ],
-  }),
 
+
+  }),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -149,26 +129,15 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="fr">
       <head>
         <HeadContent />
-        {/* CSS critique above-the-fold, inline : le hero et le header se peignent
-            sans attendre la feuille de styles principale (chargée en async). */}
+        {/* CSS critique du hero, inline : évite d'attendre la feuille de styles principale */}
         <style
           dangerouslySetInnerHTML={{
             __html:
-              "html,body{margin:0;background:#f2eee6;color:#232323;font-family:Inter,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}" +
-              "*{box-sizing:border-box;border:0 solid #ded8cd}" +
+              "html,body{margin:0;background:#f2eee6;color:#232323;font-family:Inter,ui-sans-serif,system-ui,sans-serif}" +
               "img,video{max-width:100%;display:block}" +
-              "a{color:inherit;text-decoration:none}" +
-              "h1,h2,h3{font-family:'Bodoni Moda',Georgia,serif;font-weight:500;letter-spacing:-.015em;margin:0}" +
-              "section:first-of-type{min-height:92vh;position:relative;overflow:hidden;display:flex;align-items:center}" +
-              ".container-page{width:100%;max-width:1280px;margin-inline:auto;padding-inline:1.25rem}" +
-              "header{position:sticky;top:0;z-index:40}" +
-              ".opacity-0{opacity:0}",
+              "section:first-of-type{min-height:92vh}",
           }}
         />
-        <noscript>
-          <link rel="stylesheet" href={appCss} />
-        </noscript>
-
       </head>
       <body>
         {children}
