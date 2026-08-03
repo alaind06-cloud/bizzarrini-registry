@@ -241,24 +241,9 @@ function HomePage() {
             decoding="sync"
             width={1600}
             height={1000}
-            className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85]"
+            className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85] hero-kenburns"
           />
 
-          {enableVideo && (
-            <video
-              src={heroVideo.url}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="none"
-              poster={heroPoster.url}
-              aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85]"
-            >
-              <source src={heroVideo.url} type="video/mp4" />
-            </video>
-          )}
           <div className="absolute inset-0 bg-gradient-to-b from-background/55 via-background/45 to-background/95" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/25 to-background/60" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,transparent_45%,var(--color-background)_100%)]" />
