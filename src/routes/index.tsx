@@ -221,33 +221,25 @@ function HomePage() {
     <div>
       <section className="relative overflow-hidden border-b border-border bg-background min-h-[92vh] flex items-center">
         <div className="absolute inset-0">
-          <img
-            src={heroPoster.url}
-            srcSet={`${heroPosterMobile.url} 900w, ${heroPoster.url} 1600w`}
-            sizes="100vw"
-            alt=""
-            fetchPriority="high"
-            decoding="sync"
-            width={1600}
-            height={1000}
-            className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85]"
-          />
-
-          {enableVideo && (
-            <video
-              src={heroVideo.url}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="none"
-              poster={heroPoster.url}
-              aria-hidden="true"
+          <picture>
+            <source
+              type="image/webp"
+              srcSet={`${heroPosterMobile.webp} 900w, ${heroPoster.webp} 1600w`}
+              sizes="100vw"
+            />
+            <img
+              src={heroPoster.url}
+              srcSet={`${heroPosterMobile.url} 900w, ${heroPoster.url} 1600w`}
+              sizes="100vw"
+              alt=""
+              fetchPriority="high"
+              decoding="sync"
+              width={1600}
+              height={880}
               className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85]"
-            >
-              <source src={heroVideo.url} type="video/mp4" />
-            </video>
-          )}
+            />
+          </picture>
+
           <div className="absolute inset-0 bg-gradient-to-b from-background/55 via-background/45 to-background/95" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/25 to-background/60" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,transparent_45%,var(--color-background)_100%)]" />
