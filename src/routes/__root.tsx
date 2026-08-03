@@ -11,7 +11,10 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import bodoniDisplayFont from "../assets/fonts/bodoni-moda-latin-wght-normal.woff2?url";
 import interBodyFont from "../assets/fonts/inter-latin-wght-normal.woff2?url";
+import jetbrainsMonoFont from "../assets/fonts/jetbrains-mono-latin-wght-normal.woff2?url";
+import { CRITICAL_CSS } from "../lib/critical-css";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+
 import { AuthProvider } from "@/lib/auth";
 import { I18nProvider } from "@/lib/i18n";
 import { Nav, Footer } from "@/components/Nav";
@@ -95,7 +98,6 @@ export const Route = createRootRoute({
       { name: "google-site-verification", content: "elihrHQuFba8ZXKMBbINktgQ3tDrMa4dKOskGVUqJyk" },
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       {
         rel: "preload",
@@ -111,7 +113,16 @@ export const Route = createRootRoute({
         href: interBodyFont,
         crossOrigin: "anonymous",
       },
-      { rel: "preconnect", href: SUPABASE_ORIGIN, crossOrigin: "anonymous" },
+      {
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        href: jetbrainsMonoFont,
+        crossOrigin: "anonymous",
+      },
+      // Les images du registre proviennent du Storage Supabase et sont chargées
+      // sans CORS : le preconnect ne doit donc PAS porter crossorigin.
+      { rel: "preconnect", href: SUPABASE_ORIGIN },
       { rel: "dns-prefetch", href: SUPABASE_ORIGIN },
     ],
 
@@ -128,15 +139,27 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="fr">
       <head>
         <HeadContent />
-        {/* CSS critique du hero, inline : évite d'attendre la feuille de styles principale */}
-        <style
+        {/* CSS critique above-the-fold, inline */}
+        <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
+        {/* Feuille de styles complète : préchargée puis appliquée sans bloquer le rendu.
+            Le <link rel="stylesheet"> est injecté par script (hors arbre React) pour
+            éviter tout écart d'hydratation. */}
+        <link rel="preload" as="style" href={appCss} />
+        <script
           dangerouslySetInnerHTML={{
             __html:
-              "html,body{margin:0;background:#f2eee6;color:#232323;font-family:Inter,ui-sans-serif,system-ui,sans-serif}" +
-              "img,video{max-width:100%;display:block}" +
-              "section:first-of-type{min-height:92vh}",
+              "(function(){var h=" +
+              JSON.stringify(appCss) +
+              ";var l=document.createElement('link');l.rel='stylesheet';l.href=h;l.media='print';" +
+              "l.onload=function(){l.media='all';l.onload=null};" +
+              "document.head.appendChild(l);setTimeout(function(){l.media='all'},3000)})()",
           }}
         />
+
+        <noscript>
+          <link rel="stylesheet" href={appCss} />
+        </noscript>
+
       </head>
       <body>
         {children}
@@ -145,6 +168,7 @@ function RootShell({ children }: { children: ReactNode }) {
     </html>
   );
 }
+
 
 function RootComponent() {
   return (
