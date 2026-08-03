@@ -121,7 +121,7 @@
   --secondary-foreground: oklch(0.26 0.006 60);
 
   --muted: oklch(0.905 0.014 82);
-  --muted-foreground: oklch(0.46 0.010 60);
+  --muted-foreground: oklch(0.40 0.010 60);
 
   --accent: oklch(0.905 0.022 75);
   --accent-foreground: oklch(0.26 0.006 60);
@@ -265,7 +265,7 @@
     border-bottom-color: var(--color-brand);
   }
   &::placeholder {
-    color: color-mix(in oklab, var(--color-foreground) 42%, transparent);
+    color: color-mix(in oklab, var(--color-foreground) 68%, transparent);
     font-style: italic;
   }
 }
@@ -275,7 +275,7 @@
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.22em;
-  color: color-mix(in oklab, var(--color-foreground) 55%, transparent);
+  color: color-mix(in oklab, var(--color-foreground) 78%, transparent);
   margin-bottom: 0.3rem;
   font-weight: 500;
 }
@@ -356,7 +356,7 @@
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: color-mix(in oklab, var(--color-foreground) 72%, transparent);
+  color: color-mix(in oklab, var(--color-foreground) 88%, transparent);
   transition: color 0.2s ease;
   &:hover { color: var(--color-brand); }
   &::after {
