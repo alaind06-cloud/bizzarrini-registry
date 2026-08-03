@@ -97,6 +97,7 @@ function HomePage() {
     (async () => {
 
       setLoading(true);
+      const supabase = await getSupabase();
       const { data, error } = await supabase
         .from("voitures")
         .select("*")
