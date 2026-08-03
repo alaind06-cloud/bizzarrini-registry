@@ -129,6 +129,15 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="fr">
       <head>
         <HeadContent />
+        {/* CSS critique du hero, inline : évite d'attendre la feuille de styles principale */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html:
+              "html,body{margin:0;background:#f2eee6;color:#232323;font-family:Inter,ui-sans-serif,system-ui,sans-serif}" +
+              "img,video{max-width:100%;display:block}" +
+              "section:first-of-type{min-height:92vh}",
+          }}
+        />
       </head>
       <body>
         {children}

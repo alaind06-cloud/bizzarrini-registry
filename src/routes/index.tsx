@@ -298,7 +298,7 @@ function HomePage() {
             {t("home.lead")}
           </p>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-3 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.85s", animationFillMode: "forwards" }}>
+          <div className="mt-10 flex flex-wrap justify-center gap-3 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.36s", animationFillMode: "forwards" }}>
             {!authLoading && !user && (
               <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
             )}
@@ -316,7 +316,7 @@ function HomePage() {
           <a
             href="#registre"
             className="mt-16 inline-flex flex-col items-center gap-2 text-muted-foreground hover:text-brand transition-colors opacity-0 animate-fade-in-up"
-            style={{ animationDelay: "1.0s", animationFillMode: "forwards" }}
+            style={{ animationDelay: "0.44s", animationFillMode: "forwards" }}
           >
             <span className="sr-only">{t("home.registryTitle")}</span>
             <span className="animate-float text-brand">▾</span>
