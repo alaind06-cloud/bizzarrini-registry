@@ -17,6 +17,11 @@ import { AuthProvider } from "@/lib/auth";
 import { I18nProvider } from "@/lib/i18n";
 import { Nav, Footer } from "@/components/Nav";
 
+/** Origine Supabase (Storage + API) — préconnexion pour sortir du chemin critique. */
+const SUPABASE_ORIGIN =
+  (import.meta.env?.VITE_SUPABASE_URL as string | undefined) ??
+  "https://rbrkzrtrlvihpjugksnb.supabase.co";
+
 function NotFoundComponent() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -107,7 +112,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: interBodyFont,
         crossOrigin: "anonymous",
       },
+      { rel: "preconnect", href: SUPABASE_ORIGIN, crossOrigin: "anonymous" },
+      { rel: "dns-prefetch", href: SUPABASE_ORIGIN },
     ],
+
 
   }),
   shellComponent: RootShell,
@@ -121,6 +129,15 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="fr">
       <head>
         <HeadContent />
+        {/* CSS critique du hero, inline : évite d'attendre la feuille de styles principale */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html:
+              "html,body{margin:0;background:#f2eee6;color:#232323;font-family:Inter,ui-sans-serif,system-ui,sans-serif}" +
+              "img,video{max-width:100%;display:block}" +
+              "section:first-of-type{min-height:92vh}",
+          }}
+        />
       </head>
       <body>
         {children}

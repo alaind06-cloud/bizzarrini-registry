@@ -238,7 +238,7 @@ function HomePage() {
             sizes="100vw"
             alt=""
             fetchPriority="high"
-            decoding="async"
+            decoding="sync"
             width={1600}
             height={1000}
             className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85]"
@@ -268,13 +268,13 @@ function HomePage() {
         </div>
 
         <div className="container-page relative py-24 md:py-32 text-center">
-          <div className="opacity-0 animate-fade-in-up" style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}>
+          <div className="opacity-0 animate-fade-in-up" style={{ animationDelay: "0s", animationFillMode: "forwards" }}>
             <span className="vintage-badge">{t("home.hero.badge")}</span>
           </div>
 
           <h1
             className="mt-8 font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.02] text-shadow-hero opacity-0 animate-fade-in-up"
-            style={{ animationDelay: "0.35s", animationFillMode: "forwards" }}
+            style={{ animationDelay: "0.08s", animationFillMode: "forwards" }}
           >
             {t("home.title")
               .replace(/<\/?brand>/g, "")
@@ -289,16 +289,16 @@ function HomePage() {
               ))}
           </h1>
 
-          <div className="mt-10 mx-auto section-divider opacity-0 animate-fade-in-up" style={{ animationDelay: "0.55s", animationFillMode: "forwards" }} />
+          <div className="mt-10 mx-auto section-divider opacity-0 animate-fade-in-up" style={{ animationDelay: "0.2s", animationFillMode: "forwards" }} />
 
           <p
             className="mt-8 mx-auto max-w-2xl text-base md:text-lg text-muted-foreground leading-relaxed opacity-0 animate-fade-in-up"
-            style={{ animationDelay: "0.7s", animationFillMode: "forwards" }}
+            style={{ animationDelay: "0.28s", animationFillMode: "forwards" }}
           >
             {t("home.lead")}
           </p>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-3 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.85s", animationFillMode: "forwards" }}>
+          <div className="mt-10 flex flex-wrap justify-center gap-3 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.36s", animationFillMode: "forwards" }}>
             {!authLoading && !user && (
               <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
             )}
@@ -316,7 +316,7 @@ function HomePage() {
           <a
             href="#registre"
             className="mt-16 inline-flex flex-col items-center gap-2 text-muted-foreground hover:text-brand transition-colors opacity-0 animate-fade-in-up"
-            style={{ animationDelay: "1.0s", animationFillMode: "forwards" }}
+            style={{ animationDelay: "0.44s", animationFillMode: "forwards" }}
           >
             <span className="sr-only">{t("home.registryTitle")}</span>
             <span className="animate-float text-brand">▾</span>
