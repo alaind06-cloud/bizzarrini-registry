@@ -95,7 +95,6 @@ export const Route = createRootRoute({
       { name: "google-site-verification", content: "elihrHQuFba8ZXKMBbINktgQ3tDrMa4dKOskGVUqJyk" },
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       {
         rel: "preload",
@@ -111,7 +110,16 @@ export const Route = createRootRoute({
         href: interBodyFont,
         crossOrigin: "anonymous",
       },
-      { rel: "preconnect", href: SUPABASE_ORIGIN, crossOrigin: "anonymous" },
+      {
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        href: jetbrainsMonoFont,
+        crossOrigin: "anonymous",
+      },
+      // Les images du registre proviennent du Storage Supabase et sont chargées
+      // sans CORS : le preconnect ne doit donc PAS porter crossorigin.
+      { rel: "preconnect", href: SUPABASE_ORIGIN },
       { rel: "dns-prefetch", href: SUPABASE_ORIGIN },
     ],
 
@@ -128,15 +136,22 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="fr">
       <head>
         <HeadContent />
-        {/* CSS critique du hero, inline : évite d'attendre la feuille de styles principale */}
-        <style
+        {/* CSS critique above-the-fold, inline */}
+        <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
+        {/* Feuille de styles complète : chargée sans bloquer le rendu */}
+        <link rel="preload" as="style" href={appCss} />
+        <link rel="stylesheet" href={appCss} media="print" data-defer-css="" />
+        <script
           dangerouslySetInnerHTML={{
             __html:
-              "html,body{margin:0;background:#f2eee6;color:#232323;font-family:Inter,ui-sans-serif,system-ui,sans-serif}" +
-              "img,video{max-width:100%;display:block}" +
-              "section:first-of-type{min-height:92vh}",
+              "(function(){var l=document.querySelector('link[data-defer-css]');if(!l)return;" +
+              "var go=function(){l.media='all'};" +
+              "if(l.sheet){go()}else{l.addEventListener('load',go);setTimeout(go,3000)}})()",
           }}
         />
+        <noscript>
+          <link rel="stylesheet" href={appCss} />
+        </noscript>
       </head>
       <body>
         {children}
@@ -145,6 +160,7 @@ function RootShell({ children }: { children: ReactNode }) {
     </html>
   );
 }
+
 
 function RootComponent() {
   return (
