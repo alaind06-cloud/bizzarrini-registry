@@ -1,7 +1,7 @@
 import { canonical } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { z } from "zod";
+
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/contact")({
