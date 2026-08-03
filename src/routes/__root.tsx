@@ -96,7 +96,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "google-site-verification", content: "elihrHQuFba8ZXKMBbINktgQ3tDrMa4dKOskGVUqJyk" },
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
+      // Feuille principale chargée sans bloquer le rendu : préchargée en tant que
+      // style puis activée (script inline ci-dessous). Le CSS critique du hero est
+      // inline dans le <head>, donc aucun flash de style.
+      { rel: "preload", as: "style", href: appCss, id: "main-css" },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       {
         rel: "preload",
@@ -112,12 +115,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: interBodyFont,
         crossOrigin: "anonymous",
       },
-      { rel: "preconnect", href: SUPABASE_ORIGIN, crossOrigin: "anonymous" },
+      {
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        href: monoFont,
+        crossOrigin: "anonymous",
+      },
+      // Les images du registre viennent de Supabase Storage (sans crossorigin) et
+      // sont sous la ligne de flottaison : un simple dns-prefetch suffit.
       { rel: "dns-prefetch", href: SUPABASE_ORIGIN },
     ],
-
-
+    scripts: [
+      {
+        children:
+          "(function(){function a(){var l=document.getElementById('main-css');if(!l)return;" +
+          "if(l.rel==='stylesheet')return;var s=function(){l.rel='stylesheet'};" +
+          "if(l.sheet){s();return}l.addEventListener('load',s);setTimeout(s,2000)}" +
+          "a();document.addEventListener('DOMContentLoaded',a)})()",
+      },
+    ],
   }),
+
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
