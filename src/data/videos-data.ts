@@ -27,23 +27,6 @@ export const videos: Video[] = [
   { id: 13, plateforme: "youtube", url: "https://www.youtube.com/watch?v=GQ22n_sNu2g", titre: "Bizzarrini — Hommage", sousTitre: "Documentaire" },
 ];
 
-export function toYoutubeId(url: string): string | null {
-  try {
-    const u = new URL(url);
-    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1) || null;
-    if (u.hostname.includes("youtube.com")) {
-      const id = u.searchParams.get("v");
-      if (id) return id;
-      if (u.pathname.startsWith("/embed/")) return u.pathname.split("/")[2] || null;
-    }
-  } catch {}
-  return null;
-}
-
-export function toYoutubeThumb(id: string): string {
-  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
-}
-
 export function toYoutubeEmbed(url: string): string | null {
   try {
     const u = new URL(url);
