@@ -92,19 +92,6 @@ function HomePage() {
     });
 
 
-  const [enableVideo, setEnableVideo] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mql = window.matchMedia("(min-width: 768px) and (prefers-reduced-motion: no-preference)");
-    const conn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-    const saveData = conn?.saveData === true;
-    const slow = !!conn?.effectiveType && /(^|-)(2g|slow-2g)$/.test(conn.effectiveType);
-    if (!mql.matches || saveData || slow) return;
-    const w = window as unknown as { requestIdleCallback?: (cb: () => void) => void };
-    const idle = w.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 400));
-    idle(() => setEnableVideo(true));
-  }, []);
 
   useEffect(() => {
     (async () => {
