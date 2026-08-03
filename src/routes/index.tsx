@@ -9,7 +9,7 @@ import { FilterPills, type ActivePill } from "@/components/FilterPills";
 import { Search } from "lucide-react";
 import { MODEL_GROUPS, sortCars, type RegistryFilters } from "@/data/model-groups";
 import { displayChassis, matchesChassis } from "@/data/chassis-clean";
-const heroVideo = { url: "/hero-interview.mp4" };
+
 const heroPoster = { url: "/hero-interview-poster.jpg" };
 const heroPosterMobile = { url: "/hero-interview-poster-mobile.jpg" };
 
@@ -92,19 +92,6 @@ function HomePage() {
     });
 
 
-  const [enableVideo, setEnableVideo] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mql = window.matchMedia("(min-width: 768px) and (prefers-reduced-motion: no-preference)");
-    const conn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-    const saveData = conn?.saveData === true;
-    const slow = !!conn?.effectiveType && /(^|-)(2g|slow-2g)$/.test(conn.effectiveType);
-    if (!mql.matches || saveData || slow) return;
-    const w = window as unknown as { requestIdleCallback?: (cb: () => void) => void };
-    const idle = w.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 400));
-    idle(() => setEnableVideo(true));
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -241,24 +228,9 @@ function HomePage() {
             decoding="sync"
             width={1600}
             height={1000}
-            className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85]"
+            className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85] hero-kenburns"
           />
 
-          {enableVideo && (
-            <video
-              src={heroVideo.url}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="none"
-              poster={heroPoster.url}
-              aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85]"
-            >
-              <source src={heroVideo.url} type="video/mp4" />
-            </video>
-          )}
           <div className="absolute inset-0 bg-gradient-to-b from-background/55 via-background/45 to-background/95" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/25 to-background/60" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,transparent_45%,var(--color-background)_100%)]" />
