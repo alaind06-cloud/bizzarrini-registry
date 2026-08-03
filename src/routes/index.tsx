@@ -9,7 +9,7 @@ import { FilterPills, type ActivePill } from "@/components/FilterPills";
 import { Search } from "lucide-react";
 import { MODEL_GROUPS, sortCars, type RegistryFilters } from "@/data/model-groups";
 import { displayChassis, matchesChassis } from "@/data/chassis-clean";
-const heroVideo = { url: "/hero-interview.mp4" };
+
 const heroPoster = { url: "/hero-interview-poster.jpg" };
 const heroPosterMobile = { url: "/hero-interview-poster-mobile.jpg" };
 
