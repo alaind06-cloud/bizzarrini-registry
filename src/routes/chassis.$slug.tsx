@@ -1,4 +1,5 @@
 import { canonical } from "@/lib/seo";
+import { chassisToSlug, carSlug } from "@/lib/slug";
 import { createFileRoute, Link, useRouter, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
@@ -39,18 +40,7 @@ export const Route = createFileRoute("/chassis/$slug")({
   component: CarDetail,
 });
 
-export function chassisToSlug(chassis: string | null | undefined): string {
-  if (!chassis) return "";
-  return chassis
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-/** Slug used in URLs: chassis when available, otherwise the car title. */
-export function carSlug(car: { chassis?: string | null; titre?: string | null }): string {
-  return chassisToSlug(car.chassis) || chassisToSlug(car.titre);
-}
+export { chassisToSlug, carSlug };
 
 /** Documents propres au châssis (fiche châssis), à afficher en tête de galerie. */
 const CHASSIS_DOC_FILENAMES = new Set<string>([
