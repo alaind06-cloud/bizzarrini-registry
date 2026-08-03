@@ -149,15 +149,26 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="fr">
       <head>
         <HeadContent />
-        {/* CSS critique du hero, inline : évite d'attendre la feuille de styles principale */}
+        {/* CSS critique above-the-fold, inline : le hero et le header se peignent
+            sans attendre la feuille de styles principale (chargée en async). */}
         <style
           dangerouslySetInnerHTML={{
             __html:
-              "html,body{margin:0;background:#f2eee6;color:#232323;font-family:Inter,ui-sans-serif,system-ui,sans-serif}" +
+              "html,body{margin:0;background:#f2eee6;color:#232323;font-family:Inter,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}" +
+              "*{box-sizing:border-box;border:0 solid #ded8cd}" +
               "img,video{max-width:100%;display:block}" +
-              "section:first-of-type{min-height:92vh}",
+              "a{color:inherit;text-decoration:none}" +
+              "h1,h2,h3{font-family:'Bodoni Moda',Georgia,serif;font-weight:500;letter-spacing:-.015em;margin:0}" +
+              "section:first-of-type{min-height:92vh;position:relative;overflow:hidden;display:flex;align-items:center}" +
+              ".container-page{width:100%;max-width:1280px;margin-inline:auto;padding-inline:1.25rem}" +
+              "header{position:sticky;top:0;z-index:40}" +
+              ".opacity-0{opacity:0}",
           }}
         />
+        <noscript>
+          <link rel="stylesheet" href={appCss} />
+        </noscript>
+
       </head>
       <body>
         {children}
