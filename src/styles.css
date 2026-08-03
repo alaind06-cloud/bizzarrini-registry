@@ -4,6 +4,57 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ---- Self-hosted fonts (latin + latin-ext only), font-display: swap ---- */
+@font-face {
+  font-family: "Bodoni Moda";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url("./assets/fonts/bodoni-moda-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Bodoni Moda";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url("./assets/fonts/bodoni-moda-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "Bodoni Moda";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url("./assets/fonts/bodoni-moda-latin-wght-italic.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("./assets/fonts/inter-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("./assets/fonts/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("./assets/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+
 /*
  * Bizzarrini Register — dark prestige design system.
  * Bg near-black, ivory foreground, red Bizzarrini accent, subtle amber.
@@ -70,7 +121,7 @@
   --secondary-foreground: oklch(0.26 0.006 60);
 
   --muted: oklch(0.905 0.014 82);
-  --muted-foreground: oklch(0.46 0.010 60);
+  --muted-foreground: oklch(0.40 0.010 60);
 
   --accent: oklch(0.905 0.022 75);
   --accent-foreground: oklch(0.26 0.006 60);
@@ -214,7 +265,7 @@
     border-bottom-color: var(--color-brand);
   }
   &::placeholder {
-    color: color-mix(in oklab, var(--color-foreground) 42%, transparent);
+    color: color-mix(in oklab, var(--color-foreground) 68%, transparent);
     font-style: italic;
   }
 }
@@ -224,7 +275,7 @@
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.22em;
-  color: color-mix(in oklab, var(--color-foreground) 55%, transparent);
+  color: color-mix(in oklab, var(--color-foreground) 78%, transparent);
   margin-bottom: 0.3rem;
   font-weight: 500;
 }
@@ -305,7 +356,7 @@
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: color-mix(in oklab, var(--color-foreground) 72%, transparent);
+  color: color-mix(in oklab, var(--color-foreground) 88%, transparent);
   transition: color 0.2s ease;
   &:hover { color: var(--color-brand); }
   &::after {
