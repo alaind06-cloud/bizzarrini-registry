@@ -141,26 +141,23 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
         {/* CSS critique above-the-fold, inline */}
         <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
-        {/* Feuille de styles complète : chargée sans bloquer le rendu */}
+        {/* Feuille de styles complète : préchargée puis appliquée sans bloquer le rendu.
+            Le <link rel="stylesheet"> est injecté par script (hors arbre React) pour
+            éviter tout écart d'hydratation. */}
         <link rel="preload" as="style" href={appCss} />
-        <link
-          rel="stylesheet"
-          href={appCss}
-          media="print"
-          data-defer-css=""
-          suppressHydrationWarning
-        />
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(){var l=document.querySelector('link[data-defer-css]');if(!l)return;" +
-              "var go=function(){l.media='all'};" +
-              "if(l.sheet){go()}else{l.addEventListener('load',go);setTimeout(go,3000)}})()",
+              "(function(){var h=" +
+              JSON.stringify(appCss) +
+              ";var l=document.createElement('link');l.rel='stylesheet';l.href=h;" +
+              "document.head.appendChild(l)})()",
           }}
         />
         <noscript>
           <link rel="stylesheet" href={appCss} />
         </noscript>
+
       </head>
       <body>
         {children}
