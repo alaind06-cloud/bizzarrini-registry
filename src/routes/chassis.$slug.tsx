@@ -424,7 +424,7 @@ function CarDetail() {
           {orderedDocs.length > 0 && orderedPress.length > 0 && (
             <div className="mb-4">
               <h3 className="text-xs tracking-[0.18em] uppercase text-muted-foreground">{t("car.docs.press")}</h3>
-              <p className="mt-1 text-xs text-muted-foreground/80 italic">{t("car.docs.pressNote")}</p>
+              <p className="mt-1 text-xs text-muted-foreground italic">{t("car.docs.pressNote")}</p>
             </div>
           )}
 

@@ -149,7 +149,7 @@ export function SpecsBlock({ specs }: { specs: ArchiveSpecs }) {
                     return (
                       <div key={field.key} className="flex flex-col gap-1">
                         <dt
-                          className="text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground/70"
+                          className="text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground"
                           title={multipleSources && source ? `${sourceLabel} : ${source}` : undefined}
                         >
                           {labelOf(field)}
@@ -168,7 +168,7 @@ export function SpecsBlock({ specs }: { specs: ArchiveSpecs }) {
                 return (
                   <div key={field.key}>
                     <p
-                      className="text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground/70"
+                      className="text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground"
                       title={multipleSources && source ? `${sourceLabel} : ${source}` : undefined}
                     >
                       {labelOf(field)}
@@ -197,7 +197,7 @@ export function SpecsBlock({ specs }: { specs: ArchiveSpecs }) {
       {sources.length > 0 && (
         <div className="mt-6 pt-4 border-t border-border/60">
           {sources.map((s) => (
-            <p key={s} className="text-[0.65rem] leading-snug text-muted-foreground/80 italic">
+            <p key={s} className="text-[0.65rem] leading-snug text-muted-foreground italic">
               {sourceLabel} : {s}
             </p>
           ))}
