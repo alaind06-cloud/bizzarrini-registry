@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { supabase, type Profil } from "./supabase";
+import { getSupabase, type Profil } from "./supabase-env";
 
 type AuthCtx = {
   session: Session | null;
@@ -21,26 +21,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const loadProfil = async (userId: string) => {
+    const supabase = await getSupabase();
     const { data } = await supabase.from("profils").select("*").eq("id", userId).maybeSingle();
     setProfil((data as Profil) ?? null);
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session);
-      if (session?.user) await loadProfil(session.user.id);
-      setLoading(false);
-    });
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
 
-    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
-      if (session?.user) {
-        await loadProfil(session.user.id);
-      } else {
-        setProfil(null);
+    (async () => {
+      const supabase = await getSupabase();
+      if (cancelled) return;
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!cancelled) {
+        setSession(session);
+        if (session?.user) await loadProfil(session.user.id);
+        setLoading(false);
       }
-    });
-    return () => sub.subscription.unsubscribe();
+
+      const { data: sub } = supabase.auth.onAuthStateChange(async (_event, session) => {
+        setSession(session);
+        if (session?.user) {
+          await loadProfil(session.user.id);
+        } else {
+          setProfil(null);
+        }
+      });
+      unsubscribe = () => sub.subscription.unsubscribe();
+      if (cancelled) unsubscribe();
+    })();
+
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
   }, []);
 
   const value: AuthCtx = {
@@ -54,6 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (session?.user) await loadProfil(session.user.id);
     },
     signOut: async () => {
+      const supabase = await getSupabase();
       await supabase.auth.signOut();
     },
   };
