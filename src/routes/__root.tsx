@@ -148,20 +148,18 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
   return (
-    <QueryClientProvider client={queryClient}>
-      <I18nProvider>
-        <AuthProvider>
-          <div className="min-h-screen flex flex-col">
-            <Nav />
-            <main className="flex-1">
-              <Outlet />
-            </main>
-            <Footer />
-          </div>
-        </AuthProvider>
-      </I18nProvider>
-    </QueryClientProvider>
+    <I18nProvider>
+      <AuthProvider>
+        <div className="min-h-screen flex flex-col">
+          <Nav />
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
+      </AuthProvider>
+    </I18nProvider>
   );
 }
+
