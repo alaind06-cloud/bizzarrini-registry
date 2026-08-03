@@ -143,7 +143,13 @@ function RootShell({ children }: { children: ReactNode }) {
         <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
         {/* Feuille de styles complète : chargée sans bloquer le rendu */}
         <link rel="preload" as="style" href={appCss} />
-        <link rel="stylesheet" href={appCss} media="print" data-defer-css="" />
+        <link
+          rel="stylesheet"
+          href={appCss}
+          media="print"
+          data-defer-css=""
+          suppressHydrationWarning
+        />
         <script
           dangerouslySetInnerHTML={{
             __html:
