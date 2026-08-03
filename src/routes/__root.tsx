@@ -107,7 +107,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: interBodyFont,
         crossOrigin: "anonymous",
       },
+      { rel: "preconnect", href: SUPABASE_ORIGIN, crossOrigin: "anonymous" },
+      { rel: "dns-prefetch", href: SUPABASE_ORIGIN },
     ],
+
 
   }),
   shellComponent: RootShell,
