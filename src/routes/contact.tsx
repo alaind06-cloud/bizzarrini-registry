@@ -1,7 +1,7 @@
 import { canonical } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { z } from "zod";
+
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/contact")({
@@ -26,20 +26,25 @@ function ContactPage() {
   const [sent, setSent] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  const schema = z.object({
-    nom: z.string().trim().min(1, t("contact.err.nom")).max(100),
-    email: z.string().trim().email(t("contact.err.email")).max(255),
-    message: z.string().trim().min(10, t("contact.err.message")).max(2000),
-  });
+  const validate = () => {
+    const n = nom.trim();
+    const e = email.trim();
+    const m = message.trim();
+    if (n.length < 1 || n.length > 100) return t("contact.err.nom");
+    if (e.length > 255 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return t("contact.err.email");
+    if (m.length < 10 || m.length > 2000) return t("contact.err.message");
+    return null;
+  };
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     setErr(null);
-    const res = schema.safeParse({ nom, email, message });
-    if (!res.success) {
-      setErr(res.error.issues[0]?.message ?? "");
+    const problem = validate();
+    if (problem) {
+      setErr(problem);
       return;
     }
+
     setSent(true);
   };
 
