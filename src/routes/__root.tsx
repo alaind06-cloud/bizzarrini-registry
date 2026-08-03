@@ -150,10 +150,12 @@ function RootShell({ children }: { children: ReactNode }) {
             __html:
               "(function(){var h=" +
               JSON.stringify(appCss) +
-              ";var l=document.createElement('link');l.rel='stylesheet';l.href=h;" +
-              "document.head.appendChild(l)})()",
+              ";var l=document.createElement('link');l.rel='stylesheet';l.href=h;l.media='print';" +
+              "l.onload=function(){l.media='all';l.onload=null};" +
+              "document.head.appendChild(l);setTimeout(function(){l.media='all'},3000)})()",
           }}
         />
+
         <noscript>
           <link rel="stylesheet" href={appCss} />
         </noscript>
