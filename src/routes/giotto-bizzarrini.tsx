@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
-import giottoPhoto from "@/assets/giotto-bizzarrini-atelier.jpg.asset.json";
+const giottoPhoto = { url: "/giotto-bizzarrini-atelier.jpg" };
 
 
 import { canonical } from "@/lib/seo";
