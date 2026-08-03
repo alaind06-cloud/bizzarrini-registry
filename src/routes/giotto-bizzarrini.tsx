@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
-import giottoPhoto from "@/assets/giotto-bizzarrini-workshop.jpg.asset.json";
+import giottoPhoto from "@/assets/giotto-bizzarrini-atelier.jpg.asset.json";
 
 
 import { canonical } from "@/lib/seo";
@@ -121,13 +121,22 @@ function GiottoPage() {
           <div className="grid gap-14 lg:gap-24 lg:grid-cols-2 items-center">
             <div className="relative order-2 lg:order-1">
               <div className="absolute -inset-6 md:-inset-10 bg-[radial-gradient(ellipse_at_center,rgba(200,160,90,0.18),transparent_70%)] pointer-events-none" />
-              <div className="relative overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
+              <figure className="relative overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
                 <img
                   src={giottoPhoto.url}
-                  alt="Giotto Bizzarrini in his workshop"
+                  alt="Giotto Bizzarrini dans son atelier, aux côtés d'une berlinette de compétition"
+                  loading="eager"
                   className="w-full h-auto object-cover grayscale-[0.15] contrast-[1.05]"
                 />
-              </div>
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/55 to-transparent px-6 pt-16 pb-6">
+                  <p className="font-display italic text-lg md:text-xl leading-snug text-[#f3ebdc]">
+                    “The car must be beautiful, but above all, it must be fast.”
+                  </p>
+                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.35em] text-[#c8a05a]">
+                    — Giotto Bizzarrini
+                  </p>
+                </figcaption>
+              </figure>
             </div>
 
             <div className="order-1 lg:order-2 space-y-8">
