@@ -94,7 +94,7 @@ function GiottoPage() {
               <figure className="relative overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
                 <img
                   src={giottoPhoto.url}
-                  alt="Giotto Bizzarrini dans son atelier, aux côtés d'une berlinette de compétition"
+                  alt="Giotto Bizzarrini, ingénieur automobile, dans son atelier de Livourne aux côtés d'une berlinette de compétition Bizzarrini 5300 GT"
                   loading="eager"
                   className="w-full h-auto object-cover grayscale-[0.15] contrast-[1.05]"
                 />
@@ -204,9 +204,10 @@ function GiottoPage() {
                 to="/"
                 search={{ m: "A3/C" }}
                 hash="registre"
+                title="Registre des châssis Iso Grifo A3/C"
                 className="text-foreground hover:text-brand underline underline-offset-4 decoration-border hover:decoration-brand transition-colors"
               >
-                Iso Grifo A3/C →
+                Consulter les châssis Iso Grifo A3/C →
               </Link>
             </li>
             <li>
@@ -214,9 +215,10 @@ function GiottoPage() {
                 to="/"
                 search={{ m: "5300 GT" }}
                 hash="registre"
+                title="Registre des châssis Bizzarrini 5300 GT"
                 className="text-foreground hover:text-brand underline underline-offset-4 decoration-border hover:decoration-brand transition-colors"
               >
-                Bizzarrini 5300 GT →
+                Consulter les châssis Bizzarrini 5300 GT →
               </Link>
             </li>
             <li>
@@ -224,17 +226,25 @@ function GiottoPage() {
                 to="/"
                 search={{ m: "P538" }}
                 hash="registre"
+                title="Registre des châssis Bizzarrini P538"
                 className="text-foreground hover:text-brand underline underline-offset-4 decoration-border hover:decoration-brand transition-colors"
               >
-                Bizzarrini P538 →
+                Consulter les châssis Bizzarrini P538 →
               </Link>
             </li>
           </ul>
           <div className="mt-6 pt-6 border-t border-border">
-            <Link to="/" search={backSearch} hash="registre" className="btn-brand w-full text-center">
-              {t("home.cta.catalog")}
+            <Link
+              to="/"
+              search={backSearch}
+              hash="registre"
+              title="Registre complet des châssis Bizzarrini"
+              className="btn-brand w-full text-center"
+            >
+              Consulter le registre complet des châssis
             </Link>
           </div>
+
         </aside>
       </article>
     </div>

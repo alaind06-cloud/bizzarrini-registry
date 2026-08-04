@@ -12,14 +12,20 @@ export const GIOTTO_JSONLD = {
       birthDate: "1926-06-06",
       deathDate: "2023-05-13",
       birthPlace: { "@type": "Place", name: "Livorno, Italy" },
-      jobTitle: "Automotive Engineer",
+      jobTitle: "Automotive Engineer & Car Designer",
       alumniOf: { "@type": "EducationalOrganization", name: "University of Pisa" },
+      sameAs: [
+        "https://fr.wikipedia.org/wiki/Giotto_Bizzarrini",
+        "https://en.wikipedia.org/wiki/Giotto_Bizzarrini",
+        "https://www.wikidata.org/wiki/Q1525650",
+      ],
       knowsAbout: [
         "Ferrari 250 GTO",
+        "Iso Grifo",
         "Iso Grifo A3/C",
         "Bizzarrini 5300 GT",
         "Bizzarrini P538",
-        "Lamborghini V12 Engine",
+        "Lamborghini V12 engine",
       ],
     },
     {
