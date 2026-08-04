@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
+import { supabase, photoUrl, SITE_MARQUE, type Voiture } from "@/lib/supabase";
 import { MODEL_GROUPS, sortCars } from "@/data/model-groups";
 import { displayChassis } from "@/data/chassis-clean";
 
@@ -27,7 +27,7 @@ export function AdminChassisOrder() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const { data } = await supabase.from("voitures").select("*").order("id", { ascending: true });
+      const { data } = await supabase.from("voitures").select("*").eq("marque", SITE_MARQUE).order("id", { ascending: true });
       const clean = ((data as Voiture[]) ?? []).filter(
         (v) => (v.titre ?? "").trim().toUpperCase() !== "COVER" && (v.modele ?? "").trim().toUpperCase() !== "COVER",
       );

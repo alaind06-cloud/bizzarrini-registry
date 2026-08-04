@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { supabase, type Voiture } from "@/lib/supabase";
+import { supabase, SITE_MARQUE, type Voiture } from "@/lib/supabase";
 import { displayChassis } from "@/data/chassis-clean";
 import { chassisToSlug } from "@/routes/chassis.$slug";
 import { MANUAL_ORDER_BASE } from "@/lib/photo-order";
@@ -74,6 +74,7 @@ export function AdminAddChassis() {
       const { data } = await supabase
         .from("voitures")
         .select("id, titre, modele, annee, chassis, cover_photo, photo_prefix, ordre_affichage")
+        .eq("marque", SITE_MARQUE)
         .order("id", { ascending: true });
       setCars((data as Voiture[]) ?? []);
     })();
@@ -179,6 +180,7 @@ export function AdminAddChassis() {
       const { data: inserted, error: insErr } = await supabase
         .from("voitures")
         .insert({
+          marque: SITE_MARQUE,
           titre,
           modele: finalModel,
           annee: Number(annee) || null,

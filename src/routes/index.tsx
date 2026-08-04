@@ -2,7 +2,7 @@ import { canonical } from "@/lib/seo";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { carSlug } from "@/lib/slug";
 import { useEffect, useMemo, useState } from "react";
-import { getSupabase, photoUrl, type Voiture } from "@/lib/supabase-env";
+import { getSupabase, photoUrl, SITE_MARQUE, type Voiture } from "@/lib/supabase-env";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
@@ -101,6 +101,7 @@ function HomePage() {
       const { data, error } = await supabase
         .from("voitures")
         .select("*")
+        .eq("marque", SITE_MARQUE)
         .order("id", { ascending: true });
       if (error) setErr(error.message);
       else {

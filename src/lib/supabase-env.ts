@@ -26,6 +26,13 @@ export const SUPABASE_ANON_KEY = pick(
 
 export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 
+/**
+ * Marque propre à ce site : registerbizzarrini.com n'expose que les Bizzarrini.
+ * Ce filtre applicatif s'ajoute (et ne se substitue pas) aux policies RLS
+ * qui masquent déjà les marques non publiées.
+ */
+export const SITE_MARQUE = "bizzarrini";
+
 const PHOTO_PATH = "Bizzarrini%20Photos/photos_flat";
 
 /**

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { supabase } from "@/lib/supabase";
+import { supabase, SITE_MARQUE } from "@/lib/supabase";
 import { SITE_URL } from "@/lib/seo";
 
 function chassisToSlug(value: string | null | undefined): string {
@@ -36,6 +36,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           const { data } = await supabase
             .from("voitures")
             .select("id, chassis, titre")
+            .eq("marque", SITE_MARQUE)
             .order("id", { ascending: true });
 
           for (const car of data ?? []) {

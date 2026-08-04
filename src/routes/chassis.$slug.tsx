@@ -2,7 +2,7 @@ import { canonical } from "@/lib/seo";
 import { chassisToSlug, carSlug } from "@/lib/slug";
 import { createFileRoute, Link, useRouter, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
+import { supabase, photoUrl, SITE_MARQUE, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { isMonochrome, hasManualOrder } from "@/lib/photo-order";
 import { useI18n, type Lang } from "@/lib/i18n";
@@ -90,9 +90,9 @@ function CarDetail() {
     (async () => {
       setLoading(true);
       // Look up by chassis (case-insensitive). Fallback: match slug on chassis or title.
-      let v = await supabase.from("voitures").select("*").ilike("chassis", slug).maybeSingle();
+      let v = await supabase.from("voitures").select("*").eq("marque", SITE_MARQUE).ilike("chassis", slug).maybeSingle();
       if (!v.data) {
-        const all = await supabase.from("voitures").select("*");
+        const all = await supabase.from("voitures").select("*").eq("marque", SITE_MARQUE);
         const rows = (all.data as Voiture[] | null) ?? [];
         const match =
           rows.find((row) => chassisToSlug(row.chassis) === slug) ??
@@ -127,6 +127,7 @@ function CarDetail() {
       const { data } = await supabase
         .from("voitures")
         .select("*")
+        .eq("marque", SITE_MARQUE)
         .order("id", { ascending: true });
       const clean = ((data as Voiture[]) ?? []).filter(
         (v) => (v.titre ?? "").trim().toUpperCase() !== "COVER" && (v.modele ?? "").trim().toUpperCase() !== "COVER",

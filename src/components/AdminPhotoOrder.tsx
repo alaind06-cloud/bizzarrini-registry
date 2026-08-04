@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { supabase, photoUrl, type Photo, type Voiture } from "@/lib/supabase";
+import { supabase, photoUrl, SITE_MARQUE, type Photo, type Voiture } from "@/lib/supabase";
 import { MANUAL_ORDER_BASE } from "@/lib/photo-order";
 import { MODEL_GROUPS } from "@/data/model-groups";
 import { PhotoRetouch } from "@/components/admin/PhotoRetouch";
@@ -41,6 +41,7 @@ export function AdminPhotoOrder() {
         supabase
           .from("voitures")
           .select("id, titre, modele, annee, chassis, cover_photo, photo_prefix")
+          .eq("marque", SITE_MARQUE)
           .order("id", { ascending: true }),
         supabase.from("photos").select("voiture_id, ordre"),
       ]);
