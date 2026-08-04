@@ -1,12 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { clientIp, rateLimit } from "@/lib/rate-limit.server";
 
 const ADMIN_EMAIL = "registerbizz@gmail.com";
+
+/** Une inscription est « réelle » si le profil vient d'être créé (< 10 min). */
+const MAX_PROFIL_AGE_MS = 10 * 60 * 1000;
 
 export const Route = createFileRoute("/api/notify-signup")({
   server: {
     handlers: {
       POST: async ({ request }) => {
         try {
+          // 1. Anti-spam : 3 requêtes / minute / IP.
+          const ip = clientIp(request);
+          const limited = rateLimit(`notify-signup:${ip}`, 3, 60_000);
+          if (!limited.ok) {
+            return Response.json(
+              { ok: false, emailed: false, reason: "rate_limited" },
+              { status: 429, headers: { "Retry-After": String(limited.retryAfter) } },
+            );
+          }
+
           const { nom, prenom, email, telephone, raison } = (await request.json()) as {
             nom?: string;
             prenom?: string;
@@ -15,10 +29,30 @@ export const Route = createFileRoute("/api/notify-signup")({
             raison?: string;
           };
 
+          // 2. Vérification que la requête correspond à une inscription réelle :
+          //    un profil « en_attente » créé il y a moins de 10 minutes doit exister.
+          if (!email) {
+            return Response.json({ ok: false, emailed: false, reason: "missing_email" }, { status: 400 });
+          }
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const { data: profil } = await supabaseAdmin
+            .from("profils")
+            .select("id, created_at, statut")
+            .eq("email", email)
+            .maybeSingle();
+
+          const createdAt = profil?.created_at ? Date.parse(profil.created_at) : NaN;
+          const recent = Number.isFinite(createdAt) && Date.now() - createdAt < MAX_PROFIL_AGE_MS;
+          if (!profil || !recent) {
+            console.warn("[notify-signup] requête refusée (aucune inscription récente pour cet email)");
+            return Response.json({ ok: false, emailed: false, reason: "no_recent_signup" }, { status: 403 });
+          }
+
           const resendKey =
             process.env.RESEND_API_KEY ||
             process.env.RESEND_KEY ||
             process.env.VITE_RESEND_API_KEY;
+
           if (!resendKey) {
             // Non bloquant pour l'inscription, mais l'échec doit être VISIBLE (logs + statut HTTP).
             console.error(
