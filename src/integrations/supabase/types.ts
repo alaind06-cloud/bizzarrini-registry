@@ -355,6 +355,7 @@ export type Database = {
     Functions: {
       est_admin: { Args: { _uid: string }; Returns: boolean }
       est_valide: { Args: { _uid: string }; Returns: boolean }
+      photo_storage_publique: { Args: { _name: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
