@@ -36,6 +36,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           const { data } = await supabase
             .from("voitures")
             .select("id, chassis, titre")
+            .eq("marque", SITE_MARQUE)
             .order("id", { ascending: true });
 
           for (const car of data ?? []) {

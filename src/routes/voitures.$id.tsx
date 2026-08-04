@@ -17,7 +17,7 @@ function LegacyRedirect() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase.from("voitures").select("chassis, titre").eq("id", id).maybeSingle();
+      const { data } = await supabase.from("voitures").select("chassis, titre").eq("marque", SITE_MARQUE).eq("id", id).maybeSingle();
       const row = data as { chassis: string | null; titre: string | null } | null;
       const s = row ? carSlug(row) : "";
       if (s) setSlug(s);

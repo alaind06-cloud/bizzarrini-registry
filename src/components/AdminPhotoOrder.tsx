@@ -41,6 +41,7 @@ export function AdminPhotoOrder() {
         supabase
           .from("voitures")
           .select("id, titre, modele, annee, chassis, cover_photo, photo_prefix")
+          .eq("marque", SITE_MARQUE)
           .order("id", { ascending: true }),
         supabase.from("photos").select("voiture_id, ordre"),
       ]);

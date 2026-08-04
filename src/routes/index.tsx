@@ -101,6 +101,7 @@ function HomePage() {
       const { data, error } = await supabase
         .from("voitures")
         .select("*")
+        .eq("marque", SITE_MARQUE)
         .order("id", { ascending: true });
       if (error) setErr(error.message);
       else {

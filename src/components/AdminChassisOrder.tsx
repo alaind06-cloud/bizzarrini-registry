@@ -27,7 +27,7 @@ export function AdminChassisOrder() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const { data } = await supabase.from("voitures").select("*").order("id", { ascending: true });
+      const { data } = await supabase.from("voitures").select("*").eq("marque", SITE_MARQUE).order("id", { ascending: true });
       const clean = ((data as Voiture[]) ?? []).filter(
         (v) => (v.titre ?? "").trim().toUpperCase() !== "COVER" && (v.modele ?? "").trim().toUpperCase() !== "COVER",
       );
