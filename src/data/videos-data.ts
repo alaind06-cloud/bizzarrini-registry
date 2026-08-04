@@ -33,6 +33,9 @@ export function youtubeId(url: string): string | null {
   return embed ? embed.split("/embed/")[1].split(/[?&]/)[0] : null;
 }
 
+/** Date par défaut (lancement du nouveau site) pour les vidéos sans date connue. */
+export const DEFAULT_UPLOAD_DATE = "2025-01-15";
+
 /** Dates de publication connues (ISO), utilisées dans le balisage Schema.org. */
 export const videoUploadDates: Record<string, string> = {
   "obiNne-NxuE": "2016-11-16",
@@ -53,7 +56,7 @@ export function videoObjectsJsonLd(list: Video[]): Record<string, unknown>[] {
       description: v.sousTitre ? `${v.titre} — ${v.sousTitre}` : v.titre,
       thumbnailUrl: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
       embedUrl: `https://www.youtube.com/embed/${id}`,
-      ...(videoUploadDates[id] ? { uploadDate: videoUploadDates[id] } : {}),
+      uploadDate: videoUploadDates[id] ?? DEFAULT_UPLOAD_DATE,
       publisher: { "@type": "Organization", name: "Bizzarrini Register" },
     });
   }
