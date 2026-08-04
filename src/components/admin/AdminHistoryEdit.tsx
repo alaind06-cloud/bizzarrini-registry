@@ -26,7 +26,10 @@ const REASONS: Record<string, string> = {
   bad_json: "Réponse de traduction illisible.",
   incomplete: "Traduction incomplète.",
   empty_text: "Texte source vide.",
+  unauthorized: "Session expirée : reconnectez-vous.",
+  forbidden: "Traduction réservée aux administrateurs.",
 };
+
 
 export function AdminHistoryEdit() {
   const [cars, setCars] = useState<Voiture[]>([]);
