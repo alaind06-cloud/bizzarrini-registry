@@ -49,9 +49,6 @@ export const Route = createFileRoute("/giotto-bizzarrini")({
       { rel: "alternate", hrefLang: "it", href: CANONICAL },
       { rel: "alternate", hrefLang: "x-default", href: CANONICAL },
     ],
-    scripts: import.meta.env.SSR
-      ? [{ type: "application/ld+json", children: JSON.stringify(GIOTTO_JSONLD) }]
-      : [],
   }),
   component: GiottoPage,
 });
