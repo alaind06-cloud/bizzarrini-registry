@@ -160,8 +160,10 @@ function GiottoPage() {
             <p key={i}>{p}</p>
           ))}
 
-          <h2 className="font-display text-2xl md:text-3xl mt-12">{content.aboutTitle}</h2>
-          <p>{content.aboutBody}</p>
+          <section className="mt-16 pt-12 border-t border-border">
+            <h2 className="font-display text-2xl md:text-3xl">{content.aboutTitle}</h2>
+            <p className="mt-6">{content.aboutBody}</p>
+          </section>
 
           <div id="realisations" className="mt-12 pt-12 border-t border-border scroll-mt-24">
             <h2 className="font-display text-2xl md:text-3xl">{content.achievementsTitle}</h2>
