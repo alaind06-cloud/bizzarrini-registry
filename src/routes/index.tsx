@@ -272,7 +272,7 @@ function HomePage() {
             {t("home.lead")}
           </p>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-3 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.36s", animationFillMode: "forwards" }}>
+          <div className="mt-10 flex min-h-[2.75rem] flex-wrap items-center justify-center gap-3 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.36s", animationFillMode: "forwards" }}>
             {!authLoading && !user && (
               <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
             )}
