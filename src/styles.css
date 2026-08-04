@@ -118,9 +118,10 @@
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
   --color-gold: var(--gold);
-  --font-display: "Bodoni Moda", "Playfair Display", "Didot", Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-display: "Bodoni Moda", "Bodoni Fallback", "Playfair Display", "Didot", Georgia, serif;
+  --font-sans: "Inter", "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Mono Fallback", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
 }
 
 :root {
