@@ -219,7 +219,7 @@ function HomePage() {
 
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-border bg-background min-h-[92svh] flex items-center">
+      <section className="home-hero relative overflow-hidden border-b border-border bg-background min-h-[92svh] flex items-center">
         <div className="absolute inset-0">
           <img
             src={heroPoster.url}
