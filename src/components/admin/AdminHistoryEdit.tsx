@@ -110,11 +110,18 @@ export function AdminHistoryEdit() {
     setTranslating(true);
     setError(null);
     try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       const r = await fetch("/api/translate-history", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify({ text: source, source: from }),
       });
+
       const j = (await r.json()) as { ok?: boolean; reason?: string; fr?: string; en?: string; it?: string };
       if (!r.ok || !j.ok) throw new Error(REASONS[j.reason ?? ""] ?? "Traduction indisponible.");
       const targets = (["fr", "en", "it"] as Lang[]).filter((l) => l !== from);
