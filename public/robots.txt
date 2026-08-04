@@ -5,3 +5,4 @@ Disallow: /auth
 Disallow: /reset-password
 
 Sitemap: https://www.registerbizzarrini.com/sitemap.xml
+Sitemap: https://www.registerbizzarrini.com/video-sitemap.xml

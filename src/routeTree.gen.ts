@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VideosRouteImport } from './routes/videos'
+import { Route as VideoSitemapDotxmlRouteImport } from './routes/video-sitemap[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as GiottoBizzarriniRouteImport } from './routes/giotto-bizzarrini'
@@ -27,6 +28,11 @@ import { Route as ApiNotifySignupRouteImport } from './routes/api/notify-signup'
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
   path: '/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VideoSitemapDotxmlRoute = VideoSitemapDotxmlRouteImport.update({
+  id: '/video-sitemap.xml',
+  path: '/video-sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/video-sitemap.xml': typeof VideoSitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/api/translate-history': typeof ApiTranslateHistoryRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/video-sitemap.xml': typeof VideoSitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/api/translate-history': typeof ApiTranslateHistoryRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/giotto-bizzarrini': typeof GiottoBizzarriniRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/video-sitemap.xml': typeof VideoSitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/api/translate-history': typeof ApiTranslateHistoryRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/giotto-bizzarrini'
     | '/reset-password'
     | '/sitemap.xml'
+    | '/video-sitemap.xml'
     | '/videos'
     | '/api/notify-signup'
     | '/api/translate-history'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/giotto-bizzarrini'
     | '/reset-password'
     | '/sitemap.xml'
+    | '/video-sitemap.xml'
     | '/videos'
     | '/api/notify-signup'
     | '/api/translate-history'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/giotto-bizzarrini'
     | '/reset-password'
     | '/sitemap.xml'
+    | '/video-sitemap.xml'
     | '/videos'
     | '/api/notify-signup'
     | '/api/translate-history'
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   GiottoBizzarriniRoute: typeof GiottoBizzarriniRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  VideoSitemapDotxmlRoute: typeof VideoSitemapDotxmlRoute
   VideosRoute: typeof VideosRoute
   ApiNotifySignupRoute: typeof ApiNotifySignupRoute
   ApiTranslateHistoryRoute: typeof ApiTranslateHistoryRoute
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/videos'
       fullPath: '/videos'
       preLoaderRoute: typeof VideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/video-sitemap.xml': {
+      id: '/video-sitemap.xml'
+      path: '/video-sitemap.xml'
+      fullPath: '/video-sitemap.xml'
+      preLoaderRoute: typeof VideoSitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   GiottoBizzarriniRoute: GiottoBizzarriniRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  VideoSitemapDotxmlRoute: VideoSitemapDotxmlRoute,
   VideosRoute: VideosRoute,
   ApiNotifySignupRoute: ApiNotifySignupRoute,
   ApiTranslateHistoryRoute: ApiTranslateHistoryRoute,
@@ -334,13 +355,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
