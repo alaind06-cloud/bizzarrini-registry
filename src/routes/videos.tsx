@@ -19,10 +19,12 @@ export const Route = createFileRoute("/videos")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: canonical("/videos") }],
-    scripts: videoObjectsJsonLd([...genepifilmSeries, ...videos]).map((data) => ({
-      type: "application/ld+json",
-      children: JSON.stringify(data),
-    })),
+    scripts: import.meta.env.SSR
+      ? videoObjectsJsonLd([...genepifilmSeries, ...videos]).map((data) => ({
+          type: "application/ld+json",
+          children: JSON.stringify(data),
+        }))
+      : [],
   }),
   component: VideosPage,
 });

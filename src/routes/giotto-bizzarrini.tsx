@@ -5,6 +5,7 @@ const giottoPhoto = { url: "/giotto-bizzarrini-atelier.jpg" };
 
 
 import { canonical } from "@/lib/seo";
+import { GIOTTO_JSONLD } from "@/data/giotto-jsonld";
 
 const CANONICAL = canonical("/giotto-bizzarrini");
 
@@ -20,36 +21,6 @@ const DESCRIPTIONS: Record<Lang, string> = {
   it: "Scopri la storia di Giotto Bizzarrini (Ferrari 250 GTO, Iso Grifo A3/C, Bizzarrini 5300 GT) e accedi al registro ufficiale telaio per telaio.",
 };
 
-const JSONLD = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Person",
-      "@id": `${CANONICAL}#giotto-bizzarrini`,
-      name: "Giotto Bizzarrini",
-      birthDate: "1926-06-06",
-      deathDate: "2023-05-13",
-      birthPlace: { "@type": "Place", name: "Livorno, Italy" },
-      jobTitle: "Automotive Engineer",
-      alumniOf: { "@type": "EducationalOrganization", name: "University of Pisa" },
-      knowsAbout: [
-        "Ferrari 250 GTO",
-        "Iso Grifo A3/C",
-        "Bizzarrini 5300 GT",
-        "Bizzarrini P538",
-        "Lamborghini V12 Engine",
-      ],
-    },
-    {
-      "@type": "DataCatalog",
-      "@id": `${CANONICAL}#chassis-register`,
-      name: "Giotto Bizzarrini Chassis Register",
-      description:
-        "Historical register documenting surviving chassis connected to Giotto Bizzarrini's work.",
-      about: { "@id": `${CANONICAL}#giotto-bizzarrini` },
-    },
-  ],
-};
 
 type GiottoSearch = { m?: string; d?: string; q?: string };
 
@@ -78,12 +49,9 @@ export const Route = createFileRoute("/giotto-bizzarrini")({
       { rel: "alternate", hrefLang: "it", href: CANONICAL },
       { rel: "alternate", hrefLang: "x-default", href: CANONICAL },
     ],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify(JSONLD),
-      },
-    ],
+    scripts: import.meta.env.SSR
+      ? [{ type: "application/ld+json", children: JSON.stringify(GIOTTO_JSONLD) }]
+      : [],
   }),
   component: GiottoPage,
 });
