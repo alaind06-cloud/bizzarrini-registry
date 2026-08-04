@@ -40,4 +40,8 @@ main{display:block}
 .container-page{width:100%;max-width:1280px;margin-inline:auto;padding-inline:1.25rem}
 header,nav{background:var(--bg)}
 section:first-of-type{min-height:92svh}
+code,kbd,samp,pre,.font-mono{font-family:var(--font-mono)}
+.chassis-plaque{display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--font-mono);
+font-size:0.72rem;line-height:1.2;letter-spacing:0.14em;text-transform:uppercase;
+border:1px solid var(--border);padding:0.3rem 0.65rem;border-radius:2px}
 `;
