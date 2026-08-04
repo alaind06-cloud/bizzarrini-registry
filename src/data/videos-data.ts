@@ -24,8 +24,41 @@ export const videos: Video[] = [
   { id: 5, plateforme: "facebook", url: "https://www.facebook.com/watch/?v=1066598510098907", titre: "Bizzarrini — Archive #3", sousTitre: "Gentlemen Drivers" },
   { id: 6, plateforme: "facebook", url: "https://www.facebook.com/watch/?v=809682325727146", titre: "Bizzarrini Racing History", sousTitre: "Bizzarrini Racing" },
   { id: 12, plateforme: "youtube", url: "https://www.youtube.com/watch?v=H3163F-AEmo", titre: "Bizzarrini P538", sousTitre: "Course" },
-  { id: 13, plateforme: "youtube", url: "https://www.youtube.com/watch?v=GQ22n_sNu2g", titre: "Bizzarrini — Hommage", sousTitre: "Documentaire" },
+  { id: 13, plateforme: "youtube", url: "https://www.youtube.com/watch?v=GQ22n_sNu2g", titre: "A3C/Bizzarrini", sousTitre: "Mike Clarke" },
 ];
+
+/** Identifiant YouTube d'une URL, ou null pour une vidéo Facebook. */
+export function youtubeId(url: string): string | null {
+  const embed = toYoutubeEmbed(url);
+  return embed ? embed.split("/embed/")[1].split(/[?&]/)[0] : null;
+}
+
+/** Dates de publication connues (ISO), utilisées dans le balisage Schema.org. */
+export const videoUploadDates: Record<string, string> = {
+  "obiNne-NxuE": "2016-11-16",
+};
+
+/** JSON-LD VideoObject pour chaque vidéo YouTube (les vidéos Facebook sont exclues). */
+export function videoObjectsJsonLd(list: Video[]): Record<string, unknown>[] {
+  const seen = new Set<string>();
+  const out: Record<string, unknown>[] = [];
+  for (const v of list) {
+    const id = v.plateforme === "youtube" ? youtubeId(v.url) : null;
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    out.push({
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      name: v.titre,
+      description: v.sousTitre ? `${v.titre} — ${v.sousTitre}` : v.titre,
+      thumbnailUrl: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+      embedUrl: `https://www.youtube.com/embed/${id}`,
+      ...(videoUploadDates[id] ? { uploadDate: videoUploadDates[id] } : {}),
+      publisher: { "@type": "Organization", name: "Bizzarrini Register" },
+    });
+  }
+  return out;
+}
 
 export function toYoutubeEmbed(url: string): string | null {
   try {

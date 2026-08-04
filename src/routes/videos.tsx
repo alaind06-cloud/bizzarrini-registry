@@ -1,6 +1,6 @@
 import { canonical } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { videos, genepifilmSeries, toYoutubeEmbed, toFacebookEmbed, type Video } from "@/data/videos-data";
+import { videos, genepifilmSeries, toYoutubeEmbed, toFacebookEmbed, videoObjectsJsonLd, type Video } from "@/data/videos-data";
 import { useI18n } from "@/lib/i18n";
 
 
@@ -15,8 +15,14 @@ export const Route = createFileRoute("/videos")({
       { property: "og:title", content: "Vidéos Bizzarrini — Registre officiel" },
       { property: "og:description", content: "Archive vidéo des Bizzarrini de compétition et de route." },
       { property: "og:url", content: canonical("/videos") },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: canonical("/videos") }],
+    scripts: videoObjectsJsonLd([...genepifilmSeries, ...videos]).map((data) => ({
+      type: "application/ld+json",
+      children: JSON.stringify(data),
+    })),
   }),
   component: VideosPage,
 });
