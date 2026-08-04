@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { clientIp, rateLimit } from "@/lib/rate-limit.server";
+
 
 /**
  * Traduction d'un historique de châssis via la passerelle IA Lovable
