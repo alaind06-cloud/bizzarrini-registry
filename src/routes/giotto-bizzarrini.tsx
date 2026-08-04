@@ -94,7 +94,7 @@ function GiottoPage() {
               <figure className="relative overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
                 <img
                   src={giottoPhoto.url}
-                  alt="Giotto Bizzarrini dans son atelier, aux côtés d'une berlinette de compétition"
+                  alt="Giotto Bizzarrini, ingénieur automobile, dans son atelier de Livourne aux côtés d'une berlinette de compétition Bizzarrini 5300 GT"
                   loading="eager"
                   className="w-full h-auto object-cover grayscale-[0.15] contrast-[1.05]"
                 />
