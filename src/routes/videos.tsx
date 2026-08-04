@@ -19,10 +19,6 @@ export const Route = createFileRoute("/videos")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: canonical("/videos") }],
-    scripts: videoObjectsJsonLd([...genepifilmSeries, ...videos]).map((data) => ({
-      type: "application/ld+json",
-      children: JSON.stringify(data),
-    })),
   }),
   component: VideosPage,
 });
@@ -66,6 +62,13 @@ function VideosPage() {
   const { t } = useI18n();
   return (
     <div className="container-page py-12 md:py-16">
+      {videoObjectsJsonLd([...genepifilmSeries, ...videos]).map((data, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+        />
+      ))}
       <header className="mb-10 max-w-3xl">
         <p className="text-xs uppercase tracking-[0.35em] text-brand">{t("videos.kicker")}</p>
         <h1 className="mt-3 font-display text-4xl md:text-5xl">{t("videos.title")}</h1>
