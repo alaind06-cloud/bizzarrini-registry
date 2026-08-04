@@ -11,6 +11,9 @@ export const CRITICAL_CSS = `
 size-adjust:94%;ascent-override:107%;descent-override:30.4%;line-gap-override:0%}
 @font-face{font-family:"Inter Fallback";src:local("Arial"),local("Helvetica"),local("Liberation Sans");
 size-adjust:107.4%;ascent-override:90.2%;descent-override:22.48%;line-gap-override:0%}
+@font-face{font-family:"Mono Fallback";src:local("Menlo"),local("Consolas"),local("DejaVu Sans Mono"),local("Courier New");
+size-adjust:100%;ascent-override:102%;descent-override:30%;line-gap-override:0%}
+
 :root{--bg:#f2eee6;--fg:#232323;--muted:#6b6257;--brand:#9e2b25;--border:#ddd4c6;
 --font-sans:"Inter","Inter Fallback",ui-sans-serif,system-ui,-apple-system,sans-serif;
 --font-display:"Bodoni Moda","Bodoni Fallback",Georgia,serif}
@@ -36,5 +39,19 @@ main{display:block}
 .overflow-hidden{overflow:hidden}
 .container-page{width:100%;max-width:1280px;margin-inline:auto;padding-inline:1.25rem}
 header,nav{background:var(--bg)}
-section:first-of-type{min-height:92svh}
+section:first-of-type{min-height:92svh;display:flex;align-items:center}
+/* Hero : mêmes métriques que la feuille complète pour éviter tout reflow
+   au moment où styles.css est appliqué de façon asynchrone. */
+section:first-of-type>.container-page{padding-top:6rem;padding-bottom:6rem}
+@media (min-width:768px){section:first-of-type>.container-page{padding-top:8rem;padding-bottom:8rem}}
+section:first-of-type h1{font-size:3rem;line-height:1.02;margin-top:2rem}
+@media (min-width:640px){section:first-of-type h1{font-size:3.75rem}}
+@media (min-width:768px){section:first-of-type h1{font-size:4.5rem}}
+@media (min-width:1024px){section:first-of-type h1{font-size:6rem}}
+section:first-of-type p{margin-top:2rem;margin-inline:auto;max-width:42rem;font-size:1rem;line-height:1.625}
+@media (min-width:768px){section:first-of-type p{font-size:1.125rem}}
+.vintage-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;font-size:.7rem;
+letter-spacing:.28em;text-transform:uppercase;border:1px solid rgba(158,43,37,.45);color:var(--brand)}
+.section-divider{width:6rem;height:1px;margin-inline:auto}
 `;
+
