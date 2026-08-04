@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { clientIp, rateLimit } from "@/lib/rate-limit.server";
+
 
 /**
  * Traduction d'un historique de châssis via la passerelle IA Lovable
@@ -33,6 +35,35 @@ export const Route = createFileRoute("/api/translate-history")({
     handlers: {
       POST: async ({ request }) => {
         try {
+          // Accès réservé aux admins : évite tout appel IA payant par un tiers.
+          const authHeader = request.headers.get("authorization") ?? "";
+          const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+          if (!token || token.split(".").length !== 3) {
+            return Response.json({ ok: false, reason: "unauthorized" }, { status: 401 });
+          }
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const { data: userData, error: userErr } = await supabaseAdmin.auth.getUser(token);
+          if (userErr || !userData?.user) {
+            return Response.json({ ok: false, reason: "unauthorized" }, { status: 401 });
+          }
+          const { data: profil } = await supabaseAdmin
+            .from("profils")
+            .select("est_admin")
+            .eq("id", userData.user.id)
+            .maybeSingle();
+          if (!profil?.est_admin) {
+            return Response.json({ ok: false, reason: "forbidden" }, { status: 403 });
+          }
+
+          // Garde-fou supplémentaire : 20 traductions / minute / IP.
+          const limited = rateLimit(`translate:${clientIp(request)}`, 20, 60_000);
+          if (!limited.ok) {
+            return Response.json(
+              { ok: false, reason: "rate_limit" },
+              { status: 429, headers: { "Retry-After": String(limited.retryAfter) } },
+            );
+          }
+
           const { text, source } = (await request.json()) as {
             text?: string;
             source?: "fr" | "en" | "it";
@@ -40,6 +71,7 @@ export const Route = createFileRoute("/api/translate-history")({
           if (!text || !text.trim()) {
             return Response.json({ ok: false, reason: "empty_text" }, { status: 400 });
           }
+
 
           const key = process.env.LOVABLE_API_KEY;
           if (!key) {
