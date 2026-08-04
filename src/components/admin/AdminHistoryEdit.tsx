@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { supabase, type Voiture, type VoitureDetail } from "@/lib/supabase";
+import { supabase, SITE_MARQUE, type Voiture, type VoitureDetail } from "@/lib/supabase";
 import { MODEL_GROUPS, sortCars } from "@/data/model-groups";
 import { displayChassis } from "@/data/chassis-clean";
 import { HistoryProse, wordCount } from "@/components/HistoryProse";

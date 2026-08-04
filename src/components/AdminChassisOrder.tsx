@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { supabase, photoUrl, type Voiture } from "@/lib/supabase";
+import { supabase, photoUrl, SITE_MARQUE, type Voiture } from "@/lib/supabase";
 import { MODEL_GROUPS, sortCars } from "@/data/model-groups";
 import { displayChassis } from "@/data/chassis-clean";
 

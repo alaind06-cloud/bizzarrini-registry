@@ -2,7 +2,7 @@ import { canonical } from "@/lib/seo";
 import { chassisToSlug, carSlug } from "@/lib/slug";
 import { createFileRoute, Link, useRouter, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { supabase, photoUrl, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
+import { supabase, photoUrl, SITE_MARQUE, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { isMonochrome, hasManualOrder } from "@/lib/photo-order";
 import { useI18n, type Lang } from "@/lib/i18n";

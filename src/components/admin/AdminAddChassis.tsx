@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { supabase, type Voiture } from "@/lib/supabase";
+import { supabase, SITE_MARQUE, type Voiture } from "@/lib/supabase";
 import { displayChassis } from "@/data/chassis-clean";
 import { chassisToSlug } from "@/routes/chassis.$slug";
 import { MANUAL_ORDER_BASE } from "@/lib/photo-order";
