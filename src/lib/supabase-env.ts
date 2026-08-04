@@ -36,6 +36,14 @@ export const SITE_MARQUE = "bizzarrini";
 const PHOTO_PATH = "Bizzarrini%20Photos/photos_flat";
 
 /**
+ * Les photos du registre sont hébergées sur un projet Supabase Storage dédié
+ * (bucket public « Bizzarrini Photos »), distinct du projet base de données.
+ * Surchargeable via `VITE_SUPABASE_PHOTOS_URL`.
+ */
+export const PHOTOS_BASE_URL =
+  pick("VITE_SUPABASE_PHOTOS_URL", "SUPABASE_PHOTOS_URL") ?? "https://rbrkzrtrlvihpjugksnb.supabase.co";
+
+/**
  * URL d'une photo. Si `width` est fourni, on passe par le service de
  * transformation d'images (redimensionnement + WebP négocié) : bien plus léger
  * sur mobile que le fichier original.
@@ -44,11 +52,12 @@ export const photoUrl = (
   filename: string | null | undefined,
   opts?: { width?: number; quality?: number },
 ) => {
-  if (!filename || !SUPABASE_URL) return null;
-  if (!opts?.width) return `${SUPABASE_URL}/storage/v1/object/public/${PHOTO_PATH}/${filename}`;
+  if (!filename) return null;
+  if (!opts?.width) return `${PHOTOS_BASE_URL}/storage/v1/object/public/${PHOTO_PATH}/${filename}`;
   const q = opts.quality ?? 70;
-  return `${SUPABASE_URL}/storage/v1/render/image/public/${PHOTO_PATH}/${filename}?width=${opts.width}&quality=${q}&resize=contain`;
+  return `${PHOTOS_BASE_URL}/storage/v1/render/image/public/${PHOTO_PATH}/${filename}?width=${opts.width}&quality=${q}&resize=contain`;
 };
+
 
 export type Voiture = {
   id: string;
