@@ -230,7 +230,7 @@ function HomePage() {
             decoding="sync"
             width={1600}
             height={1000}
-            className="absolute inset-0 w-full h-full object-cover opacity-60 saturate-[0.85] hero-kenburns"
+            className="absolute inset-0 w-full h-full object-cover object-[64%_32%] sm:object-[60%_38%] md:object-center opacity-60 saturate-[0.85] hero-kenburns"
           />
 
           <div className="absolute inset-0 bg-gradient-to-b from-background/55 via-background/45 to-background/95" />
