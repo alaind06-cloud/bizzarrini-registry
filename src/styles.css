@@ -54,6 +54,34 @@
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 
+/* ---- Polices de repli à métriques ajustées (anti-CLS) ----
+   Elles occupent la même place que la police finale : aucun saut au swap. */
+@font-face {
+  font-family: "Bodoni Fallback";
+  src: local("Georgia"), local("Times New Roman"), local("Times");
+  size-adjust: 94%;
+  ascent-override: 107%;
+  descent-override: 30.4%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("Helvetica"), local("Liberation Sans");
+  size-adjust: 107.4%;
+  ascent-override: 90.2%;
+  descent-override: 22.48%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Mono Fallback";
+  src: local("Menlo"), local("Consolas"), local("DejaVu Sans Mono"), local("Courier New");
+  size-adjust: 100%;
+  ascent-override: 102%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+}
+
+
 
 /*
  * Bizzarrini Register — dark prestige design system.
@@ -90,9 +118,10 @@
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
   --color-gold: var(--gold);
-  --font-display: "Bodoni Moda", "Playfair Display", "Didot", Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-display: "Bodoni Moda", "Bodoni Fallback", "Playfair Display", "Didot", Georgia, serif;
+  --font-sans: "Inter", "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Mono Fallback", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
 }
 
 :root {
