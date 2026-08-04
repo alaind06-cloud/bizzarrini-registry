@@ -106,10 +106,8 @@ export function SpecsBlock({ specs }: { specs: ArchiveSpecs }) {
   const multipleSources = sources.length > 1;
 
   const collapsible = present.length > 10;
-  const visible =
-    collapsible && !expanded
-      ? present.filter((f) => KEY_FIELDS.includes(f.key))
-      : present;
+  const keyFields = present.filter((f) => KEY_FIELDS.includes(f.key));
+  const visible = collapsible && !expanded && keyFields.length > 0 ? keyFields : present;
 
   const groupOf = (key: ArchiveSpecKey): GroupId =>
     (GROUPS.find((g) => g.keys.includes(key))?.id ?? "other") as GroupId;
@@ -119,10 +117,13 @@ export function SpecsBlock({ specs }: { specs: ArchiveSpecs }) {
     fields: visible.filter((f) => groupOf(f.key) === group.id),
   })).filter((g) => g.fields.length > 0);
 
+  if (rendered.length === 0) return null;
+
   const showGroupTitles = rendered.length > 1 && (!collapsible || expanded);
 
   return (
-    <div className="border border-border bg-surface/50 rounded-sm p-6 sm:p-7">
+    <div className="self-start border border-border bg-surface/50 rounded-sm p-6 sm:p-7">
+
       <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-6">
         {t("car.specs.title")}
       </p>
