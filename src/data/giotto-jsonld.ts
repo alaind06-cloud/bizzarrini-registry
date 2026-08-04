@@ -12,7 +12,7 @@ export const GIOTTO_JSONLD = {
       birthDate: "1926-06-06",
       deathDate: "2023-05-13",
       birthPlace: { "@type": "Place", name: "Livorno, Italy" },
-      jobTitle: "Automotive Engineer & Car Designer",
+      jobTitle: "Automotive Engineer & Designer",
       alumniOf: { "@type": "EducationalOrganization", name: "University of Pisa" },
       sameAs: [
         "https://fr.wikipedia.org/wiki/Giotto_Bizzarrini",
@@ -21,7 +21,6 @@ export const GIOTTO_JSONLD = {
       ],
       knowsAbout: [
         "Ferrari 250 GTO",
-        "Iso Grifo",
         "Iso Grifo A3/C",
         "Bizzarrini 5300 GT",
         "Bizzarrini P538",
