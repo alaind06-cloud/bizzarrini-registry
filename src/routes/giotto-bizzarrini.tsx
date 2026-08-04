@@ -74,6 +74,11 @@ function GiottoPage() {
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(GIOTTO_JSONLD) }}
+      />
+
       {activePills.length > 0 && (
         <div className="container-page pt-4">
           <FilterPills pills={activePills} />
