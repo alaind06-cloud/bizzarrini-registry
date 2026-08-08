@@ -25,6 +25,11 @@ const SUPABASE_ORIGIN =
   (import.meta.env?.VITE_SUPABASE_URL as string | undefined) ??
   "https://darckkyqmzningzzbkhr.supabase.co";
 
+/** Identifiant de mesure Google Analytics (clé publique). */
+const GA_MEASUREMENT_ID =
+  (import.meta.env?.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY as string | undefined) ??
+  "G-W5NF3YC7TW";
+
 function NotFoundComponent() {
   return (
     <div className="min-h-screen flex flex-col">
