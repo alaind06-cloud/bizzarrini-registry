@@ -120,10 +120,12 @@ export const Route = createRootRoute({
         href: jetbrainsMonoFont,
         crossOrigin: "anonymous",
       },
-      // Les images du registre proviennent du Storage Supabase et sont chargées
-      // sans CORS : le preconnect ne doit donc PAS porter crossorigin.
+      // API Supabase + bucket R2 des photos : chargés sans CORS, donc le
+      // preconnect ne doit PAS porter crossorigin.
       { rel: "preconnect", href: SUPABASE_ORIGIN },
       { rel: "dns-prefetch", href: SUPABASE_ORIGIN },
+      { rel: "preconnect", href: PHOTOS_BASE_URL },
+      { rel: "dns-prefetch", href: PHOTOS_BASE_URL },
     ],
 
 
