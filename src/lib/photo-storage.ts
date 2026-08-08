@@ -1,26 +1,61 @@
 import { supabase } from "@/lib/supabase";
 
-/** Emplacement des photos du registre dans le stockage. */
-export const PHOTO_BUCKET = "Bizzarrini Photos";
-export const PHOTO_FOLDER = "photos_flat";
+/**
+ * Écriture des photos du registre : bucket Cloudflare R2
+ * `registre-voitures-photos`, préfixe `bizzarrini/`, même nom de fichier que
+ * `photos.filename`. La lecture reste assurée par `photoUrl()` (URL publique
+ * R2). Plus aucun accès à Supabase Storage.
+ */
 
-const path = (filename: string) => `${PHOTO_FOLDER}/${filename}`;
+export const PHOTO_BUCKET = "registre-voitures-photos";
+export const PHOTO_FOLDER = "bizzarrini";
 
-/** Envoie un fichier dans le stockage (sans écraser un fichier existant). */
+const ENDPOINT = "/api/admin-photos";
+
+type Err = { message: string } | null;
+
+async function authHeaders(): Promise<Record<string, string>> {
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+async function call(init: RequestInit): Promise<{ error: Err }> {
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      ...init,
+      headers: { ...(init.headers as Record<string, string>), ...(await authHeaders()) },
+    });
+    if (res.ok) return { error: null };
+    const body = (await res.json().catch(() => null)) as { reason?: string } | null;
+    return { error: { message: body?.reason ?? `Erreur ${res.status}` } };
+  } catch (e) {
+    return { error: { message: (e as Error).message } };
+  }
+}
+
+/** Envoie un fichier dans R2 (sans écraser un fichier existant). */
 export async function uploadPhoto(filename: string, blob: Blob) {
-  return supabase.storage.from(PHOTO_BUCKET).upload(path(filename), blob, {
-    contentType: "image/jpeg",
-    upsert: false,
-    cacheControl: "31536000",
+  return call({
+    body: blob,
+    headers: {
+      "Content-Type": blob.type || "image/jpeg",
+      "x-photo-filename": filename,
+      "x-photo-op": "upload",
+    },
   });
 }
 
 /** Remplace le contenu d'une photo existante (retouche). */
 export async function replacePhoto(filename: string, blob: Blob) {
-  return supabase.storage.from(PHOTO_BUCKET).upload(path(filename), blob, {
-    contentType: "image/jpeg",
-    upsert: true,
-    cacheControl: "31536000",
+  return call({
+    body: blob,
+    headers: {
+      "Content-Type": blob.type || "image/jpeg",
+      "x-photo-filename": filename,
+      "x-photo-op": "replace",
+    },
   });
 }
 
@@ -35,7 +70,7 @@ export async function setPhotoRetouched(photoId: string, value: boolean) {
 }
 
 /**
- * Renomme une photo : déplace le fichier dans le stockage puis met à jour la
+ * Renomme une photo : déplace le fichier dans R2 puis met à jour la
  * référence en base (table `photos`, et `voitures.cover_photo` si besoin).
  */
 export async function renamePhoto(opts: {
@@ -46,21 +81,27 @@ export async function renamePhoto(opts: {
   isCover: boolean;
 }) {
   const { photoId, voitureId, from, to, isCover } = opts;
-  if (from === to) return { error: null as { message: string } | null };
+  if (from === to) return { error: null as Err };
 
-  const moved = await supabase.storage.from(PHOTO_BUCKET).move(path(from), path(to));
+  const moved = await call({
+    body: JSON.stringify({ op: "move", from, to }),
+    headers: { "Content-Type": "application/json" },
+  });
   if (moved.error) return { error: moved.error };
 
   const updated = await supabase.from("photos").update({ filename: to }).eq("id", photoId);
   if (updated.error) {
     // On remet le fichier à sa place pour ne pas casser la fiche.
-    await supabase.storage.from(PHOTO_BUCKET).move(path(to), path(from));
-    return { error: updated.error };
+    await call({
+      body: JSON.stringify({ op: "move", from: to, to: from }),
+      headers: { "Content-Type": "application/json" },
+    });
+    return { error: updated.error as Err };
   }
 
   if (isCover) {
     const cov = await supabase.from("voitures").update({ cover_photo: to }).eq("id", voitureId);
-    if (cov.error) return { error: cov.error };
+    if (cov.error) return { error: cov.error as Err };
   }
-  return { error: null };
+  return { error: null as Err };
 }
