@@ -33,29 +33,27 @@ export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
  */
 export const SITE_MARQUE = "bizzarrini";
 
-const PHOTO_PATH = "Bizzarrini%20Photos/photos_flat";
+/** Dossier des photos dans le bucket R2 public. */
+const PHOTO_PATH = "bizzarrini";
 
 /**
- * Les photos du registre sont hébergées sur un projet Supabase Storage dédié
- * (bucket public « Bizzarrini Photos »), distinct du projet base de données.
+ * Les photos du registre sont hébergées sur un bucket public Cloudflare R2.
  * Surchargeable via `VITE_SUPABASE_PHOTOS_URL`.
  */
 export const PHOTOS_BASE_URL =
-  pick("VITE_SUPABASE_PHOTOS_URL", "SUPABASE_PHOTOS_URL") ?? "https://rbrkzrtrlvihpjugksnb.supabase.co";
+  pick("VITE_SUPABASE_PHOTOS_URL", "SUPABASE_PHOTOS_URL") ??
+  "https://pub-5d4df75020194b5d8aaf953bd0696401.r2.dev";
 
 /**
- * URL d'une photo. Si `width` est fourni, on passe par le service de
- * transformation d'images (redimensionnement + WebP négocié) : bien plus léger
- * sur mobile que le fichier original.
+ * URL publique d'une photo (R2 sert le fichier tel quel : pas de service de
+ * transformation d'image, les options de largeur sont donc ignorées).
  */
 export const photoUrl = (
   filename: string | null | undefined,
-  opts?: { width?: number; quality?: number },
+  _opts?: { width?: number; quality?: number },
 ) => {
   if (!filename) return null;
-  if (!opts?.width) return `${PHOTOS_BASE_URL}/storage/v1/object/public/${PHOTO_PATH}/${filename}`;
-  const q = opts.quality ?? 70;
-  return `${PHOTOS_BASE_URL}/storage/v1/render/image/public/${PHOTO_PATH}/${filename}?width=${opts.width}&quality=${q}&resize=contain`;
+  return `${PHOTOS_BASE_URL}/${PHOTO_PATH}/${encodeURIComponent(filename)}`;
 };
 
 
