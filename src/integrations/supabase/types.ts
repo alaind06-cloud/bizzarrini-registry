@@ -52,6 +52,69 @@ export type Database = {
           },
         ]
       }
+      documents_detectes: {
+        Row: {
+          chassis_detecte: string | null
+          created_at: string
+          dossier_source: string
+          fichier: string
+          id: number
+          marque: string | null
+          notes: string | null
+          resume: string | null
+          statut: string
+          texte_ocr: string | null
+          type_document: string | null
+          valide_le: string | null
+          voiture_id: number | null
+        }
+        Insert: {
+          chassis_detecte?: string | null
+          created_at?: string
+          dossier_source: string
+          fichier: string
+          id?: never
+          marque?: string | null
+          notes?: string | null
+          resume?: string | null
+          statut?: string
+          texte_ocr?: string | null
+          type_document?: string | null
+          valide_le?: string | null
+          voiture_id?: number | null
+        }
+        Update: {
+          chassis_detecte?: string | null
+          created_at?: string
+          dossier_source?: string
+          fichier?: string
+          id?: never
+          marque?: string | null
+          notes?: string | null
+          resume?: string | null
+          statut?: string
+          texte_ocr?: string | null
+          type_document?: string | null
+          valide_le?: string | null
+          voiture_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_detectes_marque_fkey"
+            columns: ["marque"]
+            isOneToOne: false
+            referencedRelation: "marques"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "documents_detectes_voiture_id_fkey"
+            columns: ["voiture_id"]
+            isOneToOne: false
+            referencedRelation: "voitures"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       marques: {
         Row: {
           actif: boolean
@@ -100,26 +163,44 @@ export type Database = {
       photos: {
         Row: {
           created_at: string
+          date_evenement: string | null
+          date_source: string | null
+          date_source_type: string | null
+          evenement: string | null
           filename: string
           id: number
           ordre: number
+          pays_course: string | null
           retouchee: boolean
+          statut_date: string | null
           voiture_id: number | null
         }
         Insert: {
           created_at?: string
+          date_evenement?: string | null
+          date_source?: string | null
+          date_source_type?: string | null
+          evenement?: string | null
           filename: string
           id?: never
           ordre?: number
+          pays_course?: string | null
           retouchee?: boolean
+          statut_date?: string | null
           voiture_id?: number | null
         }
         Update: {
           created_at?: string
+          date_evenement?: string | null
+          date_source?: string | null
+          date_source_type?: string | null
+          evenement?: string | null
           filename?: string
           id?: never
           ordre?: number
+          pays_course?: string | null
           retouchee?: boolean
+          statut_date?: string | null
           voiture_id?: number | null
         }
         Relationships: [
@@ -295,6 +376,7 @@ export type Database = {
       voitures: {
         Row: {
           annee: number | null
+          annee_evenement: string | null
           chassis: string | null
           cover_photo: string
           created_at: string
@@ -302,14 +384,17 @@ export type Database = {
           marque: string
           modele: string
           ordre_affichage: number | null
+          pays_evenement: string | null
           photo_count: number
           photo_prefix: string
           slug: string
           storage_path: string
           titre: string
+          type_fiche_hillclimb: string | null
         }
         Insert: {
           annee?: number | null
+          annee_evenement?: string | null
           chassis?: string | null
           cover_photo: string
           created_at?: string
@@ -317,14 +402,17 @@ export type Database = {
           marque: string
           modele: string
           ordre_affichage?: number | null
+          pays_evenement?: string | null
           photo_count?: number
           photo_prefix: string
           slug: string
           storage_path?: string
           titre: string
+          type_fiche_hillclimb?: string | null
         }
         Update: {
           annee?: number | null
+          annee_evenement?: string | null
           chassis?: string | null
           cover_photo?: string
           created_at?: string
@@ -332,11 +420,13 @@ export type Database = {
           marque?: string
           modele?: string
           ordre_affichage?: number | null
+          pays_evenement?: string | null
           photo_count?: number
           photo_prefix?: string
           slug?: string
           storage_path?: string
           titre?: string
+          type_fiche_hillclimb?: string | null
         }
         Relationships: [
           {
