@@ -15,14 +15,15 @@ import jetbrainsMonoFont from "../assets/fonts/jetbrains-mono-latin-wght-normal.
 import { CRITICAL_CSS } from "../lib/critical-css";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+import { PHOTOS_BASE_URL } from "@/lib/supabase-env";
 import { AuthProvider } from "@/lib/auth";
 import { I18nProvider } from "@/lib/i18n";
 import { Nav, Footer } from "@/components/Nav";
 
-/** Origine Supabase (Storage + API) — préconnexion pour sortir du chemin critique. */
+/** Origine Supabase (API) — préconnexion pour sortir du chemin critique. */
 const SUPABASE_ORIGIN =
   (import.meta.env?.VITE_SUPABASE_URL as string | undefined) ??
-  "https://rbrkzrtrlvihpjugksnb.supabase.co";
+  "https://darckkyqmzningzzbkhr.supabase.co";
 
 function NotFoundComponent() {
   return (
@@ -120,10 +121,12 @@ export const Route = createRootRoute({
         href: jetbrainsMonoFont,
         crossOrigin: "anonymous",
       },
-      // Les images du registre proviennent du Storage Supabase et sont chargées
-      // sans CORS : le preconnect ne doit donc PAS porter crossorigin.
+      // API Supabase + bucket R2 des photos : chargés sans CORS, donc le
+      // preconnect ne doit PAS porter crossorigin.
       { rel: "preconnect", href: SUPABASE_ORIGIN },
       { rel: "dns-prefetch", href: SUPABASE_ORIGIN },
+      { rel: "preconnect", href: PHOTOS_BASE_URL },
+      { rel: "dns-prefetch", href: PHOTOS_BASE_URL },
     ],
 
 
