@@ -128,8 +128,12 @@ export const Route = createRootRoute({
       { rel: "preconnect", href: PHOTOS_BASE_URL },
       { rel: "dns-prefetch", href: PHOTOS_BASE_URL },
     ],
-
-
+    scripts: [
+      { src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`, async: true },
+      {
+        children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
