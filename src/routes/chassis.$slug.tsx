@@ -259,7 +259,7 @@ function CarDetail() {
           </div>
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
             <div className="art-frame w-full">
-              <div className="bg-surface-2 overflow-hidden flex items-center justify-center">
+              <div className="bg-surface-2 overflow-hidden flex items-center justify-center aspect-[3/2] max-h-[70vh]">
                 {cover ? (
                   <img
                     src={cover}
@@ -268,8 +268,9 @@ function CarDetail() {
                     alt={voiture.titre}
                     fetchPriority="high"
                     decoding="async"
-                    className="w-full h-auto max-h-[70vh] object-contain"
+                    className="w-full h-full object-contain"
                   />
+
 
                 ) : (
                   <div className="w-full aspect-[3/2] grid place-items-center text-muted-foreground">{t("card.noPhoto")}</div>
