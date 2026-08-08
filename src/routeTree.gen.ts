@@ -24,6 +24,7 @@ import { Route as VoituresIdRouteImport } from './routes/voitures.$id'
 import { Route as ChassisSlugRouteImport } from './routes/chassis.$slug'
 import { Route as ApiTranslateHistoryRouteImport } from './routes/api/translate-history'
 import { Route as ApiNotifySignupRouteImport } from './routes/api/notify-signup'
+import { Route as ApiAdminPhotosRouteImport } from './routes/api/admin-photos'
 
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
@@ -100,6 +101,11 @@ const ApiNotifySignupRoute = ApiNotifySignupRouteImport.update({
   path: '/api/notify-signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminPhotosRoute = ApiAdminPhotosRouteImport.update({
+  id: '/api/admin-photos',
+  path: '/api/admin-photos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video-sitemap.xml': typeof VideoSitemapDotxmlRoute
   '/videos': typeof VideosRoute
+  '/api/admin-photos': typeof ApiAdminPhotosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/api/translate-history': typeof ApiTranslateHistoryRoute
   '/chassis/$slug': typeof ChassisSlugRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video-sitemap.xml': typeof VideoSitemapDotxmlRoute
   '/videos': typeof VideosRoute
+  '/api/admin-photos': typeof ApiAdminPhotosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/api/translate-history': typeof ApiTranslateHistoryRoute
   '/chassis/$slug': typeof ChassisSlugRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video-sitemap.xml': typeof VideoSitemapDotxmlRoute
   '/videos': typeof VideosRoute
+  '/api/admin-photos': typeof ApiAdminPhotosRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/api/translate-history': typeof ApiTranslateHistoryRoute
   '/chassis/$slug': typeof ChassisSlugRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/video-sitemap.xml'
     | '/videos'
+    | '/api/admin-photos'
     | '/api/notify-signup'
     | '/api/translate-history'
     | '/chassis/$slug'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/video-sitemap.xml'
     | '/videos'
+    | '/api/admin-photos'
     | '/api/notify-signup'
     | '/api/translate-history'
     | '/chassis/$slug'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/video-sitemap.xml'
     | '/videos'
+    | '/api/admin-photos'
     | '/api/notify-signup'
     | '/api/translate-history'
     | '/chassis/$slug'
@@ -219,6 +231,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VideoSitemapDotxmlRoute: typeof VideoSitemapDotxmlRoute
   VideosRoute: typeof VideosRoute
+  ApiAdminPhotosRoute: typeof ApiAdminPhotosRoute
   ApiNotifySignupRoute: typeof ApiNotifySignupRoute
   ApiTranslateHistoryRoute: typeof ApiTranslateHistoryRoute
   ChassisSlugRoute: typeof ChassisSlugRoute
@@ -332,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiNotifySignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin-photos': {
+      id: '/api/admin-photos'
+      path: '/api/admin-photos'
+      fullPath: '/api/admin-photos'
+      preLoaderRoute: typeof ApiAdminPhotosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -347,6 +367,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VideoSitemapDotxmlRoute: VideoSitemapDotxmlRoute,
   VideosRoute: VideosRoute,
+  ApiAdminPhotosRoute: ApiAdminPhotosRoute,
   ApiNotifySignupRoute: ApiNotifySignupRoute,
   ApiTranslateHistoryRoute: ApiTranslateHistoryRoute,
   ChassisSlugRoute: ChassisSlugRoute,
