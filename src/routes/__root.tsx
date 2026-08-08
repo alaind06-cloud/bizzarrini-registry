@@ -25,6 +25,11 @@ const SUPABASE_ORIGIN =
   (import.meta.env?.VITE_SUPABASE_URL as string | undefined) ??
   "https://darckkyqmzningzzbkhr.supabase.co";
 
+/** Identifiant de mesure Google Analytics (clé publique). */
+const GA_MEASUREMENT_ID =
+  (import.meta.env?.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY as string | undefined) ??
+  "G-W5NF3YC7TW";
+
 function NotFoundComponent() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -128,8 +133,12 @@ export const Route = createRootRoute({
       { rel: "preconnect", href: PHOTOS_BASE_URL },
       { rel: "dns-prefetch", href: PHOTOS_BASE_URL },
     ],
-
-
+    scripts: [
+      { src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`, async: true },
+      {
+        children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
