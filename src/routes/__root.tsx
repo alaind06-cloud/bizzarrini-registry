@@ -15,6 +15,7 @@ import jetbrainsMonoFont from "../assets/fonts/jetbrains-mono-latin-wght-normal.
 import { CRITICAL_CSS } from "../lib/critical-css";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+import { PHOTOS_BASE_URL } from "@/lib/supabase-env";
 import { AuthProvider } from "@/lib/auth";
 import { I18nProvider } from "@/lib/i18n";
 import { Nav, Footer } from "@/components/Nav";
