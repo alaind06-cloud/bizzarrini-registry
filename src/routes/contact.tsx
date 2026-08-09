@@ -120,7 +120,9 @@ function ContactPage() {
                 <textarea className="field min-h-[160px] resize-y" value={message} onChange={(e) => setMessage(e.target.value)} maxLength={2000} />
               </div>
               {err && <p className="text-sm text-brand">{err}</p>}
-              <button className="btn-brand w-full">{t("contact.submit")}</button>
+              <button className="btn-brand w-full disabled:opacity-60" disabled={sending}>
+                {sending ? "…" : t("contact.submit")}
+              </button>
             </form>
           )}
         </div>
