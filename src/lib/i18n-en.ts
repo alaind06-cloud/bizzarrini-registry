@@ -116,6 +116,7 @@ export const en: Dict = {
   "contact.err.nom": "Name required",
   "contact.err.email": "Invalid email",
   "contact.err.message": "Message too short",
+  "contact.err.send": "Sending failed. Please retry or email registerbizz@gmail.com.",
 
   "admin.kicker": "Administration",
   "admin.title": "Members",
