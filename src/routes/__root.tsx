@@ -31,6 +31,9 @@ const GA_MEASUREMENT_ID =
   (import.meta.env?.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY as string | undefined) ??
   "G-EQB0Y315TC";
 
+/** Identifiant Google Tag Manager. */
+const GTM_ID = "GTM-WZFBMZN6";
+
 function NotFoundComponent() {
   return (
     <div className="min-h-screen flex flex-col">
