@@ -16,6 +16,7 @@ import { CRITICAL_CSS } from "../lib/critical-css";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 import { PHOTOS_BASE_URL } from "@/lib/supabase-env";
+import { SITE_URL } from "@/lib/seo";
 import { AuthProvider } from "@/lib/auth";
 import { I18nProvider } from "@/lib/i18n";
 import { Nav, Footer } from "@/components/Nav";
@@ -86,19 +87,20 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Registre — Bizzarrini Register" },
+      { title: "Bizzarrini Register" },
       {
         name: "description",
         content:
-          "Registre complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis.",
+          "Le registre officiel Bizzarrini : châssis documentés, archives photo, ouvrages de référence et vidéos d'époque.",
       },
       { name: "author", content: "Bizzarrini Register" },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Bizzarrini Register" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "Registre — Bizzarrini Register" },
-      { name: "twitter:title", content: "Registre — Bizzarrini Register" },
-      { property: "og:description", content: "Registre complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis." },
-      { name: "twitter:description", content: "Registre complet des 195 châssis Bizzarrini référencés. Filtrez par modèle, année ou numéro de châssis." },
+      { property: "og:title", content: "Bizzarrini Register" },
+      { name: "twitter:title", content: "Bizzarrini Register" },
+      { property: "og:description", content: "Le registre officiel Bizzarrini : châssis documentés, archives photo, ouvrages de référence et vidéos d'époque." },
+      { name: "twitter:description", content: "Le registre officiel Bizzarrini : châssis documentés, archives photo, ouvrages de référence et vidéos d'époque." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/41b65d5f-c552-4782-a59e-3389f34bce15/id-preview-5f1d0ad3--fc4836e6-1d01-4b29-8f2c-017e1286da53.lovable.app-1784744993309.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/41b65d5f-c552-4782-a59e-3389f34bce15/id-preview-5f1d0ad3--fc4836e6-1d01-4b29-8f2c-017e1286da53.lovable.app-1784744993309.png" },
       { name: "google-site-verification", content: "elihrHQuFba8ZXKMBbINktgQ3tDrMa4dKOskGVUqJyk" },
@@ -137,6 +139,30 @@ export const Route = createRootRoute({
       { src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`, async: true },
       {
         children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": `${SITE_URL}/#organization`,
+              name: "Bizzarrini Register",
+              url: `${SITE_URL}/`,
+              description:
+                "Registre officiel des automobiles conçues par Giotto Bizzarrini : documentation châssis par châssis, archives et expertise.",
+            },
+            {
+              "@type": "WebSite",
+              "@id": `${SITE_URL}/#website`,
+              name: "Bizzarrini Register",
+              url: `${SITE_URL}/`,
+              inLanguage: ["fr", "en", "it"],
+              publisher: { "@id": `${SITE_URL}/#organization` },
+            },
+          ],
+        }),
       },
     ],
   }),

@@ -27,16 +27,27 @@ export const Route = createFileRoute("/chassis/$slug")({
       p: Number.isFinite(Number(search.p)) && Number(search.p) > 1 ? Math.floor(Number(search.p)) : undefined,
     };
   },
-  head: ({ params }) => ({
-    meta: [
-      { title: "Fiche châssis — Bizzarrini Register" },
-      { name: "description", content: "Galerie complète et historique d'un châssis Bizzarrini authentifié." },
-      { property: "og:title", content: "Fiche châssis — Bizzarrini Register" },
-      { property: "og:description", content: "Galerie et historique réservés aux membres validés." },
-      { property: "og:url", content: canonical(`/chassis/${params.slug}`) },
-    ],
-    links: [{ rel: "canonical", href: canonical(`/chassis/${params.slug}`) }],
-  }),
+  head: ({ params }) => {
+    const label = params.slug
+      .split("-")
+      .map((w) => (/^[a-z]$|^\d/.test(w) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)))
+      .join(" ");
+    const title = `${label} — Châssis Bizzarrini | Register`;
+    const description = `Fiche du châssis ${label} : galerie photo d'archives, historique documenté et provenance au registre officiel Bizzarrini.`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: canonical(`/chassis/${params.slug}`) },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ],
+      links: [{ rel: "canonical", href: canonical(`/chassis/${params.slug}`) }],
+    };
+  },
   component: CarDetail,
 });
 
