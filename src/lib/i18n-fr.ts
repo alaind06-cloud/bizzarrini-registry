@@ -122,6 +122,7 @@ export const fr: Dict = {
   "contact.err.nom": "Nom requis",
   "contact.err.email": "Email invalide",
   "contact.err.message": "Message trop court",
+  "contact.err.send": "L'envoi a échoué. Réessayez ou écrivez à registerbizz@gmail.com.",
 
   // Admin
   "admin.kicker": "Administration",
