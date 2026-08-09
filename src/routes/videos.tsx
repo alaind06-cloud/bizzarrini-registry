@@ -87,7 +87,7 @@ function VideosPage() {
         <p className="mt-3 text-sm max-w-3xl text-foreground/90 italic border-l-2 border-brand/60 pl-3">
           {t("videos.featuredNote")}{" "}
           <Link to="/expert-certificate" className="not-italic text-brand hover:underline">
-            {t("common.learnMore")}
+            {t("car.provenance.link")}
           </Link>
         </p>
 

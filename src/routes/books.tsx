@@ -96,9 +96,9 @@ function BooksPage() {
           <h2 className="font-display text-2xl md:text-3xl">{t("books.bizzarriniTitle")}</h2>
           <p className="mt-3 text-sm text-foreground/90 italic border-l-2 border-brand/60 pl-3">
             {t("books.bizzarriniNote")}{" "}
-            <Link to="/expert-certificate" className="not-italic text-brand hover:underline">
-              {t("common.learnMore")}
-            </Link>
+              <Link to="/expert-certificate" className="not-italic text-brand hover:underline">
+                {t("car.provenance.link")}
+              </Link>
           </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10">

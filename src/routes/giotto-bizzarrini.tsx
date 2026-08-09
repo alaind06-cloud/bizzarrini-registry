@@ -299,7 +299,7 @@ const COPY: Record<Lang, Copy> = {
     quote: "La voiture doit être belle, mais avant tout, elle doit être rapide.",
     photoCredit: "Photo : Giotto Bizzarrini dans son atelier — Bizzarrini Heritage",
     legacyKicker: "L'héritage",
-    legacyTitle: "Un ingénieur, trois révolutions",
+    legacyTitle: "Giotto Bizzarrini, un ingénieur, trois révolutions",
     legacyLead: "De la Ferrari 250 GTO à la Bizzarrini 5300 GT, en passant par le V12 Lamborghini, Giotto Bizzarrini a signé les fondations mécaniques du GT italien moderne.",
     stats: [
       { value: "1926", label: "Naissance à Livourne" },
@@ -335,7 +335,7 @@ const COPY: Record<Lang, Copy> = {
     quote: "The car must be beautiful, but above all, it must be fast.",
     photoCredit: "Photo: Giotto Bizzarrini in his workshop — Bizzarrini Heritage",
     legacyKicker: "The legacy",
-    legacyTitle: "One engineer, three revolutions",
+    legacyTitle: "Giotto Bizzarrini: one engineer, three revolutions",
     legacyLead: "From the Ferrari 250 GTO to the Bizzarrini 5300 GT, by way of the Lamborghini V12, Giotto Bizzarrini laid the mechanical foundations of the modern Italian GT.",
     stats: [
       { value: "1926", label: "Born in Livorno" },
@@ -371,7 +371,7 @@ const COPY: Record<Lang, Copy> = {
     quote: "L'auto deve essere bella, ma soprattutto deve essere veloce.",
     photoCredit: "Foto: Giotto Bizzarrini nella sua officina — Bizzarrini Heritage",
     legacyKicker: "L'eredità",
-    legacyTitle: "Un ingegnere, tre rivoluzioni",
+    legacyTitle: "Giotto Bizzarrini, un ingegnere, tre rivoluzioni",
     legacyLead: "Dalla Ferrari 250 GTO alla Bizzarrini 5300 GT, passando per il V12 Lamborghini, Giotto Bizzarrini ha posto le basi meccaniche della moderna GT italiana.",
     stats: [
       { value: "1926", label: "Nascita a Livorno" },
