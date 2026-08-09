@@ -66,8 +66,25 @@ function BooksPage() {
   const bizzarriniBooks = books.slice(0, 3);
   const otherBooks = books.slice(3);
 
+  const booksJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Livres — Bizzarrini Register",
+    url: canonical("/books"),
+    description:
+      "Ouvrages de référence sur Bizzarrini et les voitures de course historiques.",
+    hasPart: books.map((b) => ({
+      "@type": "Book",
+      name: b.titre,
+      author: { "@type": "Person", name: "Philippe Olczyk" },
+      image: b.couverture,
+      ...(b.lienAchat ? { url: b.lienAchat } : {}),
+    })),
+  };
+
   return (
     <div className="container-page py-12 md:py-16">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(booksJsonLd) }} />
       <header className="mb-10 max-w-3xl">
         <p className="text-xs uppercase tracking-[0.35em] text-brand">{t("books.kicker")}</p>
         <h1 className="mt-3 font-display text-4xl md:text-5xl">{t("books.title")}</h1>
