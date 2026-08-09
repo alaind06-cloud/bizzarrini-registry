@@ -139,6 +139,30 @@ export const Route = createRootRoute({
       {
         children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": `${SITE_URL}/#organization`,
+              name: "Bizzarrini Register",
+              url: `${SITE_URL}/`,
+              description:
+                "Registre officiel des automobiles conçues par Giotto Bizzarrini : documentation châssis par châssis, archives et expertise.",
+            },
+            {
+              "@type": "WebSite",
+              "@id": `${SITE_URL}/#website`,
+              name: "Bizzarrini Register",
+              url: `${SITE_URL}/`,
+              inLanguage: ["fr", "en", "it"],
+              publisher: { "@id": `${SITE_URL}/#organization` },
+            },
+          ],
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
