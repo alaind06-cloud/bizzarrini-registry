@@ -24,6 +24,7 @@ import { Route as VoituresIdRouteImport } from './routes/voitures.$id'
 import { Route as ChassisSlugRouteImport } from './routes/chassis.$slug'
 import { Route as ApiTranslateHistoryRouteImport } from './routes/api/translate-history'
 import { Route as ApiNotifySignupRouteImport } from './routes/api/notify-signup'
+import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiAdminPhotosRouteImport } from './routes/api/admin-photos'
 
 const VideosRoute = VideosRouteImport.update({
@@ -101,6 +102,11 @@ const ApiNotifySignupRoute = ApiNotifySignupRouteImport.update({
   path: '/api/notify-signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiContactRoute = ApiContactRouteImport.update({
+  id: '/api/contact',
+  path: '/api/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAdminPhotosRoute = ApiAdminPhotosRouteImport.update({
   id: '/api/admin-photos',
   path: '/api/admin-photos',
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/video-sitemap.xml': typeof VideoSitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/admin-photos': typeof ApiAdminPhotosRoute
+  '/api/contact': typeof ApiContactRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/api/translate-history': typeof ApiTranslateHistoryRoute
   '/chassis/$slug': typeof ChassisSlugRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/video-sitemap.xml': typeof VideoSitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/admin-photos': typeof ApiAdminPhotosRoute
+  '/api/contact': typeof ApiContactRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/api/translate-history': typeof ApiTranslateHistoryRoute
   '/chassis/$slug': typeof ChassisSlugRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/video-sitemap.xml': typeof VideoSitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/api/admin-photos': typeof ApiAdminPhotosRoute
+  '/api/contact': typeof ApiContactRoute
   '/api/notify-signup': typeof ApiNotifySignupRoute
   '/api/translate-history': typeof ApiTranslateHistoryRoute
   '/chassis/$slug': typeof ChassisSlugRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/video-sitemap.xml'
     | '/videos'
     | '/api/admin-photos'
+    | '/api/contact'
     | '/api/notify-signup'
     | '/api/translate-history'
     | '/chassis/$slug'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/video-sitemap.xml'
     | '/videos'
     | '/api/admin-photos'
+    | '/api/contact'
     | '/api/notify-signup'
     | '/api/translate-history'
     | '/chassis/$slug'
@@ -213,6 +224,7 @@ export interface FileRouteTypes {
     | '/video-sitemap.xml'
     | '/videos'
     | '/api/admin-photos'
+    | '/api/contact'
     | '/api/notify-signup'
     | '/api/translate-history'
     | '/chassis/$slug'
@@ -232,6 +244,7 @@ export interface RootRouteChildren {
   VideoSitemapDotxmlRoute: typeof VideoSitemapDotxmlRoute
   VideosRoute: typeof VideosRoute
   ApiAdminPhotosRoute: typeof ApiAdminPhotosRoute
+  ApiContactRoute: typeof ApiContactRoute
   ApiNotifySignupRoute: typeof ApiNotifySignupRoute
   ApiTranslateHistoryRoute: typeof ApiTranslateHistoryRoute
   ChassisSlugRoute: typeof ChassisSlugRoute
@@ -345,6 +358,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiNotifySignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/contact': {
+      id: '/api/contact'
+      path: '/api/contact'
+      fullPath: '/api/contact'
+      preLoaderRoute: typeof ApiContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin-photos': {
       id: '/api/admin-photos'
       path: '/api/admin-photos'
@@ -368,6 +388,7 @@ const rootRouteChildren: RootRouteChildren = {
   VideoSitemapDotxmlRoute: VideoSitemapDotxmlRoute,
   VideosRoute: VideosRoute,
   ApiAdminPhotosRoute: ApiAdminPhotosRoute,
+  ApiContactRoute: ApiContactRoute,
   ApiNotifySignupRoute: ApiNotifySignupRoute,
   ApiTranslateHistoryRoute: ApiTranslateHistoryRoute,
   ChassisSlugRoute: ChassisSlugRoute,
