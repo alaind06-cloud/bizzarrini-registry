@@ -29,7 +29,7 @@ const SUPABASE_ORIGIN =
 /** Identifiant de mesure Google Analytics (clé publique). */
 const GA_MEASUREMENT_ID =
   (import.meta.env?.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY as string | undefined) ??
-  "G-W5NF3YC7TW";
+  "G-EQB0Y315TC";
 
 function NotFoundComponent() {
   return (
