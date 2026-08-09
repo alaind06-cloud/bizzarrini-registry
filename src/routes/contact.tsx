@@ -24,6 +24,7 @@ function ContactPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
   const validate = () => {
@@ -36,7 +37,7 @@ function ContactPage() {
     return null;
   };
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setErr(null);
     const problem = validate();
@@ -45,7 +46,24 @@ function ContactPage() {
       return;
     }
 
-    setSent(true);
+    setSending(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nom: nom.trim(), email: email.trim(), message: message.trim() }),
+      });
+      const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
+      if (!res.ok || !data?.ok) {
+        setErr(t("contact.err.send"));
+        return;
+      }
+      setSent(true);
+    } catch {
+      setErr(t("contact.err.send"));
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -102,7 +120,9 @@ function ContactPage() {
                 <textarea className="field min-h-[160px] resize-y" value={message} onChange={(e) => setMessage(e.target.value)} maxLength={2000} />
               </div>
               {err && <p className="text-sm text-brand">{err}</p>}
-              <button className="btn-brand w-full">{t("contact.submit")}</button>
+              <button className="btn-brand w-full disabled:opacity-60" disabled={sending}>
+                {sending ? "…" : t("contact.submit")}
+              </button>
             </form>
           )}
         </div>
