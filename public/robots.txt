@@ -4,5 +4,5 @@ Disallow: /admin
 Disallow: /auth
 Disallow: /reset-password
 
-Sitemap: https://www.registerbizzarrini.com/sitemap.xml
-Sitemap: https://www.registerbizzarrini.com/video-sitemap.xml
+Sitemap: https://bizzarrini-registry.lovable.app/sitemap.xml
+Sitemap: https://bizzarrini-registry.lovable.app/video-sitemap.xml
