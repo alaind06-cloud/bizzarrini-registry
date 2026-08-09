@@ -31,6 +31,9 @@ const GA_MEASUREMENT_ID =
   (import.meta.env?.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY as string | undefined) ??
   "G-EQB0Y315TC";
 
+/** Identifiant Google Tag Manager. */
+const GTM_ID = "GTM-WZFBMZN6";
+
 function NotFoundComponent() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -137,6 +140,9 @@ export const Route = createRootRoute({
       { rel: "dns-prefetch", href: PHOTOS_BASE_URL },
     ],
     scripts: [
+      {
+        children: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM_ID}');`,
+      },
       { src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`, async: true },
       {
         children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
