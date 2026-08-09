@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { SITE_URL } from "@/lib/seo";
+import { SITEMAP_BASE } from "@/lib/seo";
 import { genepifilmSeries, videos, videoObjectsJsonLd } from "@/data/videos-data";
 
 function escapeXml(value: string): string {
@@ -42,7 +42,7 @@ export const Route = createFileRoute("/video-sitemap.xml")({
           `<?xml version="1.0" encoding="UTF-8"?>`,
           `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">`,
           `  <url>`,
-          `    <loc>${SITE_URL}/videos</loc>`,
+          `    <loc>${SITEMAP_BASE}/videos</loc>`,
           ...blocks,
           `  </url>`,
           `</urlset>`,

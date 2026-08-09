@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { supabase, SITE_MARQUE } from "@/lib/supabase";
-import { SITE_URL } from "@/lib/seo";
+import { SITEMAP_BASE } from "@/lib/seo";
 
 function chassisToSlug(value: string | null | undefined): string {
   if (!value) return "";
@@ -50,7 +50,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         const urls = entries.map((e) =>
           [
             `  <url>`,
-            `    <loc>${SITE_URL}${e.path}</loc>`,
+            `    <loc>${SITEMAP_BASE}${e.path}</loc>`,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             `  </url>`,
