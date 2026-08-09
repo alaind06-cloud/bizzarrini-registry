@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { SITE_URL } from "@/lib/seo";
+import { SITEMAP_BASE } from "@/lib/seo";
 import { genepifilmSeries, videos, videoObjectsJsonLd } from "@/data/videos-data";
 
 function escapeXml(value: string): string {
