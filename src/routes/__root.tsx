@@ -16,6 +16,7 @@ import { CRITICAL_CSS } from "../lib/critical-css";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 import { PHOTOS_BASE_URL } from "@/lib/supabase-env";
+import { SITE_URL } from "@/lib/seo";
 import { AuthProvider } from "@/lib/auth";
 import { I18nProvider } from "@/lib/i18n";
 import { Nav, Footer } from "@/components/Nav";
