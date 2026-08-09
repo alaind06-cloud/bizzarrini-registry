@@ -16,7 +16,7 @@ export const it: Dict = {
   "home.kicker": "Registro ufficiale",
   "home.registryTitle": "Registro storico",
   "home.hero.badge": "Fondato nel 1964 — Livorno, Italia",
-  "home.title": "Il registro ufficiale delle <brand>Bizzarrini</brand>",
+  "home.title": "Il registro ufficiale delle <brand>Bizzarrini</brand> — l'archivio storico autenticato",
   "home.lead": "Quasi tre decenni a raccogliere informazioni sui modelli Bizzarrini e sulla loro storia, condivise con gli appassionati. Ci interessano solo i fatti, per offrirvi il registro Bizzarrini più onesto possibile. Sentitevi liberi di contribuire.",
   "home.cta.request": "Richiedi l'accesso",
   "home.cta.catalog": "Vedi il registro",
