@@ -225,6 +225,7 @@ export type Database = {
           raison: string | null
           statut: string
           telephone: string | null
+          token_validation: string
         }
         Insert: {
           created_at?: string
@@ -237,6 +238,7 @@ export type Database = {
           raison?: string | null
           statut?: string
           telephone?: string | null
+          token_validation?: string
         }
         Update: {
           created_at?: string
@@ -249,6 +251,7 @@ export type Database = {
           raison?: string | null
           statut?: string
           telephone?: string | null
+          token_validation?: string
         }
         Relationships: [
           {
