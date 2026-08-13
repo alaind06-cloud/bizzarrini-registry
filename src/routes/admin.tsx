@@ -1,12 +1,12 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { supabase, type Profil } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { AdminPhotoOrder } from "@/components/AdminPhotoOrder";
 import { AdminChassisOrder } from "@/components/AdminChassisOrder";
 import { AdminAddChassis } from "@/components/admin/AdminAddChassis";
 import { AdminHistoryEdit } from "@/components/admin/AdminHistoryEdit";
+import { AdminValidations } from "@/components/admin/AdminValidations";
 
 
 export const Route = createFileRoute("/admin")({
