@@ -95,6 +95,7 @@ export const it: Dict = {
   "books.bizzarriniNote": "Questi tre volumi sono scritti da un esperto detentore del certificato di autenticazione Giotto Bizzarrini.",
   "books.othersTitle": "Altre opere",
   "books.buy": "Acquista →",
+  "books.visitRegister": "Vedi il registro ufficiale →",
   "books.relatedGiotto": "Correlato a Giotto Bizzarrini →",
 
   "contact.kicker": "Scrivici",
