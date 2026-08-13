@@ -31,31 +31,8 @@ function AdminPage() {
 
   useEffect(() => {
     if (authLoading) return;
-    if (!user) {
-      router.navigate({ to: "/auth" });
-      return;
-    }
-    if (!isAdmin) return;
-    load();
-  }, [user, isAdmin, authLoading, tab]);
-
-  const load = async () => {
-    setLoading(true);
-    const { data } = await supabase
-      .from("profils")
-      .select("*")
-      .eq("statut", tab)
-      .order("created_at", { ascending: false });
-    setProfils((data as Profil[]) ?? []);
-    setLoading(false);
-  };
-
-  const updateStatut = async (id: string, statut: Profil["statut"]) => {
-    setBusy(id);
-    await supabase.from("profils").update({ statut }).eq("id", id);
-    setBusy(null);
-    load();
-  };
+    if (!user) router.navigate({ to: "/auth" });
+  }, [user, authLoading]);
 
   if (authLoading) {
     return <div className="container-page py-20 text-center text-muted-foreground">{t("home.loading")}</div>;
@@ -71,11 +48,6 @@ function AdminPage() {
     );
   }
 
-  const tabs: { k: Profil["statut"]; label: string }[] = [
-    { k: "en_attente", label: t("admin.tab.enAttente") },
-    { k: "valide", label: t("admin.tab.valide") },
-    { k: "refuse", label: t("admin.tab.refuse") },
-  ];
 
   return (
     <div className="container-page py-12">
