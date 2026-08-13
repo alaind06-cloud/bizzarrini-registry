@@ -1,8 +1,20 @@
+export type BookMarque = "bizzarrini" | "de-tomaso" | "lancia-037";
+
+export const MARQUE_SITES: Record<BookMarque, string> = {
+  bizzarrini: "https://registerbizzarrini.com",
+  "de-tomaso": "https://registerdetomaso.com",
+  "lancia-037": "https://registerlancia037.com",
+};
+
+/** Marque du site courant : ses livres ne pointent pas vers un site externe. */
+export const SITE_MARQUE: BookMarque = "bizzarrini";
+
 export interface Book {
   titre: string;
   couverture: string;
   lienAchat?: string;
   id?: string;
+  marque?: BookMarque;
 }
 
 export const books: Book[] = [
