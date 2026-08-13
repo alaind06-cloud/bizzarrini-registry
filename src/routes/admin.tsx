@@ -24,13 +24,9 @@ function AdminPage() {
   const { user, isAdmin, loading: authLoading } = useAuth();
   const { t } = useI18n();
   const router = useRouter();
-  const [profils, setProfils] = useState<Profil[]>([]);
   const [zone, setZone] = useState<"validations" | "gestion">("validations");
   const [section, setSection] = useState<"ajout" | "chassis" | "photos" | "historique">("ajout");
-  const [tab, setTab] = useState<"en_attente" | "valide" | "refuse">("en_attente");
-
-  const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState<string | null>(null);
+  const [pending, setPending] = useState<number | null>(null);
 
 
   useEffect(() => {
