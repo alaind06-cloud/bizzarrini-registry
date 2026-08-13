@@ -6,6 +6,15 @@ export const GIOTTO_JSONLD = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "ProfilePage",
+      "@id": `${CANONICAL}#profilepage`,
+      url: CANONICAL,
+      headline: "Giotto Bizzarrini — fondateur de Bizzarrini",
+      author: { "@type": "Organization", name: "Bizzarrini Register" },
+      mainEntity: { "@id": `${CANONICAL}#giotto-bizzarrini` },
+    },
+    {
+
       "@type": "Person",
       "@id": `${CANONICAL}#giotto-bizzarrini`,
       name: "Giotto Bizzarrini",
