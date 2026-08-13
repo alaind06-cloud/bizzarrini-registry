@@ -100,6 +100,7 @@ export const fr: Dict = {
   "books.bizzarriniNote": "Ces trois ouvrages sont écrits par un expert détenteur du certificat d'authentification Giotto Bizzarrini.",
   "books.othersTitle": "Autres ouvrages",
   "books.buy": "Acheter →",
+  "books.visitRegister": "Voir le registre officiel →",
   "books.relatedGiotto": "En lien avec Giotto Bizzarrini →",
 
   // Contact

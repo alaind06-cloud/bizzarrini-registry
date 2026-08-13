@@ -95,6 +95,7 @@ export const en: Dict = {
   "books.bizzarriniNote": "These three books are written by an expert holding the Giotto Bizzarrini authentication certificate.",
   "books.othersTitle": "Other works",
   "books.buy": "Buy →",
+  "books.visitRegister": "Visit the official register →",
   "books.relatedGiotto": "Related to Giotto Bizzarrini →",
 
   "contact.kicker": "Get in touch",
