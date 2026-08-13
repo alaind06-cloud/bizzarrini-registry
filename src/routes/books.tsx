@@ -1,6 +1,6 @@
 import { canonical } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { books, type Book } from "@/data/books-data";
+import { books, MARQUE_SITES, SITE_MARQUE, type Book } from "@/data/books-data";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/books")({
@@ -23,21 +23,57 @@ export const Route = createFileRoute("/books")({
 
 function BookCard({ book, index }: { book: Book; index: number }) {
   const { t } = useI18n();
+  const registerUrl =
+    book.marque && book.marque !== SITE_MARQUE ? MARQUE_SITES[book.marque] : undefined;
+
+  const cover = (
+    <div className="relative aspect-[3/4] bg-surface-2 overflow-hidden border border-border shadow-[0_20px_40px_-25px_rgba(0,0,0,0.9)] transition-all duration-500 group-hover:-translate-y-1 group-hover:border-brand/60 group-hover:shadow-[0_28px_60px_-25px_rgba(220,38,38,0.35)]">
+      <img
+        src={book.couverture}
+        alt={book.titre}
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+      />
+      <span className="absolute top-2 left-2 text-[10px] uppercase tracking-[0.2em] bg-background/80 backdrop-blur border border-border px-2 py-1 text-muted-foreground">
+        N° {String(index + 1).padStart(2, "0")}
+      </span>
+    </div>
+  );
+
   return (
     <article id={book.id} className="group scroll-mt-24">
-      <div className="relative aspect-[3/4] bg-surface-2 overflow-hidden border border-border shadow-[0_20px_40px_-25px_rgba(0,0,0,0.9)] transition-all duration-500 group-hover:-translate-y-1 group-hover:border-brand/60 group-hover:shadow-[0_28px_60px_-25px_rgba(220,38,38,0.35)]">
-        <img
-          src={book.couverture}
-          alt={book.titre}
-          loading="lazy"
-          className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
-        />
-        <span className="absolute top-2 left-2 text-[10px] uppercase tracking-[0.2em] bg-background/80 backdrop-blur border border-border px-2 py-1 text-muted-foreground">
-          N° {String(index + 1).padStart(2, "0")}
-        </span>
-      </div>
-      <h2 className="mt-4 font-display text-base leading-snug">{book.titre}</h2>
+      {registerUrl ? (
+        <a href={registerUrl} target="_blank" rel="noopener noreferrer" className="block">
+          {cover}
+        </a>
+      ) : (
+        cover
+      )}
+      <h2 className="mt-4 font-display text-base leading-snug">
+        {registerUrl ? (
+          <a
+            href={registerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-brand transition-colors"
+          >
+            {book.titre}
+          </a>
+        ) : (
+          book.titre
+        )}
+      </h2>
       <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">Philippe Olczyk</p>
+      {registerUrl && (
+        <a
+          href={registerUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 block text-xs uppercase tracking-widest text-brand hover:underline"
+        >
+          {t("books.visitRegister")}
+        </a>
+      )}
       {book.lienAchat && (
         <a
           href={book.lienAchat}
