@@ -88,6 +88,7 @@ export type VoitureDetail = {
 
 export type Profil = {
   id: string;
+  marque?: string | null;
   nom: string | null;
   prenom: string | null;
   telephone: string | null;
