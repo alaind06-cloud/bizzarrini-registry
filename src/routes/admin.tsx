@@ -56,40 +56,30 @@ function AdminPage() {
         <h1 className="mt-3 font-display text-4xl">{t("admin.title")}</h1>
       </header>
 
-      {/* Deux zones distinctes : décisions à prendre / gestion du contenu */}
-      <div className="mb-8 grid gap-3 sm:grid-cols-2">
+      {/* Menu persistant : décisions à prendre / gestion du contenu */}
+      <nav className="mb-8 flex flex-wrap items-center gap-8 border-b border-border">
         {([
-          {
-            k: "validations" as const,
-            title: "Validations",
-            desc: "Demandes d'accès des membres",
-          },
-          {
-            k: "gestion" as const,
-            title: "Gestion",
-            desc: "Châssis, ordre du registre et photos",
-          },
+          { k: "validations" as const, title: "Validations" },
+          { k: "gestion" as const, title: "Gestion" },
         ]).map((z) => (
           <button
             key={z.k}
             onClick={() => setZone(z.k)}
-            className={`border px-5 py-4 text-left transition-colors ${
+            className={`-mb-px flex items-center gap-2 border-b-2 px-1 py-3 text-xs uppercase tracking-[0.25em] transition-colors ${
               zone === z.k
-                ? "border-brand bg-surface"
-                : "border-border bg-surface/50 hover:border-foreground/30"
+                ? "border-brand text-brand"
+                : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
-            <span
-              className={`block text-xs uppercase tracking-[0.25em] ${
-                zone === z.k ? "text-brand" : "text-muted-foreground"
-              }`}
-            >
-              {z.title}
-            </span>
-            <span className="mt-1 block text-sm text-muted-foreground">{z.desc}</span>
+            {z.title}
+            {z.k === "validations" && pending !== null && pending > 0 && (
+              <span className="bg-gold/20 px-1.5 py-0.5 text-[0.65rem] tracking-normal text-gold">
+                {pending}
+              </span>
+            )}
           </button>
         ))}
-      </div>
+      </nav>
 
       {zone === "gestion" ? (
         <>
