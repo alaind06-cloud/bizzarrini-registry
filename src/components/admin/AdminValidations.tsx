@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { supabase, type Profil } from "@/lib/supabase";
 import { useI18n } from "@/lib/i18n";
 
@@ -223,9 +223,8 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
               </thead>
               <tbody>
                 {filtered.map((p) => (
-                  <>
+                  <Fragment key={p.id}>
                     <tr
-                      key={p.id}
                       onClick={() => setOpenId(openId === p.id ? null : p.id)}
                       className="cursor-pointer border-b border-border/60 align-top hover:bg-surface/60"
                     >
@@ -238,13 +237,13 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
                       <td className="py-3">{actions(p)}</td>
                     </tr>
                     {openId === p.id && (
-                      <tr key={`${p.id}-d`} className="border-b border-border/60 bg-surface/40">
+                      <tr className="border-b border-border/60 bg-surface/40">
                         <td colSpan={7} className="px-4 py-4">
                           {details(p)}
                         </td>
                       </tr>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </tbody>
             </table>
