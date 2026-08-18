@@ -146,42 +146,31 @@ function AuthPage() {
                 </div>
                 <div>
                   <label htmlFor="auth-raison" className="label-field">
-                    {t("auth.field.raison")}
+                    {t("auth.field.raisonLibre")}
                   </label>
-                  <select
+                  <textarea
                     id="auth-raison"
-                    className="field"
+                    className="field min-h-32 resize-y"
                     value={raison}
                     onChange={(e) => setRaison(e.target.value)}
                     required
+                    rows={4}
+                    maxLength={1000}
+                    placeholder={t("auth.field.raisonLibrePlaceholder")}
+                    aria-describedby="auth-raison-help"
+                  />
+                  <p
+                    id="auth-raison-help"
+                    className={`mt-1 text-xs ${raisonTropCourte ? "text-brand" : "text-muted-foreground"}`}
                   >
-                    <option value="" disabled>
-                      {t("auth.field.raisonPlaceholder")}
-                    </option>
-                    {RAISON_OPTIONS.map((key) => (
-                      <option key={key} value={t(`auth.raison.${key}` as never)}>
-                        {t(`auth.raison.${key}` as never)}
-                      </option>
-                    ))}
-                  </select>
-                  {raison === t("auth.raison.autre") && (
-                    <div className="mt-3">
-                      <label htmlFor="auth-raison-autre" className="label-field">
-                        {t("auth.raison.autrePrecision")} <span className="text-muted-foreground">{t("auth.field.optional")}</span>
-                      </label>
-                      <input
-                        id="auth-raison-autre"
-                        className="field"
-                        value={raisonAutre}
-                        onChange={(e) => setRaisonAutre(e.target.value)}
-                        maxLength={300}
-                        placeholder={t("auth.raison.autrePlaceholder")}
-                      />
-                    </div>
-                  )}
+                    {raisonTropCourte
+                      ? t("auth.err.raisonTropCourte").replace("{n}", String(RAISON_MIN))
+                      : `${raison.trim().length} / ${RAISON_MIN}`}
+                  </p>
                 </div>
               </>
             )}
+
 
             <div>
               <label htmlFor="auth-email" className="label-field">{t("auth.field.email")}</label>
