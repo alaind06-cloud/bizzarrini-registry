@@ -16,14 +16,7 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
-const RAISON_OPTIONS = [
-  "proprietaire",
-  "ancienProprietaire",
-  "passionne",
-  "historien",
-  "professionnel",
-  "autre",
-] as const;
+const RAISON_MIN = 30;
 
 function AuthPage() {
   const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
@@ -37,9 +30,10 @@ function AuthPage() {
   const [prenom, setPrenom] = useState("");
   const [telephone, setTelephone] = useState("");
   const [raison, setRaison] = useState("");
-  const [raisonAutre, setRaisonAutre] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "err" | "ok"; text: string } | null>(null);
+
+  const raisonTropCourte = raison.trim().length > 0 && raison.trim().length < RAISON_MIN;
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -52,10 +46,12 @@ function AuthPage() {
         await refreshProfil();
         router.navigate({ to: "/" });
       } else if (mode === "signup") {
-        const raisonComplete =
-          raison === t("auth.raison.autre") && raisonAutre.trim()
-            ? `${raison} — ${raisonAutre.trim()}`
-            : raison;
+        const raisonComplete = raison.trim();
+        if (raisonComplete.length < RAISON_MIN) {
+          setMsg({ type: "err", text: t("auth.err.raisonTropCourte").replace("{n}", String(RAISON_MIN)) });
+          setBusy(false);
+          return;
+        }
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -146,42 +142,31 @@ function AuthPage() {
                 </div>
                 <div>
                   <label htmlFor="auth-raison" className="label-field">
-                    {t("auth.field.raison")}
+                    {t("auth.field.raisonLibre")}
                   </label>
-                  <select
+                  <textarea
                     id="auth-raison"
-                    className="field"
+                    className="field min-h-32 resize-y"
                     value={raison}
                     onChange={(e) => setRaison(e.target.value)}
                     required
+                    rows={4}
+                    maxLength={1000}
+                    placeholder={t("auth.field.raisonLibrePlaceholder")}
+                    aria-describedby="auth-raison-help"
+                  />
+                  <p
+                    id="auth-raison-help"
+                    className={`mt-1 text-xs ${raisonTropCourte ? "text-brand" : "text-muted-foreground"}`}
                   >
-                    <option value="" disabled>
-                      {t("auth.field.raisonPlaceholder")}
-                    </option>
-                    {RAISON_OPTIONS.map((key) => (
-                      <option key={key} value={t(`auth.raison.${key}` as never)}>
-                        {t(`auth.raison.${key}` as never)}
-                      </option>
-                    ))}
-                  </select>
-                  {raison === t("auth.raison.autre") && (
-                    <div className="mt-3">
-                      <label htmlFor="auth-raison-autre" className="label-field">
-                        {t("auth.raison.autrePrecision")} <span className="text-muted-foreground">{t("auth.field.optional")}</span>
-                      </label>
-                      <input
-                        id="auth-raison-autre"
-                        className="field"
-                        value={raisonAutre}
-                        onChange={(e) => setRaisonAutre(e.target.value)}
-                        maxLength={300}
-                        placeholder={t("auth.raison.autrePlaceholder")}
-                      />
-                    </div>
-                  )}
+                    {raisonTropCourte
+                      ? t("auth.err.raisonTropCourte").replace("{n}", String(RAISON_MIN))
+                      : `${raison.trim().length} / ${RAISON_MIN}`}
+                  </p>
                 </div>
               </>
             )}
+
 
             <div>
               <label htmlFor="auth-email" className="label-field">{t("auth.field.email")}</label>
