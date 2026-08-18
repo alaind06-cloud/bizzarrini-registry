@@ -16,14 +16,7 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
-const RAISON_OPTIONS = [
-  "proprietaire",
-  "ancienProprietaire",
-  "passionne",
-  "historien",
-  "professionnel",
-  "autre",
-] as const;
+const RAISON_MIN = 30;
 
 function AuthPage() {
   const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
@@ -37,9 +30,10 @@ function AuthPage() {
   const [prenom, setPrenom] = useState("");
   const [telephone, setTelephone] = useState("");
   const [raison, setRaison] = useState("");
-  const [raisonAutre, setRaisonAutre] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "err" | "ok"; text: string } | null>(null);
+
+  const raisonTropCourte = raison.trim().length > 0 && raison.trim().length < RAISON_MIN;
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -52,10 +46,12 @@ function AuthPage() {
         await refreshProfil();
         router.navigate({ to: "/" });
       } else if (mode === "signup") {
-        const raisonComplete =
-          raison === t("auth.raison.autre") && raisonAutre.trim()
-            ? `${raison} — ${raisonAutre.trim()}`
-            : raison;
+        const raisonComplete = raison.trim();
+        if (raisonComplete.length < RAISON_MIN) {
+          setMsg({ type: "err", text: t("auth.err.raisonTropCourte").replace("{n}", String(RAISON_MIN)) });
+          setBusy(false);
+          return;
+        }
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
