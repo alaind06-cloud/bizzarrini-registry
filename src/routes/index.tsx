@@ -2,6 +2,7 @@ import { canonical } from "@/lib/seo";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { carSlug } from "@/lib/slug";
 import { useEffect, useMemo, useState } from "react";
+import { RequestAccess } from "@/components/RequestAccess";
 import { getSupabase, photoUrl, SITE_MARQUE, type Voiture } from "@/lib/supabase-env";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
@@ -276,12 +277,7 @@ function HomePage() {
             {!authLoading && !user && (
               <Link to="/auth" className="btn-brand">{t("home.cta.request")}</Link>
             )}
-            {user && !isValide && (
-              <div className="inline-flex items-center gap-3 rounded border border-brand/40 bg-brand/10 px-4 py-2 text-sm backdrop-blur">
-                <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
-                {t("home.pending")}
-              </div>
-            )}
+            {user && !isValide && <RequestAccess />}
             {user && isValide && (
               <a href="#registre" className="btn-brand">{t("home.cta.catalog")}</a>
             )}
