@@ -1,6 +1,9 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { getSupabase, type Profil } from "./supabase-env";
+import { getSupabase, SITE_MARQUE, type Profil } from "./supabase-env";
+
+/** Statut de la demande d'accès de l'utilisateur pour la marque de ce site. */
+export type DemandeStatut = "aucune" | "en_attente" | "valide" | "refuse";
 
 type AuthCtx = {
   session: Session | null;
@@ -9,6 +12,7 @@ type AuthCtx = {
   loading: boolean;
   isValide: boolean;
   isAdmin: boolean;
+  demandeStatut: DemandeStatut;
   refreshProfil: () => Promise<void>;
   signOut: () => Promise<void>;
 };
