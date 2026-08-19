@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { supabase, type Profil } from "@/lib/supabase";
+import { SITE_MARQUE } from "@/lib/supabase-env";
 import { useI18n } from "@/lib/i18n";
 
 type Statut = Profil["statut"];
@@ -47,6 +48,7 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
       .from("demandes_acces")
       .select("user_id, marque, statut, raison, created_at")
       .eq("statut", tab)
+      .eq("marque", SITE_MARQUE)
       .order("created_at", { ascending: false });
 
     const rows = demandes ?? [];
@@ -85,6 +87,7 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
       .from("demandes_acces")
       .select("user_id", { count: "exact", head: true })
       .eq("statut", "en_attente")
+      .eq("marque", SITE_MARQUE)
       .then(({ count }) => onPendingCount(count ?? 0));
   }, [profils]);
 
