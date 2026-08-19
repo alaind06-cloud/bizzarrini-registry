@@ -102,6 +102,7 @@ const fallbackAuth: AuthCtx = {
   loading: true,
   isValide: false,
   isAdmin: false,
+  demandeStatut: "aucune",
   refreshProfil: async () => {},
   signOut: async () => {},
 };
