@@ -63,6 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           await loadProfil(session.user.id);
         } else {
           setProfil(null);
+          setDemandeStatut("aucune");
         }
       });
       unsubscribe = () => sub.subscription.unsubscribe();
