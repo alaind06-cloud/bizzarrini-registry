@@ -29,9 +29,12 @@ function MarqueBadge({ marque }: { marque?: string | null }) {
   );
 }
 
+/** Une demande d'accès enrichie des infos du profil demandeur. */
+type Demande = Profil & { user_id: string; demande_marque: string | null };
+
 export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: number) => void }) {
   const { t } = useI18n();
-  const [profils, setProfils] = useState<Profil[]>([]);
+  const [profils, setProfils] = useState<Demande[]>([]);
   const [tab, setTab] = useState<Statut>("en_attente");
   const [q, setQ] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
@@ -40,12 +43,35 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
 
   const load = async () => {
     setLoading(true);
-    const { data } = await supabase
-      .from("profils")
-      .select("*")
+    const { data: demandes } = await supabase
+      .from("demandes_acces")
+      .select("user_id, marque, statut, raison, created_at")
       .eq("statut", tab)
       .order("created_at", { ascending: false });
-    setProfils((data as Profil[]) ?? []);
+
+    const rows = demandes ?? [];
+    const ids = [...new Set(rows.map((d: any) => d.user_id))];
+    let byId: Record<string, any> = {};
+    if (ids.length) {
+      const { data: pf } = await supabase.from("profils").select("*").in("id", ids);
+      byId = Object.fromEntries((pf ?? []).map((p: any) => [p.id, p]));
+    }
+
+    setProfils(
+      rows.map((d: any) => {
+        const p = byId[d.user_id] ?? {};
+        return {
+          ...p,
+          id: `${d.user_id}:${d.marque}`,
+          user_id: d.user_id,
+          demande_marque: d.marque,
+          marque: d.marque,
+          statut: d.statut,
+          raison: d.raison ?? p.raison ?? null,
+          created_at: d.created_at,
+        } as Demande;
+      }),
+    );
     setLoading(false);
   };
 
@@ -56,15 +82,17 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
   useEffect(() => {
     if (!onPendingCount) return;
     supabase
-      .from("profils")
-      .select("id", { count: "exact", head: true })
+      .from("demandes_acces")
+      .select("user_id", { count: "exact", head: true })
       .eq("statut", "en_attente")
       .then(({ count }) => onPendingCount(count ?? 0));
   }, [profils]);
 
-  const updateStatut = async (id: string, statut: Statut) => {
-    setBusy(id);
-    await supabase.from("profils").update({ statut }).eq("id", id);
+  const updateStatut = async (row: Demande, statut: Statut) => {
+    setBusy(row.id);
+    let req = supabase.from("demandes_acces").update({ statut }).eq("user_id", row.user_id);
+    req = row.demande_marque ? req.eq("marque", row.demande_marque) : req;
+    await req;
     setBusy(null);
     load();
   };
@@ -106,14 +134,14 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
     </span>
   );
 
-  const actions = (p: Profil) => (
+  const actions = (p: Demande) => (
     <div className="flex flex-wrap gap-2">
       {p.statut !== "valide" && (
         <button
           disabled={busy === p.id}
           onClick={(e) => {
             e.stopPropagation();
-            updateStatut(p.id, "valide");
+            updateStatut(p, "valide");
           }}
           className="btn-brand !py-1.5 !px-3 !text-xs"
         >
@@ -125,7 +153,7 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
           disabled={busy === p.id}
           onClick={(e) => {
             e.stopPropagation();
-            updateStatut(p.id, "refuse");
+            updateStatut(p, "refuse");
           }}
           className="btn-ghost !py-1.5 !px-3 !text-xs"
         >

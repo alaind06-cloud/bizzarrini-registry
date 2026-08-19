@@ -52,6 +52,41 @@ export type Database = {
           },
         ]
       }
+      demandes_acces: {
+        Row: {
+          created_at: string
+          marque: string
+          raison: string | null
+          statut: string
+          token_validation: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          marque: string
+          raison?: string | null
+          statut?: string
+          token_validation?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          marque?: string
+          raison?: string | null
+          statut?: string
+          token_validation?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demandes_acces_marque_fkey"
+            columns: ["marque"]
+            isOneToOne: false
+            referencedRelation: "marques"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
       documents_detectes: {
         Row: {
           chassis_detecte: string | null
@@ -219,7 +254,7 @@ export type Database = {
           email: string | null
           est_admin: boolean
           id: string
-          marque: string
+          marque: string | null
           nom: string
           prenom: string
           raison: string | null
@@ -232,7 +267,7 @@ export type Database = {
           email?: string | null
           est_admin?: boolean
           id: string
-          marque: string
+          marque?: string | null
           nom: string
           prenom: string
           raison?: string | null
@@ -245,7 +280,7 @@ export type Database = {
           email?: string | null
           est_admin?: boolean
           id?: string
-          marque?: string
+          marque?: string | null
           nom?: string
           prenom?: string
           raison?: string | null
