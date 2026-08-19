@@ -1,6 +1,6 @@
 import { createFileRoute, useRouter, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase, SITE_MARQUE } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 
@@ -57,7 +57,7 @@ function AuthPage() {
           password,
           options: {
             emailRedirectTo: window.location.origin,
-            data: { nom, prenom, telephone, raison: raisonComplete },
+            data: { nom, prenom, telephone, raison: raisonComplete, marque: SITE_MARQUE },
           },
         });
         if (error) {
