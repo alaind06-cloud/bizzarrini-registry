@@ -80,8 +80,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user: session?.user ?? null,
     profil,
     loading,
-    isValide: profil?.statut === "valide",
+    isValide: demandeStatut === "valide" || !!profil?.est_admin,
     isAdmin: !!profil?.est_admin,
+    demandeStatut,
     refreshProfil: async () => {
       if (session?.user) await loadProfil(session.user.id);
     },
