@@ -141,7 +141,7 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
           disabled={busy === p.id}
           onClick={(e) => {
             e.stopPropagation();
-            updateStatut(p.id, "valide");
+            updateStatut(p, "valide");
           }}
           className="btn-brand !py-1.5 !px-3 !text-xs"
         >
@@ -153,7 +153,7 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
           disabled={busy === p.id}
           onClick={(e) => {
             e.stopPropagation();
-            updateStatut(p.id, "refuse");
+            updateStatut(p, "refuse");
           }}
           className="btn-ghost !py-1.5 !px-3 !text-xs"
         >
