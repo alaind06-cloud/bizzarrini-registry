@@ -85,6 +85,13 @@ export type Database = {
             referencedRelation: "marques"
             referencedColumns: ["slug"]
           },
+          {
+            foreignKeyName: "demandes_acces_profil_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profils"
+            referencedColumns: ["id"]
+          },
         ]
       }
       documents_detectes: {
