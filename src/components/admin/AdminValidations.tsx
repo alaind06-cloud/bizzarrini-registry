@@ -134,7 +134,7 @@ export function AdminValidations({ onPendingCount }: { onPendingCount?: (n: numb
     </span>
   );
 
-  const actions = (p: Profil) => (
+  const actions = (p: Demande) => (
     <div className="flex flex-wrap gap-2">
       {p.statut !== "valide" && (
         <button
