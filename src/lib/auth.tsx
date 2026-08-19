@@ -22,12 +22,22 @@ const Ctx = createContext<AuthCtx | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profil, setProfil] = useState<Profil | null>(null);
+  const [demandeStatut, setDemandeStatut] = useState<DemandeStatut>("aucune");
   const [loading, setLoading] = useState(true);
 
   const loadProfil = async (userId: string) => {
     const supabase = await getSupabase();
-    const { data } = await supabase.from("profils").select("*").eq("id", userId).maybeSingle();
+    const [{ data }, { data: demande }] = await Promise.all([
+      supabase.from("profils").select("*").eq("id", userId).maybeSingle(),
+      supabase
+        .from("demandes_acces")
+        .select("statut")
+        .eq("user_id", userId)
+        .eq("marque", SITE_MARQUE)
+        .maybeSingle(),
+    ]);
     setProfil((data as Profil) ?? null);
+    setDemandeStatut(((demande as { statut?: DemandeStatut } | null)?.statut as DemandeStatut) ?? "aucune");
   };
 
   useEffect(() => {
