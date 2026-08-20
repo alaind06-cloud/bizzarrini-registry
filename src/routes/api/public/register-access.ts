@@ -66,11 +66,8 @@ export const Route = createFileRoute("/api/public/register-access")({
           if (!parsed.success) return fail("invalid_input", 400);
           const { userId, email, nom, prenom, telephone, raison } = parsed.data;
 
-          const admin = adminClient();
-          if (!admin) {
-            console.error("[register-access] service role key manquante");
-            return fail("server_misconfigured", 500);
-          }
+          const { supabaseAdmin: admin } = await import("@/integrations/supabase/client.server");
+
 
           const { data: userRes, error: userErr } = await admin.auth.admin.getUserById(userId);
           if (userErr || !userRes?.user) return fail("unknown_user", 403);
