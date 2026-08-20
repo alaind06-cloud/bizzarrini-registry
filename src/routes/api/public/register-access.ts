@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { createClient } from "@supabase/supabase-js";
+
 import { clientIp, rateLimit } from "@/lib/rate-limit.server";
 
 const MARQUE = "bizzarrini";
@@ -41,25 +41,6 @@ function originAllowed(request: Request): boolean {
   return ALLOWED_ORIGINS.has(origin);
 }
 
-function adminClient() {
-  const url = process.env["SUPABASE_URL"];
-  const key =
-    process.env["SHARED_SUPABASE_SERVICE_ROLE_KEY"] || process.env["SUPABASE_SERVICE_ROLE_KEY"];
-  if (!url || !key) return null;
-  return createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false },
-    global: {
-      fetch: (input, init) => {
-        const headers = new Headers(init?.headers);
-        if (key.startsWith("sb_") && headers.get("Authorization") === `Bearer ${key}`) {
-          headers.delete("Authorization");
-        }
-        headers.set("apikey", key);
-        return fetch(input, { ...init, headers });
-      },
-    },
-  });
-}
 
 export const Route = createFileRoute("/api/public/register-access")({
   server: {
@@ -85,11 +66,8 @@ export const Route = createFileRoute("/api/public/register-access")({
           if (!parsed.success) return fail("invalid_input", 400);
           const { userId, email, nom, prenom, telephone, raison } = parsed.data;
 
-          const admin = adminClient();
-          if (!admin) {
-            console.error("[register-access] service role key manquante");
-            return fail("server_misconfigured", 500);
-          }
+          const { supabaseAdmin: admin } = await import("@/integrations/supabase/client.server");
+
 
           const { data: userRes, error: userErr } = await admin.auth.admin.getUserById(userId);
           if (userErr || !userRes?.user) return fail("unknown_user", 403);
