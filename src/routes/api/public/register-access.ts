@@ -1,9 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 
 import { clientIp, rateLimit } from "@/lib/rate-limit.server";
 
 const MARQUE = "bizzarrini";
+const SUPABASE_URL = "https://darckkyqmzningzzbkhr.supabase.co";
+
+function adminClient() {
+  const key =
+    process.env["SHARED_SUPABASE_SERVICE_ROLE_KEY"] ||
+    process.env["SUPABASE_SERVICE_ROLE_KEY"];
+  if (!key) return null;
+  return createClient(SUPABASE_URL, key, {
+    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+  });
+}
 
 const ALLOWED_ORIGINS = new Set([
   "https://www.registerbizzarrini.com",
@@ -66,7 +78,9 @@ export const Route = createFileRoute("/api/public/register-access")({
           if (!parsed.success) return fail("invalid_input", 400);
           const { userId, email, nom, prenom, telephone, raison } = parsed.data;
 
-          const { supabaseAdmin: admin } = await import("@/integrations/supabase/client.server");
+          const admin = adminClient();
+          if (!admin) return fail("server_misconfigured", 500);
+
 
 
           const { data: userRes, error: userErr } = await admin.auth.admin.getUserById(userId);
@@ -123,17 +137,8 @@ export const Route = createFileRoute("/api/public/register-access")({
             { headers },
           );
         } catch (e: any) {
-          const detail = {
-            name: e?.name ?? null,
-            message: e?.message ?? String(e),
-            stack: e?.stack ?? null,
-            cause: e?.cause?.message ?? null,
-          };
-          console.error("[register-access] server_error", JSON.stringify(detail));
-          return Response.json(
-            { ok: false, reason: "server_error", debug: detail },
-            { status: 500, headers },
-          );
+          console.error("[register-access] server_error", e?.message ?? String(e), e?.stack ?? "");
+          return Response.json({ ok: false, reason: "server_error" }, { status: 500, headers });
         }
       },
     },
