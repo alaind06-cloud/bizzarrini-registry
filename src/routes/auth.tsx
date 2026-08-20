@@ -66,28 +66,36 @@ function AuthPage() {
         }
         console.info("[signup] ok, user id:", data.user?.id);
 
-        // Notification admin — best-effort (2 tentatives), ne doit jamais faire échouer l'inscription.
-        const payload = JSON.stringify({ nom, prenom, email, telephone, raison: raisonComplete });
-        for (let attempt = 1; attempt <= 2; attempt++) {
-          try {
-            const notifyRes = await fetch("/api/notify-signup", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: payload,
-              keepalive: true,
-            });
-            if (notifyRes.ok) {
-              console.info("[notify-signup] notification admin envoyée");
-              break;
-            }
-            const body = await notifyRes.text().catch(() => "");
-            console.error("[notify-signup] HTTP", notifyRes.status, body);
-          } catch (err) {
-            console.error("[notify-signup] network error", err);
-          }
-          if (attempt === 1) await new Promise((r) => setTimeout(r, 1200));
+        // Création fiable du profil + de la demande d'accès (le trigger auth ne se
+        // déclenche pas si l'email existe déjà sur un site frère du même projet Supabase).
+        const userId = data.user?.id;
+        if (!userId) {
+          setMsg({ type: "err", text: t("auth.msg.genericErr") });
+          setBusy(false);
+          return;
+        }
+        const regRes = await fetch("/api/public/register-access", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, email, nom, prenom, telephone, raison: raisonComplete }),
+        }).catch(() => null);
+
+        if (!regRes || !regRes.ok) {
+          const reason = regRes ? await regRes.text().catch(() => "") : "network_error";
+          console.error("[register-access] échec", regRes?.status, reason);
+          setMsg({ type: "err", text: t("auth.msg.genericErr") });
+          setBusy(false);
+          return;
         }
 
+        // Notification admin — best-effort, non bloquante.
+        const payload = JSON.stringify({ nom, prenom, email, telephone, raison: raisonComplete });
+        void fetch("/api/notify-signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: payload,
+          keepalive: true,
+        }).catch((err) => console.error("[notify-signup] network error", err));
 
         setMsg({ type: "ok", text: t("auth.msg.signupOk") });
       } else {
