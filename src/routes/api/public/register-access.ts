@@ -123,8 +123,17 @@ export const Route = createFileRoute("/api/public/register-access")({
             { headers },
           );
         } catch (e: any) {
-          console.error("[register-access]", e);
-          return fail("server_error", 500);
+          const detail = {
+            name: e?.name ?? null,
+            message: e?.message ?? String(e),
+            stack: e?.stack ?? null,
+            cause: e?.cause?.message ?? null,
+          };
+          console.error("[register-access] server_error", JSON.stringify(detail));
+          return Response.json(
+            { ok: false, reason: "server_error", debug: detail },
+            { status: 500, headers },
+          );
         }
       },
     },
