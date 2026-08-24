@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      _bizzarrini_migration_ids: {
+        Row: {
+          done: boolean | null
+          photo_id: number
+        }
+        Insert: {
+          done?: boolean | null
+          photo_id: number
+        }
+        Update: {
+          done?: boolean | null
+          photo_id?: number
+        }
+        Relationships: []
+      }
+      _bizzarrini_missing: {
+        Row: {
+          photo_id: number | null
+        }
+        Insert: {
+          photo_id?: number | null
+        }
+        Update: {
+          photo_id?: number | null
+        }
+        Relationships: []
+      }
+      _migration_retry_ids: {
+        Row: {
+          done: boolean | null
+          photo_id: number
+        }
+        Insert: {
+          done?: boolean | null
+          photo_id: number
+        }
+        Update: {
+          done?: boolean | null
+          photo_id?: number
+        }
+        Relationships: []
+      }
+      _migration_webp_ids: {
+        Row: {
+          done: boolean | null
+          photo_id: number
+        }
+        Insert: {
+          done?: boolean | null
+          photo_id: number
+        }
+        Update: {
+          done?: boolean | null
+          photo_id?: number
+        }
+        Relationships: []
+      }
       books: {
         Row: {
           couverture_url: string | null
