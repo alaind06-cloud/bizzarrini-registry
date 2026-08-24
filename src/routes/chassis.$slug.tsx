@@ -233,18 +233,8 @@ function CarDetail() {
 
 
 
-  if (authLoading || (user && isValide && loading)) {
+  if (authLoading || loading) {
     return <div className="container-page py-20 text-center text-muted-foreground">{t("car.loading")}</div>;
-  }
-
-  if (user && !isValide) {
-    return (
-      <div className="container-page py-20 text-center">
-        <h1 className="font-display text-3xl">{t("car.access.reserved")}</h1>
-        <p className="mt-3 text-muted-foreground">{t("car.access.pending")}</p>
-        <Link to="/" className="btn-ghost mt-6 inline-flex">{t("car.access.back")}</Link>
-      </div>
-    );
   }
 
   if (err || !voiture) {
