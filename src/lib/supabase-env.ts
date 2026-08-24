@@ -33,20 +33,20 @@ export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
  */
 export const SITE_MARQUE = "bizzarrini";
 
-/** Dossier des photos dans le bucket R2 public. */
+/** Dossier des photos dans le bucket public Supabase Storage. */
 const PHOTO_PATH = "bizzarrini";
 
 /**
- * Les photos du registre sont hébergées sur un bucket public Cloudflare R2.
- * Surchargeable via `VITE_SUPABASE_PHOTOS_URL`.
+ * Les photos du registre sont hébergées sur le bucket public Supabase Storage
+ * `voitures-photos`. Surchargeable via `VITE_SUPABASE_PHOTOS_URL`.
  */
 export const PHOTOS_BASE_URL =
   pick("VITE_SUPABASE_PHOTOS_URL", "SUPABASE_PHOTOS_URL") ??
-  "https://pub-5d4df75020194b5d8aaf953bd0696401.r2.dev";
+  "https://darckkyqmzningzzbkhr.supabase.co/storage/v1/object/public/voitures-photos";
 
 /**
- * URL publique d'une photo (R2 sert le fichier tel quel : pas de service de
- * transformation d'image, les options de largeur sont donc ignorées).
+ * URL publique d'une photo (Supabase Storage sert le fichier tel quel ici ;
+ * les options de largeur/qualité ne sont pas utilisées pour l'instant).
  */
 export const photoUrl = (
   filename: string | null | undefined,
