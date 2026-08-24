@@ -1,6 +1,6 @@
 import { canonical } from "@/lib/seo";
 import { chassisToSlug, carSlug } from "@/lib/slug";
-import { createFileRoute, Link, useRouter, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase, photoUrl, SITE_MARQUE, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
@@ -79,7 +79,6 @@ function applyManualPin<T>(slug: string, list: T[]): T[] {
 function CarDetail() {
   const { slug } = Route.useParams();
   const filters = Route.useSearch();
-  const router = useRouter();
   const { user, isValide, loading: authLoading } = useAuth();
   const { t, lang } = useI18n();
   const [voiture, setVoiture] = useState<Voiture | null>(null);
