@@ -41,6 +41,96 @@ export type Database = {
         }
         Relationships: []
       }
+      _lancia_migration_ids: {
+        Row: {
+          photo_id: number
+        }
+        Insert: {
+          photo_id: number
+        }
+        Update: {
+          photo_id?: number
+        }
+        Relationships: []
+      }
+      _lancia_missing: {
+        Row: {
+          photo_id: number | null
+        }
+        Insert: {
+          photo_id?: number | null
+        }
+        Update: {
+          photo_id?: number | null
+        }
+        Relationships: []
+      }
+      _lancia_missing2: {
+        Row: {
+          photo_id: number | null
+        }
+        Insert: {
+          photo_id?: number | null
+        }
+        Update: {
+          photo_id?: number | null
+        }
+        Relationships: []
+      }
+      _lancia_sanitize_map: {
+        Row: {
+          new_key: string | null
+          old_r2_path: string | null
+          photo_id: number
+        }
+        Insert: {
+          new_key?: string | null
+          old_r2_path?: string | null
+          photo_id: number
+        }
+        Update: {
+          new_key?: string | null
+          old_r2_path?: string | null
+          photo_id?: number
+        }
+        Relationships: []
+      }
+      _lancia_webp_gen_ids: {
+        Row: {
+          photo_id: number
+        }
+        Insert: {
+          photo_id: number
+        }
+        Update: {
+          photo_id?: number
+        }
+        Relationships: []
+      }
+      _mangusta_migration_ids: {
+        Row: {
+          photo_id: number
+        }
+        Insert: {
+          photo_id: number
+        }
+        Update: {
+          photo_id?: number
+        }
+        Relationships: []
+      }
+      _mangusta_missing: {
+        Row: {
+          photo_id: number | null
+        }
+        Insert: {
+          photo_id?: number | null
+        }
+        Update: {
+          photo_id?: number | null
+        }
+        Relationships: []
+      }
       _migration_retry_ids: {
         Row: {
           done: boolean | null
@@ -67,6 +157,18 @@ export type Database = {
         }
         Update: {
           done?: boolean | null
+          photo_id?: number
+        }
+        Relationships: []
+      }
+      _webp_gen_ids: {
+        Row: {
+          photo_id: number
+        }
+        Insert: {
+          photo_id: number
+        }
+        Update: {
           photo_id?: number
         }
         Relationships: []
@@ -548,6 +650,8 @@ export type Database = {
       est_admin: { Args: { _uid: string }; Returns: boolean }
       est_valide: { Args: { _uid: string }; Returns: boolean }
       photo_storage_publique: { Args: { _name: string }; Returns: boolean }
+      sanitize_storage_key: { Args: { txt: string }; Returns: string }
+      unaccent: { Args: { "": string }; Returns: string }
     }
     Enums: {
       [_ in never]: never
