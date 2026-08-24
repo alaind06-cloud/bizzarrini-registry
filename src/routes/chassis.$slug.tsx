@@ -250,7 +250,90 @@ function CarDetail() {
   const cover = photoUrl(voiture.cover_photo, { width: 1000, quality: 72 });
   const coverSmall = photoUrl(voiture.cover_photo, { width: 640, quality: 68 });
 
+  // Aperçu public (non connecté ou compte en attente) : contenu factuel indexable,
+  // galerie complète et historique détaillé restant réservés aux membres validés.
+  if (!canAccess) {
+    const label = displayChassis(voiture.chassis);
+    const modelLabel = voiture.modele ?? "Bizzarrini";
+    const summary = [
+      modelLabel,
+      voiture.annee ? String(voiture.annee) : null,
+      label ? `${t("car.chassisLabel")} ${label}` : null,
+    ]
+      .filter(Boolean)
+      .join(" · ");
 
+    return (
+      <div>
+        <section className="border-b border-border">
+          <div className="container-page py-10 md:py-16">
+            <Link to="/" search={filters} className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground">
+              {t("car.backCatalog")}
+            </Link>
+            <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
+              <div className="art-frame w-full">
+                <div className="bg-surface-2 overflow-hidden flex items-center justify-center aspect-[3/2] max-h-[70vh]">
+                  {cover ? (
+                    <img
+                      src={cover}
+                      srcSet={coverSmall ? `${coverSmall} 640w, ${cover} 1000w` : undefined}
+                      sizes="(min-width: 1024px) 62vw, 100vw"
+                      alt={`${modelLabel}${voiture.annee ? ` ${voiture.annee}` : ""}${label ? ` — châssis ${label}` : ""}`}
+                      fetchPriority="high"
+                      decoding="async"
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="w-full aspect-[3/2] grid place-items-center text-muted-foreground">{t("card.noPhoto")}</div>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col gap-6">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.38em] text-muted-foreground">
+                    {modelLabel}{voiture.annee ? ` · ${voiture.annee}` : ""}
+                  </p>
+                  <h1 className="mt-3 font-display text-3xl md:text-5xl leading-[1.05]">{voiture.titre}</h1>
+                  {voiture.chassis && (
+                    <div className="mt-5">
+                      <span className="chassis-plaque">
+                        <span className="text-muted-foreground">{t("car.chassisLabel")}</span>
+                        <span>{label}</span>
+                      </span>
+                    </div>
+                  )}
+                  <p className="mt-5 text-sm text-foreground/85 leading-relaxed">{summary}</p>
+                </div>
+                <SpecsBlock specs={specs} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="container-page py-10">
+          <aside className="max-w-3xl border-l-2 border-brand/60 bg-surface-2/40 p-5 rounded-sm">
+            <h2 className="font-display text-lg md:text-xl">{t("car.provenance.title")}</h2>
+            <p className="mt-2 text-sm text-foreground/85 leading-relaxed">{t("car.provenance.body")}</p>
+            <Link to="/expert-certificate" className="mt-3 inline-block text-xs uppercase tracking-widest text-brand hover:underline">
+              {t("car.provenance.link")}
+            </Link>
+          </aside>
+        </section>
+
+        <section className="container-page pb-16">
+          <div className="max-w-3xl border border-border bg-surface/60 p-6 rounded-sm">
+            <h2 className="font-display text-xl md:text-2xl">{t("car.access.reserved")}</h2>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              {user ? t("car.access.pending") : t("home.lead")}
+            </p>
+            {!user && (
+              <Link to="/auth" className="btn-brand mt-5 inline-flex">{t("home.cta.request")}</Link>
+            )}
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div>
