@@ -226,7 +226,7 @@ function HomePage() {
             src={heroPoster.url}
             srcSet={`${heroPosterMobile.url} 900w, ${heroPoster.url} 1600w`}
             sizes="100vw"
-            alt=""
+            alt="Giotto Bizzarrini en interview dans son atelier, entouré d'archives et de châssis Bizzarrini"
             fetchPriority="high"
             decoding="sync"
             width={1600}
