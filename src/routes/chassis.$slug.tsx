@@ -90,13 +90,10 @@ function CarDetail() {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const [mode, setMode] = useState<"summary" | "full">("full");
 
+  const canAccess = !!user && isValide;
+
   useEffect(() => {
     if (authLoading) return;
-    if (!user) {
-      router.navigate({ to: "/auth" });
-      return;
-    }
-    if (!isValide) return;
 
     (async () => {
       setLoading(true);
@@ -116,6 +113,15 @@ function CarDetail() {
         return;
       }
       const voitureRow = v.data as Voiture;
+      setVoiture(voitureRow);
+
+      if (!canAccess) {
+        setPhotos([]);
+        setDetail(null);
+        setLoading(false);
+        return;
+      }
+
       const [p, d] = await Promise.all([
         supabase.from("photos").select("*").eq("voiture_id", voitureRow.id).order("ordre", { ascending: true }),
         supabase.from("voiture_details").select("*").eq("voiture_id", voitureRow.id).maybeSingle(),
@@ -123,13 +129,12 @@ function CarDetail() {
       if (p.error) {
         setErr(p.error.message);
       } else {
-        setVoiture(voitureRow);
         setPhotos((p.data as Photo[]) ?? []);
         setDetail((d.data as VoitureDetail) ?? null);
       }
       setLoading(false);
     })();
-  }, [slug, user, isValide, authLoading, router]);
+  }, [slug, canAccess, authLoading]);
 
   const [siblings, setSiblings] = useState<Voiture[]>([]);
   useEffect(() => {
