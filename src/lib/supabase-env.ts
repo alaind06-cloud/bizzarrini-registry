@@ -73,6 +73,9 @@ export type Voiture = {
   chassis: string | null;
   cover_photo: string | null;
   photo_prefix: string | null;
+  /** Dossier des photos dans le bucket (ex. `bizzarrini/1964-iso-grifo-a3-c-b-0208/`). */
+  storage_path?: string | null;
+
   /** Ordre manuel du registre, défini depuis /admin (peut être absent). */
   ordre_affichage?: number | null;
 };
