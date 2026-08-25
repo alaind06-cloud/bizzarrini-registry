@@ -533,7 +533,8 @@ function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canA
           {cover ? (
             <img
               src={cover}
-              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+              srcSet={coverSet}
+              sizes="(min-width: 1280px) 300px, (min-width: 1024px) 25vw, (min-width: 640px) 45vw, 92vw"
               alt={alt}
               width={480}
               height={360}
