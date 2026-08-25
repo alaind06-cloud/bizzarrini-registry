@@ -14,6 +14,7 @@ size-adjust:107.4%;ascent-override:90.2%;descent-override:22.48%;line-gap-overri
 @font-face{font-family:"Mono Fallback";src:local("Menlo"),local("Consolas"),local("DejaVu Sans Mono"),local("Liberation Mono"),local("Courier New");
 size-adjust:100%;ascent-override:102%;descent-override:30%;line-gap-override:0%}
 :root{--bg:#f2eee6;--fg:#232323;--muted:#6b6257;--brand:#9e2b25;--border:#ddd4c6;
+--color-background:#f2eee6;--color-brand:#9e2b25;--color-gold:#b9975b;
 --font-sans:"Inter","Inter Fallback",ui-sans-serif,system-ui,-apple-system,sans-serif;
 --font-display:"Bodoni Moda","Bodoni Fallback",Georgia,serif;
 --font-mono:"JetBrains Mono","Mono Fallback",ui-monospace,"SFMono-Regular",Menlo,monospace}
