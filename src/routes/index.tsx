@@ -11,8 +11,12 @@ import { Search } from "lucide-react";
 import { MODEL_GROUPS, sortCars, type RegistryFilters } from "@/data/model-groups";
 import { displayChassis, matchesChassis } from "@/data/chassis-clean";
 
-const heroPoster = { url: "/hero-interview-poster.jpg" };
-const heroPosterMobile = { url: "/hero-interview-poster-mobile.jpg" };
+import heroPosterUrl from "@/assets/hero-interview-desktop.jpg";
+import heroPosterMobileUrl from "@/assets/hero-interview-mobile.jpg";
+
+// Servies depuis /assets/* (URL hachée) → Cache-Control immutable côté CDN.
+const heroPoster = { url: heroPosterUrl };
+const heroPosterMobile = { url: heroPosterMobileUrl };
 
 
 
