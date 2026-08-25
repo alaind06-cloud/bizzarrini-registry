@@ -43,6 +43,7 @@ function AuthPage() {
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        notifyAuthChanged();
         await refreshProfil();
         router.navigate({ to: "/" });
       } else if (mode === "signup") {
