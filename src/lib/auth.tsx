@@ -44,9 +44,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let unsubscribe: (() => void) | undefined;
     let cancelled = false;
 
+    // Visiteur anonyme : inutile de charger le SDK Supabase (~50 Ko) au premier
+    // rendu. On ne l'importe que s'il existe une session persistée, un retour
+    // d'authentification dans l'URL, ou si l'on est dans l'aperçu Lovable
+    // (session brokerée hors localStorage).
+    if (!hasPossibleSession()) {
+      setLoading(false);
+      return;
+    }
+
     (async () => {
       const supabase = await getSupabase();
       if (cancelled) return;
+
 
       const {
         data: { session },
