@@ -85,13 +85,18 @@ export const Route = createFileRoute("/")({
 
 const PAGE_SIZE = 24;
 const REGISTRY_SCROLL_KEY = "registry:scroll";
+const EMPTY_VOITURES: Voiture[] = [];
 
 function HomePage() {
   const { user, isValide, loading: authLoading } = useAuth();
   const { t } = useI18n();
   const { m: modelQuery, d: decadeParam, q: qParam, g: groupParam, p: pageParam } = Route.useSearch();
   const navigate = useNavigate({ from: "/" });
-  const { voitures: initialVoitures } = Route.useLoaderData();
+  // During a hot reload or a failed loader handoff, TanStack Router can
+  // briefly render the split component before loader data is available.
+  // Keep the page renderable so the existing client fallback can recover.
+  const loaderData = Route.useLoaderData();
+  const initialVoitures = loaderData?.voitures ?? EMPTY_VOITURES;
   const [voitures, setVoitures] = useState<Voiture[]>(initialVoitures);
   const [loading, setLoading] = useState(initialVoitures.length === 0);
   const [err, setErr] = useState<string | null>(null);
