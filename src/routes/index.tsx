@@ -454,8 +454,8 @@ function FilterChip({
 function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canAccess: boolean; filters: RegistryFilters; priority?: boolean }) {
 
   const { t } = useI18n();
-  const cover = photoUrl(v.cover_photo, { width: 480 });
-  const cover2x = photoUrl(v.cover_photo, { width: 900, quality: 62 });
+  const cover = photoUrl(v.cover_photo, { width: 480, path: v.storage_path });
+  const cover2x = photoUrl(v.cover_photo, { width: 900, quality: 62, path: v.storage_path });
 
   const slug = carSlug(v);
   const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug }, search: filters } : { to: "/auth" };

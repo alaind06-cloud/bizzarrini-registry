@@ -190,7 +190,7 @@ function CarDetail() {
     (async () => {
       const entries = await Promise.all(
         photos.map(async (p) => {
-          const url = photoUrl(p.filename, { width: 64, quality: 50 });
+          const url = photoUrl(p.filename, { width: 64, quality: 50, path: voiture?.storage_path });
           return [p.id, await isMonochrome(url)] as const;
         }),
       );
@@ -246,8 +246,8 @@ function CarDetail() {
     );
   }
 
-  const cover = photoUrl(voiture.cover_photo, { width: 1000, quality: 72 });
-  const coverSmall = photoUrl(voiture.cover_photo, { width: 640, quality: 68 });
+  const cover = photoUrl(voiture.cover_photo, { width: 1000, quality: 72, path: voiture.storage_path });
+  const coverSmall = photoUrl(voiture.cover_photo, { width: 640, quality: 68, path: voiture.storage_path });
 
   // Aperçu public (non connecté ou compte en attente) : contenu factuel indexable,
   // galerie complète et historique détaillé restant réservés aux membres validés.
@@ -483,7 +483,7 @@ function CarDetail() {
                       className="aspect-square w-full bg-surface-2 overflow-hidden group block"
                     >
                       <img
-                        src={photoUrl(ph.filename, { width: 400 })!}
+                        src={photoUrl(ph.filename, { width: 400, path: voiture.storage_path })!}
                         alt={t("car.docs.chassisCaption")}
                         loading="lazy"
                         decoding="async"
@@ -511,7 +511,7 @@ function CarDetail() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {orderedPress.map((ph) => {
               const idx = orderedPhotos.indexOf(ph);
-              const src = photoUrl(ph.filename, { width: 400 })!;
+              const src = photoUrl(ph.filename, { width: 400, path: voiture.storage_path })!;
 
               return (
                 <button
@@ -549,6 +549,7 @@ function CarDetail() {
           photos={orderedPhotos}
           index={lightboxIdx}
           alt={voiture.titre}
+          storagePath={voiture.storage_path}
           onClose={() => setLightboxIdx(null)}
           onChange={setLightboxIdx}
         />
@@ -932,12 +933,14 @@ function Lightbox({
   photos,
   index,
   alt,
+  storagePath,
   onClose,
   onChange,
 }: {
   photos: Photo[];
   index: number;
   alt: string;
+  storagePath?: string | null;
   onClose: () => void;
   onChange: (i: number) => void;
 }) {
@@ -1124,8 +1127,8 @@ function Lightbox({
     };
   }, [scale]);
 
-  const src = photoUrl(photos[index].filename, { width: 1400, quality: 78 })!;
-  const srcHi = photoUrl(photos[index].filename)!;
+  const src = photoUrl(photos[index].filename, { width: 1400, quality: 78, path: storagePath })!;
+  const srcHi = photoUrl(photos[index].filename, { path: storagePath })!;
 
   return (
     <div

@@ -217,7 +217,7 @@ export function AdminChassisOrder() {
                 </span>
                 {c.cover_photo ? (
                   <img
-                    src={photoUrl(c.cover_photo, { width: 120, quality: 55 }) ?? undefined}
+                    src={photoUrl(c.cover_photo, { width: 120, quality: 55, path: c.storage_path }) ?? undefined}
                     alt=""
                     loading="lazy"
                     draggable={false}
