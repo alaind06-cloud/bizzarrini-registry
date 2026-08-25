@@ -16,7 +16,7 @@ const SAFE_PATH = /^[A-Za-z0-9/_.\- ()]+$/;
 export const Route = createFileRoute("/api/public/cover/$")({
   server: {
     handlers: {
-      GET: async ({ params }) => {
+      GET: async ({ params, request }) => {
         const raw = decodeURIComponent((params as { _splat?: string })._splat ?? "");
         const path = raw.replace(/^\/+/, "");
 
@@ -24,12 +24,23 @@ export const Route = createFileRoute("/api/public/cover/$")({
           return new Response("Bad request", { status: 400 });
         }
 
-        const upstream = `${PHOTOS_BASE_URL}/${path
+        const encodedPath = path
           .split("/")
           .map((seg) => encodeURIComponent(seg))
-          .join("/")}`;
+          .join("/");
 
-        const res = await fetch(upstream);
+        // `?w=` déclenche le redimensionnement Supabase (endpoint `render/image`),
+        // qui renvoie du WebP quand le client l'accepte : on ne transfère que
+        // les pixels réellement affichés.
+        const wRaw = Number(new URL(request.url).searchParams.get("w"));
+        const width = Number.isFinite(wRaw) && wRaw >= 64 && wRaw <= 2000 ? Math.round(wRaw) : null;
+
+        const upstream = width
+          ? `${PHOTOS_BASE_URL.replace("/object/public/", "/render/image/public/")}/${encodedPath}?width=${width}&quality=58&resize=contain`
+          : `${PHOTOS_BASE_URL}/${encodedPath}`;
+
+        const accept = request.headers.get("accept");
+        const res = await fetch(upstream, accept ? { headers: { accept } } : undefined);
         if (!res.ok || !res.body) {
           return new Response("Not found", {
             status: res.status === 404 ? 404 : 502,
