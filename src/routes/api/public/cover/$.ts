@@ -53,6 +53,7 @@ export const Route = createFileRoute("/api/public/cover/$")({
           headers: {
             "Content-Type": res.headers.get("content-type") ?? "image/jpeg",
             "Cache-Control": "public, max-age=31536000, immutable",
+            Vary: "Accept",
             "X-Content-Type-Options": "nosniff",
           },
         });
