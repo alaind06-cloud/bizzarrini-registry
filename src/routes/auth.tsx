@@ -1,7 +1,7 @@
 import { createFileRoute, useRouter, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { supabase, SITE_MARQUE } from "@/lib/supabase";
-import { useAuth } from "@/lib/auth";
+import { useAuth, notifyAuthChanged } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/auth")({
@@ -43,6 +43,7 @@ function AuthPage() {
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        notifyAuthChanged();
         await refreshProfil();
         router.navigate({ to: "/" });
       } else if (mode === "signup") {

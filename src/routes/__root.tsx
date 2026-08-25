@@ -139,9 +139,20 @@ export const Route = createRootRoute({
       { rel: "dns-prefetch", href: PHOTOS_BASE_URL },
     ],
     scripts: [
-      { src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`, async: true },
+      // Google Analytics : chargé hors du chemin critique (idle ou 1re
+      // interaction) pour ne pas peser sur le LCP/FCP.
       {
-        children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
+        children:
+          `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}` +
+          `gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}',{send_page_view:true});` +
+          `(function(){var done=false;function load(){if(done)return;done=true;` +
+          `var s=document.createElement('script');s.async=true;` +
+          `s.src='https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}';` +
+          `document.head.appendChild(s);}` +
+          `['pointerdown','keydown','touchstart','scroll'].forEach(function(e){` +
+          `addEventListener(e,load,{once:true,passive:true})});` +
+          `var idle=window.requestIdleCallback||function(f){setTimeout(f,3000)};` +
+          `addEventListener('load',function(){idle(load,{timeout:6000})},{once:true});})();`,
       },
       {
         type: "application/ld+json",
