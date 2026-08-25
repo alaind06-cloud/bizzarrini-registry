@@ -3,7 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { carSlug } from "@/lib/slug";
 import { useEffect, useMemo, useState } from "react";
 import { RequestAccess } from "@/components/RequestAccess";
-import { coverAlt, coverUrl, getSupabase, SITE_MARQUE, type Voiture } from "@/lib/supabase-env";
+import { coverAlt, coverSrcSet, coverUrl, getSupabase, SITE_MARQUE, type Voiture } from "@/lib/supabase-env";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
