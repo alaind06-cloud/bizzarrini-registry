@@ -62,6 +62,40 @@ export const photoUrl = (
     .join("/");
   return `${PHOTOS_BASE_URL}/${encoded}/${encodeURIComponent(filename)}`;
 };
+/**
+ * URL d'une photo de couverture publique servie via notre proxy
+ * `/api/public/cover/...`, qui ajoute un `Cache-Control` immuable d'un an
+ * (Supabase Storage ne renvoie qu'1 h). À réserver aux covers publiques.
+ */
+export const coverUrl = (
+  filename: string | null | undefined,
+  opts?: { path?: string | null },
+) => {
+  if (!filename) return null;
+  const raw = (opts?.path ?? PHOTO_PATH).trim().replace(/^\/+|\/+$/g, "");
+  const folder = raw.length ? raw : PHOTO_PATH;
+  const encoded = folder
+    .split("/")
+    .map((seg) => encodeURIComponent(seg))
+    .join("/");
+  return `/api/public/cover/${encoded}/${encodeURIComponent(filename)}`;
+};
+
+/** Texte alternatif SEO : « Bizzarrini <modèle> châssis <n°>, <année> ». */
+export const coverAlt = (v: {
+  modele?: string | null;
+  chassis?: string | null;
+  annee?: number | null;
+  titre?: string | null;
+}) => {
+  const parts: string[] = ["Bizzarrini"];
+  if (v.modele) parts.push(v.modele);
+  else if (v.titre) parts.push(v.titre);
+  const base = parts.join(" ");
+  const chassis = v.chassis ? ` châssis ${v.chassis}` : "";
+  const annee = v.annee ? `, ${v.annee}` : "";
+  return `${base}${chassis}${annee}`;
+};
 
 
 
