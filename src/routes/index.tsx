@@ -3,7 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { carSlug } from "@/lib/slug";
 import { useEffect, useMemo, useState } from "react";
 import { RequestAccess } from "@/components/RequestAccess";
-import { getSupabase, photoUrl, SITE_MARQUE, type Voiture } from "@/lib/supabase-env";
+import { coverAlt, coverUrl, getSupabase, SITE_MARQUE, type Voiture } from "@/lib/supabase-env";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
@@ -19,6 +19,28 @@ const heroPosterMobile = { url: "/hero-interview-poster-mobile.jpg" };
 
 type RegisterSearch = { m?: string; d?: string; q?: string; g?: string; p?: number };
 
+/** Charge le registre public (SSR + navigation client) pour que la grille de
+ *  covers soit présente dans le HTML servi au premier chargement. */
+async function loadRegistry(): Promise<Voiture[]> {
+  try {
+    const supabase = await getSupabase();
+    const { data, error } = await supabase
+      .from("voitures")
+      .select("*")
+      .eq("marque", SITE_MARQUE)
+      .order("id", { ascending: true });
+    if (error) return [];
+    const clean = ((data as Voiture[]) ?? []).filter(
+      (v) =>
+        (v.titre ?? "").trim().toUpperCase() !== "COVER" &&
+        (v.modele ?? "").trim().toUpperCase() !== "COVER",
+    );
+    return sortCars(clean);
+  } catch {
+    return [];
+  }
+}
+
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): RegisterSearch => ({
     m: typeof search.m === "string" && search.m.trim() ? search.m.trim() : undefined,
@@ -27,6 +49,8 @@ export const Route = createFileRoute("/")({
     g: typeof search.g === "string" && search.g.trim() ? search.g.trim() : undefined,
     p: Number.isFinite(Number(search.p)) && Number(search.p) > 1 ? Math.floor(Number(search.p)) : undefined,
   }),
+  loader: async () => ({ voitures: await loadRegistry() }),
+
   head: () => ({
     meta: [
       { title: "Bizzarrini Register — Registre officiel des châssis" },
