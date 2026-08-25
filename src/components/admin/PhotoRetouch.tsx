@@ -19,13 +19,14 @@ import {
 type Props = {
   photo: Photo;
   isCover: boolean;
+  storagePath?: string | null;
   onClose: () => void;
   onRenamed: (photoId: string, filename: string) => void;
   onRetouched?: (photoId: string) => void;
 };
 
 
-export function PhotoRetouch({ photo, isCover, onClose, onRenamed, onRetouched }: Props) {
+export function PhotoRetouch({ photo, isCover, storagePath, onClose, onRenamed, onRetouched }: Props) {
   const [source, setSource] = useState<HTMLCanvasElement | null>(null);
   const [crop, setCrop] = useState<CropRect | null>(null);
   const [auto, setAuto] = useState<CropRect | null>(null);
@@ -38,7 +39,7 @@ export function PhotoRetouch({ photo, isCover, onClose, onRenamed, onRetouched }
     let alive = true;
     (async () => {
       try {
-        const url = photoUrl(photo.filename);
+        const url = photoUrl(photo.filename, { path: storagePath });
         if (!url) throw new Error("Photo introuvable");
         const canvas = await loadFromUrl(url);
         if (!alive) return;
@@ -53,7 +54,7 @@ export function PhotoRetouch({ photo, isCover, onClose, onRenamed, onRetouched }
     return () => {
       alive = false;
     };
-  }, [photo.filename]);
+  }, [photo.filename, storagePath]);
 
   const apply = async () => {
     if (!source || !crop) return;

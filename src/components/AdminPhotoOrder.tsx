@@ -28,6 +28,7 @@ export function AdminPhotoOrder() {
   const [save, setSave] = useState<SaveState>("idle");
   const [error, setError] = useState<string | null>(null);
   const [cover, setCover] = useState<string | null>(null);
+  const [storagePath, setStoragePath] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [preview, setPreview] = useState<number | null>(null);
   const [retouch, setRetouch] = useState<Photo | null>(null);
@@ -40,7 +41,7 @@ export function AdminPhotoOrder() {
       const [{ data: carRows }, { data: photoRows }] = await Promise.all([
         supabase
           .from("voitures")
-          .select("id, titre, modele, annee, chassis, cover_photo, photo_prefix")
+          .select("id, titre, modele, annee, chassis, cover_photo, photo_prefix, storage_path")
           .eq("marque", SITE_MARQUE)
           .order("id", { ascending: true }),
         supabase.from("photos").select("voiture_id, ordre"),
@@ -61,6 +62,7 @@ export function AdminPhotoOrder() {
     if (!carId) {
       setPhotos([]);
       setCover(null);
+      setStoragePath(null);
       return;
     }
     (async () => {
@@ -73,10 +75,12 @@ export function AdminPhotoOrder() {
           .select("*")
           .eq("voiture_id", carId)
           .order("ordre", { ascending: true }),
-        supabase.from("voitures").select("cover_photo").eq("id", carId).maybeSingle(),
+        supabase.from("voitures").select("cover_photo, storage_path").eq("id", carId).maybeSingle(),
       ]);
       setPhotos((data as Photo[]) ?? []);
-      setCover((car as { cover_photo: string | null } | null)?.cover_photo ?? null);
+      const carRow = car as { cover_photo: string | null; storage_path: string | null } | null;
+      setCover(carRow?.cover_photo ?? null);
+      setStoragePath(carRow?.storage_path ?? null);
       setLoading(false);
     })();
   }, [carId]);
@@ -412,7 +416,7 @@ export function AdminPhotoOrder() {
                   aria-label={`Aperçu de ${p.filename}`}
                 >
                   <img
-                    src={photoUrl(p.filename, { width: 300, quality: 60 }) ?? undefined}
+                    src={photoUrl(p.filename, { width: 300, quality: 60, path: storagePath }) ?? undefined}
                     alt={p.filename}
                     loading="lazy"
                     draggable={false}
@@ -521,7 +525,7 @@ export function AdminPhotoOrder() {
           onClick={() => setPreview(null)}
         >
           <img
-            src={photoUrl(photos[preview].filename, { width: 1600, quality: 80 }) ?? undefined}
+            src={photoUrl(photos[preview].filename, { width: 1600, quality: 80, path: storagePath }) ?? undefined}
             alt={photos[preview].filename}
             className="max-h-[80vh] max-w-full object-contain"
             onClick={(e) => e.stopPropagation()}
@@ -562,6 +566,7 @@ export function AdminPhotoOrder() {
 
       {retouch && (
         <PhotoRetouch
+          storagePath={storagePath}
           photo={retouch}
           isCover={cover === retouch.filename}
           onClose={() => setRetouch(null)}
