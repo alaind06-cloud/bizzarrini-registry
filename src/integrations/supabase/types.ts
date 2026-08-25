@@ -253,69 +253,6 @@ export type Database = {
           },
         ]
       }
-      documents_detectes: {
-        Row: {
-          chassis_detecte: string | null
-          created_at: string
-          dossier_source: string
-          fichier: string
-          id: number
-          marque: string | null
-          notes: string | null
-          resume: string | null
-          statut: string
-          texte_ocr: string | null
-          type_document: string | null
-          valide_le: string | null
-          voiture_id: number | null
-        }
-        Insert: {
-          chassis_detecte?: string | null
-          created_at?: string
-          dossier_source: string
-          fichier: string
-          id?: never
-          marque?: string | null
-          notes?: string | null
-          resume?: string | null
-          statut?: string
-          texte_ocr?: string | null
-          type_document?: string | null
-          valide_le?: string | null
-          voiture_id?: number | null
-        }
-        Update: {
-          chassis_detecte?: string | null
-          created_at?: string
-          dossier_source?: string
-          fichier?: string
-          id?: never
-          marque?: string | null
-          notes?: string | null
-          resume?: string | null
-          statut?: string
-          texte_ocr?: string | null
-          type_document?: string | null
-          valide_le?: string | null
-          voiture_id?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "documents_detectes_marque_fkey"
-            columns: ["marque"]
-            isOneToOne: false
-            referencedRelation: "marques"
-            referencedColumns: ["slug"]
-          },
-          {
-            foreignKeyName: "documents_detectes_voiture_id_fkey"
-            columns: ["voiture_id"]
-            isOneToOne: false
-            referencedRelation: "voitures"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       marques: {
         Row: {
           actif: boolean
@@ -550,33 +487,6 @@ export type Database = {
           },
         ]
       }
-      voiture_details_historique: {
-        Row: {
-          description_en: string | null
-          description_fr: string | null
-          description_it: string | null
-          id: number
-          modifie_le: string
-          voiture_id: number
-        }
-        Insert: {
-          description_en?: string | null
-          description_fr?: string | null
-          description_it?: string | null
-          id?: never
-          modifie_le?: string
-          voiture_id: number
-        }
-        Update: {
-          description_en?: string | null
-          description_fr?: string | null
-          description_it?: string | null
-          id?: never
-          modifie_le?: string
-          voiture_id?: number
-        }
-        Relationships: []
-      }
       voitures: {
         Row: {
           annee: number | null
@@ -586,6 +496,8 @@ export type Database = {
           created_at: string
           id: number
           marque: string
+          model_folder: string | null
+          model_folder_dt: string | null
           modele: string
           ordre_affichage: number | null
           pays_evenement: string | null
@@ -604,6 +516,8 @@ export type Database = {
           created_at?: string
           id?: never
           marque: string
+          model_folder?: string | null
+          model_folder_dt?: string | null
           modele: string
           ordre_affichage?: number | null
           pays_evenement?: string | null
@@ -622,6 +536,8 @@ export type Database = {
           created_at?: string
           id?: never
           marque?: string
+          model_folder?: string | null
+          model_folder_dt?: string | null
           modele?: string
           ordre_affichage?: number | null
           pays_evenement?: string | null

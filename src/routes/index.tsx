@@ -3,7 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { carSlug } from "@/lib/slug";
 import { useEffect, useMemo, useState } from "react";
 import { RequestAccess } from "@/components/RequestAccess";
-import { getSupabase, photoUrl, SITE_MARQUE, type Voiture } from "@/lib/supabase-env";
+import { coverAlt, coverUrl, getSupabase, SITE_MARQUE, type Voiture } from "@/lib/supabase-env";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
@@ -19,6 +19,28 @@ const heroPosterMobile = { url: "/hero-interview-poster-mobile.jpg" };
 
 type RegisterSearch = { m?: string; d?: string; q?: string; g?: string; p?: number };
 
+/** Charge le registre public (SSR + navigation client) pour que la grille de
+ *  covers soit présente dans le HTML servi au premier chargement. */
+async function loadRegistry(): Promise<Voiture[]> {
+  try {
+    const supabase = await getSupabase();
+    const { data, error } = await supabase
+      .from("voitures")
+      .select("*")
+      .eq("marque", SITE_MARQUE)
+      .order("id", { ascending: true });
+    if (error) return [];
+    const clean = ((data as Voiture[]) ?? []).filter(
+      (v) =>
+        (v.titre ?? "").trim().toUpperCase() !== "COVER" &&
+        (v.modele ?? "").trim().toUpperCase() !== "COVER",
+    );
+    return sortCars(clean);
+  } catch {
+    return [];
+  }
+}
+
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): RegisterSearch => ({
     m: typeof search.m === "string" && search.m.trim() ? search.m.trim() : undefined,
@@ -27,6 +49,8 @@ export const Route = createFileRoute("/")({
     g: typeof search.g === "string" && search.g.trim() ? search.g.trim() : undefined,
     p: Number.isFinite(Number(search.p)) && Number(search.p) > 1 ? Math.floor(Number(search.p)) : undefined,
   }),
+  loader: async () => ({ voitures: await loadRegistry() }),
+
   head: () => ({
     meta: [
       { title: "Bizzarrini Register — Registre officiel des châssis" },
@@ -67,9 +91,11 @@ function HomePage() {
   const { t } = useI18n();
   const { m: modelQuery, d: decadeParam, q: qParam, g: groupParam, p: pageParam } = Route.useSearch();
   const navigate = useNavigate({ from: "/" });
-  const [voitures, setVoitures] = useState<Voiture[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { voitures: initialVoitures } = Route.useLoaderData();
+  const [voitures, setVoitures] = useState<Voiture[]>(initialVoitures);
+  const [loading, setLoading] = useState(initialVoitures.length === 0);
   const [err, setErr] = useState<string | null>(null);
+
 
   const modele = groupParam ?? "all";
   const annee = decadeParam ?? "all";
@@ -95,8 +121,14 @@ function HomePage() {
 
 
   useEffect(() => {
+    setVoitures(initialVoitures);
+    if (initialVoitures.length > 0) {
+      setLoading(false);
+      return;
+    }
+    // Repli client si le chargement SSR a échoué (réseau, RLS, etc.).
+    let cancelled = false;
     (async () => {
-
       setLoading(true);
       const supabase = await getSupabase();
       const { data, error } = await supabase
@@ -104,6 +136,7 @@ function HomePage() {
         .select("*")
         .eq("marque", SITE_MARQUE)
         .order("id", { ascending: true });
+      if (cancelled) return;
       if (error) setErr(error.message);
       else {
         const clean = ((data as Voiture[]) ?? []).filter(
@@ -113,7 +146,12 @@ function HomePage() {
       }
       setLoading(false);
     })();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [initialVoitures]);
+
+
 
   // Groupes de modèles partagés avec la fiche châssis
 
@@ -454,11 +492,13 @@ function FilterChip({
 function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canAccess: boolean; filters: RegistryFilters; priority?: boolean }) {
 
   const { t } = useI18n();
-  const cover = photoUrl(v.cover_photo, { width: 480, path: v.storage_path });
-  const cover2x = photoUrl(v.cover_photo, { width: 900, quality: 62, path: v.storage_path });
+  const cover = coverUrl(v.cover_photo, { path: v.storage_path });
+  const alt = coverAlt({ ...v, chassis: v.chassis ? displayChassis(v.chassis) : null });
 
   const slug = carSlug(v);
-  const href = canAccess && slug ? { to: "/chassis/$slug", params: { slug }, search: filters } : { to: "/auth" };
+  // La fiche châssis est publique (résumé + cover) : le lien reste crawlable.
+  const href = slug ? { to: "/chassis/$slug", params: { slug }, search: filters } : { to: "/auth" };
+
 
   // Strip model/year echo from the title to avoid repetition on the card
   const rawTitle = (v.titre ?? "").trim();
@@ -487,11 +527,11 @@ function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canA
           {cover ? (
             <img
               src={cover}
-              srcSet={cover2x ? `${cover} 480w, ${cover2x} 900w` : undefined}
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-              alt={v.titre}
+              alt={alt}
               width={480}
               height={360}
+
               loading={priority ? "eager" : "lazy"}
               fetchPriority={priority ? "high" : "low"}
               decoding="async"

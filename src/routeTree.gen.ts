@@ -27,6 +27,7 @@ import { Route as ApiNotifySignupRouteImport } from './routes/api/notify-signup'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiAdminPhotosRouteImport } from './routes/api/admin-photos'
 import { Route as ApiPublicRegisterAccessRouteImport } from './routes/api/public/register-access'
+import { Route as ApiPublicCoverSplatRouteImport } from './routes/api/public/cover/$'
 
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
@@ -118,6 +119,11 @@ const ApiPublicRegisterAccessRoute = ApiPublicRegisterAccessRouteImport.update({
   path: '/api/public/register-access',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCoverSplatRoute = ApiPublicCoverSplatRouteImport.update({
+  id: '/api/public/cover/$',
+  path: '/api/public/cover/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/chassis/$slug': typeof ChassisSlugRoute
   '/voitures/$id': typeof VoituresIdRoute
   '/api/public/register-access': typeof ApiPublicRegisterAccessRoute
+  '/api/public/cover/$': typeof ApiPublicCoverSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/chassis/$slug': typeof ChassisSlugRoute
   '/voitures/$id': typeof VoituresIdRoute
   '/api/public/register-access': typeof ApiPublicRegisterAccessRoute
+  '/api/public/cover/$': typeof ApiPublicCoverSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/chassis/$slug': typeof ChassisSlugRoute
   '/voitures/$id': typeof VoituresIdRoute
   '/api/public/register-access': typeof ApiPublicRegisterAccessRoute
+  '/api/public/cover/$': typeof ApiPublicCoverSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/chassis/$slug'
     | '/voitures/$id'
     | '/api/public/register-access'
+    | '/api/public/cover/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/chassis/$slug'
     | '/voitures/$id'
     | '/api/public/register-access'
+    | '/api/public/cover/$'
   id:
     | '__root__'
     | '/'
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/chassis/$slug'
     | '/voitures/$id'
     | '/api/public/register-access'
+    | '/api/public/cover/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -262,6 +274,7 @@ export interface RootRouteChildren {
   ChassisSlugRoute: typeof ChassisSlugRoute
   VoituresIdRoute: typeof VoituresIdRoute
   ApiPublicRegisterAccessRoute: typeof ApiPublicRegisterAccessRoute
+  ApiPublicCoverSplatRoute: typeof ApiPublicCoverSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -392,6 +405,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRegisterAccessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/cover/$': {
+      id: '/api/public/cover/$'
+      path: '/api/public/cover/$'
+      fullPath: '/api/public/cover/$'
+      preLoaderRoute: typeof ApiPublicCoverSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -414,6 +434,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChassisSlugRoute: ChassisSlugRoute,
   VoituresIdRoute: VoituresIdRoute,
   ApiPublicRegisterAccessRoute: ApiPublicRegisterAccessRoute,
+  ApiPublicCoverSplatRoute: ApiPublicCoverSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
