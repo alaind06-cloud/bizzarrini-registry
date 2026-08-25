@@ -3,7 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { carSlug } from "@/lib/slug";
 import { useEffect, useMemo, useState } from "react";
 import { RequestAccess } from "@/components/RequestAccess";
-import { coverAlt, coverUrl, getSupabase, SITE_MARQUE, type Voiture } from "@/lib/supabase-env";
+import { coverAlt, coverSrcSet, coverUrl, getSupabase, SITE_MARQUE, type Voiture } from "@/lib/supabase-env";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { FilterPills, type ActivePill } from "@/components/FilterPills";
@@ -497,7 +497,8 @@ function FilterChip({
 function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canAccess: boolean; filters: RegistryFilters; priority?: boolean }) {
 
   const { t } = useI18n();
-  const cover = coverUrl(v.cover_photo, { path: v.storage_path });
+  const cover = coverUrl(v.cover_photo, { path: v.storage_path, width: 400 });
+  const coverSet = coverSrcSet(v.cover_photo, { path: v.storage_path });
   const alt = coverAlt({ ...v, chassis: v.chassis ? displayChassis(v.chassis) : null });
 
   const slug = carSlug(v);
@@ -532,7 +533,8 @@ function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canA
           {cover ? (
             <img
               src={cover}
-              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+              srcSet={coverSet}
+              sizes="(min-width: 1280px) 300px, (min-width: 1024px) 25vw, (min-width: 640px) 45vw, 92vw"
               alt={alt}
               width={480}
               height={360}

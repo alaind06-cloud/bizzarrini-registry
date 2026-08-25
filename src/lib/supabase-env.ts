@@ -69,7 +69,7 @@ export const photoUrl = (
  */
 export const coverUrl = (
   filename: string | null | undefined,
-  opts?: { path?: string | null },
+  opts?: { path?: string | null; width?: number },
 ) => {
   if (!filename) return null;
   const raw = (opts?.path ?? PHOTO_PATH).trim().replace(/^\/+|\/+$/g, "");
@@ -78,7 +78,22 @@ export const coverUrl = (
     .split("/")
     .map((seg) => encodeURIComponent(seg))
     .join("/");
-  return `/api/public/cover/${encoded}/${encodeURIComponent(filename)}`;
+  const q = opts?.width ? `?w=${Math.round(opts.width)}` : "";
+  return `/api/public/cover/${encoded}/${encodeURIComponent(filename)}${q}`;
+};
+
+/** Largeurs responsives servies pour les covers du catalogue. */
+export const COVER_WIDTHS = [320, 400, 560, 760] as const;
+
+/** `srcSet` responsive pour une cover du catalogue. */
+export const coverSrcSet = (
+  filename: string | null | undefined,
+  opts?: { path?: string | null },
+) => {
+  if (!filename) return undefined;
+  return COVER_WIDTHS.map(
+    (w) => `${coverUrl(filename, { path: opts?.path, width: w })} ${w}w`,
+  ).join(", ");
 };
 
 /** Texte alternatif SEO : « Bizzarrini <modèle> châssis <n°>, <année> ». */
