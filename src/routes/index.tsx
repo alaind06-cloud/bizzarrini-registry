@@ -91,9 +91,11 @@ function HomePage() {
   const { t } = useI18n();
   const { m: modelQuery, d: decadeParam, q: qParam, g: groupParam, p: pageParam } = Route.useSearch();
   const navigate = useNavigate({ from: "/" });
-  const [voitures, setVoitures] = useState<Voiture[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { voitures: initialVoitures } = Route.useLoaderData();
+  const [voitures, setVoitures] = useState<Voiture[]>(initialVoitures);
+  const [loading, setLoading] = useState(initialVoitures.length === 0);
   const [err, setErr] = useState<string | null>(null);
+
 
   const modele = groupParam ?? "all";
   const annee = decadeParam ?? "all";
