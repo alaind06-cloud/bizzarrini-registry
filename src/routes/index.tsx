@@ -527,11 +527,11 @@ function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canA
           {cover ? (
             <img
               src={cover}
-              srcSet={cover2x ? `${cover} 480w, ${cover2x} 900w` : undefined}
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-              alt={v.titre}
+              alt={alt}
               width={480}
               height={360}
+
               loading={priority ? "eager" : "lazy"}
               fetchPriority={priority ? "high" : "low"}
               decoding="async"
