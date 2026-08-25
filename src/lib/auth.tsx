@@ -19,6 +19,12 @@ type AuthCtx = {
 
 const Ctx = createContext<AuthCtx | undefined>(undefined);
 
+/** Évènement à émettre après une connexion pour brancher l'écoute Supabase. */
+export const AUTH_REFRESH_EVENT = "bz:auth-refresh";
+export function notifyAuthChanged() {
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(AUTH_REFRESH_EVENT));
+}
+
 const PREVIEW_ZONES = ["lovableproject.com", "lovableproject-dev.com", "lovable.app", "gpt-eng.com", "gptengineer.run"];
 
 /** Indique s'il peut exister une session à restaurer côté client. */
@@ -44,6 +50,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profil, setProfil] = useState<Profil | null>(null);
   const [demandeStatut, setDemandeStatut] = useState<DemandeStatut>("aucune");
   const [loading, setLoading] = useState(true);
+  // Permet de (re)brancher Supabase après une connexion sans rechargement.
+  const [armed, setArmed] = useState(0);
+
+  useEffect(() => {
+    const rearm = () => setArmed((n) => n + 1);
+    window.addEventListener(AUTH_REFRESH_EVENT, rearm);
+    return () => window.removeEventListener(AUTH_REFRESH_EVENT, rearm);
+  }, []);
 
   const loadProfil = async (userId: string) => {
     const supabase = await getSupabase();
@@ -68,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // rendu. On ne l'importe que s'il existe une session persistée, un retour
     // d'authentification dans l'URL, ou si l'on est dans l'aperçu Lovable
     // (session brokerée hors localStorage).
-    if (!hasPossibleSession()) {
+    if (armed === 0 && !hasPossibleSession()) {
       setLoading(false);
       return;
     }
@@ -104,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       cancelled = true;
       unsubscribe?.();
     };
-  }, []);
+  }, [armed]);
 
   const value: AuthCtx = {
     session,
