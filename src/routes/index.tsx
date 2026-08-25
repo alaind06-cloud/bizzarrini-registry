@@ -121,8 +121,14 @@ function HomePage() {
 
 
   useEffect(() => {
+    setVoitures(initialVoitures);
+    if (initialVoitures.length > 0) {
+      setLoading(false);
+      return;
+    }
+    // Repli client si le chargement SSR a échoué (réseau, RLS, etc.).
+    let cancelled = false;
     (async () => {
-
       setLoading(true);
       const supabase = await getSupabase();
       const { data, error } = await supabase
@@ -130,6 +136,7 @@ function HomePage() {
         .select("*")
         .eq("marque", SITE_MARQUE)
         .order("id", { ascending: true });
+      if (cancelled) return;
       if (error) setErr(error.message);
       else {
         const clean = ((data as Voiture[]) ?? []).filter(
@@ -139,7 +146,12 @@ function HomePage() {
       }
       setLoading(false);
     })();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [initialVoitures]);
+
+
 
   // Groupes de modèles partagés avec la fiche châssis
 
