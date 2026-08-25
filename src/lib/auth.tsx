@@ -19,6 +19,26 @@ type AuthCtx = {
 
 const Ctx = createContext<AuthCtx | undefined>(undefined);
 
+const PREVIEW_ZONES = ["lovableproject.com", "lovableproject-dev.com", "lovable.app", "gpt-eng.com", "gptengineer.run"];
+
+/** Indique s'il peut exister une session à restaurer côté client. */
+function hasPossibleSession(): boolean {
+  if (typeof window === "undefined") return false;
+  const host = window.location.hostname;
+  if (host === "localhost" || PREVIEW_ZONES.some((z) => host === z || host.endsWith("." + z))) return true;
+  const url = window.location.href;
+  if (url.includes("access_token") || url.includes("code=") || url.includes("type=recovery")) return true;
+  try {
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const k = window.localStorage.key(i);
+      if (k && k.startsWith("sb-") && k.endsWith("-auth-token")) return true;
+    }
+  } catch {
+    return true;
+  }
+  return false;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profil, setProfil] = useState<Profil | null>(null);
