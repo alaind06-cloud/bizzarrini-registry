@@ -497,7 +497,8 @@ function FilterChip({
 function CarCard({ v, canAccess, filters, priority = false }: { v: Voiture; canAccess: boolean; filters: RegistryFilters; priority?: boolean }) {
 
   const { t } = useI18n();
-  const cover = coverUrl(v.cover_photo, { path: v.storage_path });
+  const cover = coverUrl(v.cover_photo, { path: v.storage_path, width: 400 });
+  const coverSet = coverSrcSet(v.cover_photo, { path: v.storage_path });
   const alt = coverAlt({ ...v, chassis: v.chassis ? displayChassis(v.chassis) : null });
 
   const slug = carSlug(v);
