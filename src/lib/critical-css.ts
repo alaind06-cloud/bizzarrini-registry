@@ -40,6 +40,11 @@ main{display:block}
 .overflow-hidden{overflow:hidden}
 .container-page{width:100%;max-width:1280px;margin-inline:auto;padding-inline:1.25rem}
 header,nav{background:var(--bg)}
+/* En-tête : hauteur réservée dès le premier paint pour que le hero ne
+   descende pas quand la feuille complète s'applique (anti-CLS). */
+.hidden{display:none}
+body>div>header:first-of-type,body header.sticky{min-height:116px}
+@media (min-width:768px){body>div>header:first-of-type,body header.sticky{min-height:161px}}
 /* Hero d'accueil : rendu final dès le premier paint, sans attendre styles.css */
 .home-hero{min-height:92vh;min-height:92svh;position:relative;display:flex;align-items:center;
 overflow:hidden;background:var(--bg);border-bottom:1px solid var(--border)}
