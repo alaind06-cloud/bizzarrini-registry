@@ -33,7 +33,7 @@ export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
  */
 export const SITE_MARQUE = "bizzarrini";
 
-/** Dossier des photos dans le bucket public Supabase Storage. */
+/** Dossier par défaut des photos (fiches sans `storage_path` renseigné). */
 const PHOTO_PATH = "bizzarrini";
 
 /**
@@ -45,16 +45,24 @@ export const PHOTOS_BASE_URL =
   "https://darckkyqmzningzzbkhr.supabase.co/storage/v1/object/public/voitures-photos";
 
 /**
- * URL publique d'une photo (Supabase Storage sert le fichier tel quel ici ;
- * les options de largeur/qualité ne sont pas utilisées pour l'instant).
+ * URL publique d'une photo. Les fichiers sont rangés par châssis :
+ * `PHOTOS_BASE_URL / voitures.storage_path / photos.filename`.
+ * `path` correspond à `voiture.storage_path` (ex. `bizzarrini/1964-iso-grifo-.../`).
  */
 export const photoUrl = (
   filename: string | null | undefined,
-  _opts?: { width?: number; quality?: number },
+  opts?: { width?: number; quality?: number; path?: string | null },
 ) => {
   if (!filename) return null;
-  return `${PHOTOS_BASE_URL}/${PHOTO_PATH}/${encodeURIComponent(filename)}`;
+  const raw = (opts?.path ?? PHOTO_PATH).trim().replace(/^\/+|\/+$/g, "");
+  const folder = raw.length ? raw : PHOTO_PATH;
+  const encoded = folder
+    .split("/")
+    .map((seg) => encodeURIComponent(seg))
+    .join("/");
+  return `${PHOTOS_BASE_URL}/${encoded}/${encodeURIComponent(filename)}`;
 };
+
 
 
 export type Voiture = {
