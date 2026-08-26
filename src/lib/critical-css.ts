@@ -42,7 +42,11 @@ main{display:block}
 header,nav{background:var(--bg)}
 /* En-tête : hauteur réservée dès le premier paint pour que le hero ne
    descende pas quand la feuille complète s'applique (anti-CLS). */
-.hidden{display:none}
+/* .hidden ne doit masquer QUE sous md : sinon cette règle (hors @layer)
+   l'emporte sur l'utilitaire Tailwind .md\\:flex (layer utilities) et le
+   menu de navigation desktop reste invisible. */
+@media (max-width:767px){.hidden{display:none}}
+@media (min-width:768px){.md\\:hidden{display:none}}
 body>div>header:first-of-type,body header.sticky{min-height:116px}
 @media (min-width:768px){body>div>header:first-of-type,body header.sticky{min-height:161px}}
 /* Hero d'accueil : rendu final dès le premier paint, sans attendre styles.css */
