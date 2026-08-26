@@ -13,8 +13,8 @@ size-adjust:94%;ascent-override:107%;descent-override:30.4%;line-gap-override:0%
 size-adjust:107.4%;ascent-override:90.2%;descent-override:22.48%;line-gap-override:0%}
 @font-face{font-family:"Mono Fallback";src:local("Menlo"),local("Consolas"),local("DejaVu Sans Mono"),local("Liberation Mono"),local("Courier New");
 size-adjust:100%;ascent-override:102%;descent-override:30%;line-gap-override:0%}
-:root{--bg:#f2eee6;--fg:#232323;--muted:#6b6257;--brand:#9e2b25;--border:#ddd4c6;
---color-background:#f2eee6;--color-brand:#9e2b25;--color-gold:#b9975b;
+:root{--bg:#f2eee6;--fg:#232323;--critical-muted:#6b6257;--brand:#9e2b25;--border:#ddd4c6;
+ --color-background:#f2eee6;--color-foreground:#232323;--color-muted-foreground:#6b6257;--color-brand:#9e2b25;--color-gold:#b9975b;
 --font-sans:"Inter","Inter Fallback",ui-sans-serif,system-ui,-apple-system,sans-serif;
 --font-display:"Bodoni Moda","Bodoni Fallback",Georgia,serif;
 --font-mono:"JetBrains Mono","Mono Fallback",ui-monospace,"SFMono-Regular",Menlo,monospace}
@@ -80,7 +80,7 @@ padding:0.5rem 1rem;font-size:0.7rem;line-height:1;font-weight:500;text-transfor
 letter-spacing:0.28em;color:var(--brand);border:1px solid rgba(158,43,37,.45);border-radius:2px}
 .home-hero .section-divider{width:6rem;height:1px;margin-inline:auto;
 background:linear-gradient(90deg,transparent,var(--brand),transparent)}
-.home-hero p{font-size:1rem;line-height:1.625;max-width:42rem;margin-inline:auto;color:var(--muted)}
+.home-hero p{font-size:1rem;line-height:1.625;max-width:42rem;margin-inline:auto;color:var(--critical-muted)}
 @media (min-width:768px){.home-hero p{font-size:1.125rem}}
 .home-hero .mt-8{margin-top:2rem}
 .home-hero .mt-10{margin-top:2.5rem}
