@@ -31,24 +31,25 @@ export const Route = createFileRoute("/chassis/$slug")({
     // Métadonnées <head> uniquement : modèle / année / châssis depuis la base.
     try {
       const cols = "modele, annee, chassis, titre";
-      let row: { modele: string | null; annee: number | null; chassis: string | null; titre: string | null } | null =
-        null;
+      type MetaRow = { modele: string | null; annee: number | null; chassis: string | null; titre: string | null };
+      let row: MetaRow | null = null;
       const direct = await supabase
         .from("voitures")
         .select(cols)
         .eq("marque", SITE_MARQUE)
         .ilike("chassis", params.slug)
         .maybeSingle();
-      row = (direct.data as typeof row) ?? null;
+      row = (direct.data as MetaRow | null) ?? null;
       if (!row) {
         const all = await supabase.from("voitures").select(cols).eq("marque", SITE_MARQUE);
-        const rows = ((all.data as Array<NonNullable<typeof row>>) ?? []).filter(Boolean);
+        const rows = ((all.data as MetaRow[] | null) ?? []).filter(Boolean);
         row =
           rows.find((r) => chassisToSlug(r.chassis) === params.slug) ??
           rows.find((r) => carSlug(r as unknown as Voiture) === params.slug) ??
           null;
       }
       return { meta: row };
+
     } catch {
       return { meta: null };
     }
