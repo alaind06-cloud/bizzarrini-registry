@@ -27,13 +27,45 @@ export const Route = createFileRoute("/chassis/$slug")({
       p: Number.isFinite(Number(search.p)) && Number(search.p) > 1 ? Math.floor(Number(search.p)) : undefined,
     };
   },
-  head: ({ params }) => {
-    const label = params.slug
+  loader: async ({ params }) => {
+    // Métadonnées <head> uniquement : modèle / année / châssis depuis la base.
+    try {
+      const cols = "modele, annee, chassis, titre";
+      type MetaRow = { modele: string | null; annee: number | null; chassis: string | null; titre: string | null };
+      let row: MetaRow | null = null;
+      const direct = await supabase
+        .from("voitures")
+        .select(cols)
+        .eq("marque", SITE_MARQUE)
+        .ilike("chassis", params.slug)
+        .maybeSingle();
+      row = (direct.data as MetaRow | null) ?? null;
+      if (!row) {
+        const all = await supabase.from("voitures").select(cols).eq("marque", SITE_MARQUE);
+        const rows = ((all.data as MetaRow[] | null) ?? []).filter(Boolean);
+        row =
+          rows.find((r) => chassisToSlug(r.chassis) === params.slug) ??
+          rows.find((r) => carSlug(r as unknown as Voiture) === params.slug) ??
+          null;
+      }
+      return { meta: row };
+
+    } catch {
+      return { meta: null };
+    }
+  },
+  head: ({ params, loaderData }) => {
+    const fallbackLabel = params.slug
       .split("-")
       .map((w) => (/^[a-z]$|^\d/.test(w) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)))
       .join(" ");
-    const title = `${label} — Châssis Bizzarrini | Register`;
-    const description = `Fiche du châssis ${label} : galerie photo d'archives, historique documenté et provenance au registre officiel Bizzarrini.`;
+    const row = loaderData?.meta ?? null;
+    const chassisLabel = displayChassis(row?.chassis) || fallbackLabel;
+    const modele = (row?.modele ?? "").trim();
+    const annee = row?.annee ? String(row.annee) : "";
+    const base = ["Bizzarrini", modele, chassisLabel].filter(Boolean).join(" ");
+    const title = `${base}${annee ? ` (${annee})` : ""} — Register`;
+    const description = `${base}${annee ? `, ${annee}` : ""} : fiche du châssis ${chassisLabel} au registre officiel Bizzarrini — galerie photo d'archives, historique documenté et provenance.`;
     return {
       meta: [
         { title },
@@ -48,6 +80,7 @@ export const Route = createFileRoute("/chassis/$slug")({
       links: [{ rel: "canonical", href: canonical(`/chassis/${params.slug}`) }],
     };
   },
+
   component: CarDetail,
 });
 
