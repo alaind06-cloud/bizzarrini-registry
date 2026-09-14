@@ -250,6 +250,8 @@ function CarDetail() {
   const [err, setErr] = useState<string | null>(null);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const [mode, setMode] = useState<"summary" | "full">("full");
+  const photoDebug = usePhotoDebug();
+
 
   const canAccess = !!user && isValide;
 
