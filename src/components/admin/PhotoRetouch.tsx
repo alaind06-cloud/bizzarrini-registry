@@ -62,7 +62,7 @@ export function PhotoRetouch({ photo, isCover, storagePath, onClose, onRenamed, 
     setError(null);
     try {
       const blob = await canvasToJpeg(renderEdited(source, crop, rotation));
-      const { error: err } = await replacePhoto(photo.filename, blob);
+      const { error: err } = await replacePhoto(photo.filename, blob, storagePath);
       if (err) throw new Error(err.message);
       const target = safeFilename(name);
       if (target !== photo.filename) {
@@ -73,6 +73,7 @@ export function PhotoRetouch({ photo, isCover, storagePath, onClose, onRenamed, 
           from: photo.filename,
           to: target,
           isCover,
+          path: storagePath,
         });
         if (res.error) throw new Error(res.error.message);
         onRenamed(photo.id, target);

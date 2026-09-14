@@ -67,7 +67,7 @@ export function PhotoBatchUpload({ voitureId, prefix, existing, storagePath, onU
         taken.add(filename);
 
         patch(i, { state: "envoi" });
-        const { error: upErr } = await uploadPhoto(filename, blob);
+        const { error: upErr } = await uploadPhoto(filename, blob, storagePath);
         if (upErr) throw new Error(upErr.message);
 
         maxOrdre += 1;
