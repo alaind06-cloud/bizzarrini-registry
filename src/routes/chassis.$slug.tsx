@@ -117,16 +117,17 @@ function fallbackToOriginalPhoto(
   event: React.SyntheticEvent<HTMLImageElement>,
   filename: string | null | undefined,
   storagePath: string | null | undefined,
+  keepVisible = false,
 ) {
   const image = event.currentTarget;
   if (image.dataset.originalFallback === "true") {
-    image.style.display = "none";
+    if (!keepVisible) image.style.display = "none";
     return;
   }
 
   const original = photoUrl(filename, { path: storagePath });
   if (!original) {
-    image.style.display = "none";
+    if (!keepVisible) image.style.display = "none";
     return;
   }
 
@@ -134,6 +135,107 @@ function fallbackToOriginalPhoto(
   image.removeAttribute("srcset");
   image.src = original;
 }
+
+/**
+ * Mode diagnostic temporaire : `?photoDebug=1`.
+ * Affiche sous chaque vignette l'état réel de chargement, l'URL demandée,
+ * l'URL retenue par le navigateur et les dimensions. Lecture côté client
+ * uniquement pour ne pas altérer le rendu serveur ni les URLs normales.
+ */
+function usePhotoDebug() {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    try {
+      setOn(new URLSearchParams(window.location.search).get("photoDebug") === "1");
+    } catch {
+      setOn(false);
+    }
+  }, []);
+  return on;
+}
+
+type ThumbState = {
+  status: "loading" | "loaded" | "error" | "fallback";
+  currentSrc: string;
+  natural: string;
+  displayed: string;
+};
+
+function GalleryThumb({
+  filename,
+  storagePath,
+  alt,
+  debug,
+  onOpen,
+}: {
+  filename: string;
+  storagePath: string | null | undefined;
+  alt: string;
+  debug: boolean;
+  onOpen: () => void;
+}) {
+  const src = photoUrl(filename, { width: 400, path: storagePath })!;
+  const srcSet = photoSrcSet(filename, { width: 400, path: storagePath });
+  const [state, setState] = useState<ThumbState>({
+    status: "loading",
+    currentSrc: "",
+    natural: "—",
+    displayed: "—",
+  });
+
+  const snapshot = (img: HTMLImageElement, status: ThumbState["status"]) => {
+    const rect = img.getBoundingClientRect();
+    setState({
+      status,
+      currentSrc: img.currentSrc || img.src,
+      natural: `${img.naturalWidth}×${img.naturalHeight}`,
+      displayed: `${Math.round(rect.width)}×${Math.round(rect.height)}`,
+    });
+  };
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={onOpen}
+        className="aspect-square w-full bg-surface-2 overflow-hidden group block"
+      >
+        <img
+          // En diagnostic : chargement immédiat et sans srcset, pour isoler
+          // simultanément le lazy-loading et la sélection responsive.
+          src={src}
+          srcSet={debug ? undefined : srcSet}
+          alt={alt}
+          loading={debug ? "eager" : "lazy"}
+          decoding="async"
+          width={400}
+          height={400}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          onLoad={(e) => {
+            if (!debug) return;
+            const img = e.currentTarget;
+            snapshot(img, img.dataset.originalFallback === "true" ? "fallback" : "loaded");
+          }}
+          onError={(e) => {
+            if (debug) snapshot(e.currentTarget, "error");
+            fallbackToOriginalPhoto(e, filename, storagePath, debug);
+          }}
+        />
+      </button>
+      {debug && (
+        <p className="mt-1 break-all text-left font-mono text-[10px] leading-tight text-muted-foreground">
+          <b>{state.status}</b> · nat {state.natural} · box {state.displayed}
+          <br />
+          src: {src}
+          <br />
+          current: {state.currentSrc || "—"}
+        </p>
+      )}
+    </div>
+  );
+}
+
+
 
 
 function CarDetail() {
@@ -148,6 +250,8 @@ function CarDetail() {
   const [err, setErr] = useState<string | null>(null);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const [mode, setMode] = useState<"summary" | "full">("full");
+  const photoDebug = usePhotoDebug();
+
 
   const canAccess = !!user && isValide;
 
@@ -538,24 +642,13 @@ function CarDetail() {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {orderedDocs.map((ph) => (
                   <figure key={ph.id}>
-                    <button
-                      onClick={() => setLightboxIdx(orderedPhotos.indexOf(ph))}
-                      className="aspect-square w-full bg-surface-2 overflow-hidden group block"
-                    >
-                      <img
-                        src={photoUrl(ph.filename, { width: 400, path: voiture.storage_path })!}
-                        srcSet={photoSrcSet(ph.filename, { width: 400, path: voiture.storage_path })}
-                        alt={t("car.docs.chassisCaption")}
-                        loading="lazy"
-                        decoding="async"
-
-                        width={400}
-                        height={400}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => fallbackToOriginalPhoto(e, ph.filename, voiture.storage_path)}
-                      />
-
-                    </button>
+                    <GalleryThumb
+                      filename={ph.filename}
+                      storagePath={voiture.storage_path}
+                      alt={t("car.docs.chassisCaption")}
+                      debug={photoDebug}
+                      onOpen={() => setLightboxIdx(orderedPhotos.indexOf(ph))}
+                    />
                     <figcaption className="mt-2 text-xs text-muted-foreground">{t("car.docs.chassisCaption")}</figcaption>
                   </figure>
                 ))}
@@ -571,32 +664,16 @@ function CarDetail() {
           )}
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {orderedPress.map((ph) => {
-              const idx = orderedPhotos.indexOf(ph);
-              const src = photoUrl(ph.filename, { width: 400, path: voiture.storage_path })!;
-
-              return (
-                <button
-                  key={ph.id}
-                  onClick={() => setLightboxIdx(idx)}
-                  className="aspect-square bg-surface-2 overflow-hidden group"
-                >
-                  <img
-                    src={src}
-                    srcSet={photoSrcSet(ph.filename, { width: 400, path: voiture.storage_path })}
-                    alt={voiture.titre}
-                    loading="lazy"
-                    decoding="async"
-
-                    width={400}
-                    height={400}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => fallbackToOriginalPhoto(e, ph.filename, voiture.storage_path)}
-                  />
-                </button>
-              );
-
-            })}
+            {orderedPress.map((ph) => (
+              <GalleryThumb
+                key={ph.id}
+                filename={ph.filename}
+                storagePath={voiture.storage_path}
+                alt={voiture.titre}
+                debug={photoDebug}
+                onOpen={() => setLightboxIdx(orderedPhotos.indexOf(ph))}
+              />
+            ))}
           </div>
         </section>
       )}
