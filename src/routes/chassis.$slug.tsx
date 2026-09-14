@@ -635,20 +635,21 @@ function CarDetail() {
                       onClick={() => setLightboxIdx(orderedPhotos.indexOf(ph))}
                       className="aspect-square w-full bg-surface-2 overflow-hidden group block"
                     >
-                      <img
-                        src={photoUrl(ph.filename, { width: 400, path: voiture.storage_path })!}
-                        srcSet={photoSrcSet(ph.filename, { width: 400, path: voiture.storage_path })}
+                      <GalleryThumb
+                        filename={ph.filename}
+                        storagePath={voiture.storage_path}
                         alt={t("car.docs.chassisCaption")}
-                        loading="lazy"
-                        decoding="async"
-
-                        width={400}
-                        height={400}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => fallbackToOriginalPhoto(e, ph.filename, voiture.storage_path)}
+                        debug={false}
                       />
-
                     </button>
+                    {photoDebug && (
+                      <GalleryThumb
+                        filename={ph.filename}
+                        storagePath={voiture.storage_path}
+                        alt={t("car.docs.chassisCaption")}
+                        debug
+                      />
+                    )}
                     <figcaption className="mt-2 text-xs text-muted-foreground">{t("car.docs.chassisCaption")}</figcaption>
                   </figure>
                 ))}
