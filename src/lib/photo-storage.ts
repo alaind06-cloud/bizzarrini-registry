@@ -1,18 +1,25 @@
 import { supabase } from "@/lib/supabase";
 
 /**
- * Écriture des photos du registre : bucket Cloudflare R2
- * `registre-voitures-photos`, préfixe `bizzarrini/`, même nom de fichier que
- * `photos.filename`. La lecture reste assurée par `photoUrl()` (URL publique
- * R2). Plus aucun accès à Supabase Storage.
+ * Écriture des photos du registre : bucket Supabase Storage public
+ * `voitures-photos`, dossier `voitures.storage_path` (ex.
+ * `bizzarrini/America/america-ba4-111/`), même nom de fichier que
+ * `photos.filename`. La lecture reste assurée par `photoUrl()` / `coverUrl()`
+ * sur ce même bucket.
  */
 
-export const PHOTO_BUCKET = "registre-voitures-photos";
+export const PHOTO_BUCKET = "voitures-photos";
 export const PHOTO_FOLDER = "bizzarrini";
 
 const ENDPOINT = "/api/admin-photos";
 
 type Err = { message: string } | null;
+
+/** Normalise un `storage_path` (sans slash de début/fin). */
+export const photoFolder = (path?: string | null) => {
+  const value = (path ?? "").trim().replace(/^\/+|\/+$/g, "");
+  return value.length ? value : PHOTO_FOLDER;
+};
 
 async function authHeaders(): Promise<Record<string, string>> {
   const { data } = await supabase.auth.getSession();
@@ -35,25 +42,27 @@ async function call(init: RequestInit): Promise<{ error: Err }> {
   }
 }
 
-/** Envoie un fichier dans R2 (sans écraser un fichier existant). */
-export async function uploadPhoto(filename: string, blob: Blob) {
+/** Envoie un fichier dans le bucket (sans écraser un fichier existant). */
+export async function uploadPhoto(filename: string, blob: Blob, path?: string | null) {
   return call({
     body: blob,
     headers: {
       "Content-Type": blob.type || "image/jpeg",
       "x-photo-filename": filename,
+      "x-photo-path": photoFolder(path),
       "x-photo-op": "upload",
     },
   });
 }
 
 /** Remplace le contenu d'une photo existante (retouche). */
-export async function replacePhoto(filename: string, blob: Blob) {
+export async function replacePhoto(filename: string, blob: Blob, path?: string | null) {
   return call({
     body: blob,
     headers: {
       "Content-Type": blob.type || "image/jpeg",
       "x-photo-filename": filename,
+      "x-photo-path": photoFolder(path),
       "x-photo-op": "replace",
     },
   });
@@ -70,7 +79,7 @@ export async function setPhotoRetouched(photoId: string, value: boolean) {
 }
 
 /**
- * Renomme une photo : déplace le fichier dans R2 puis met à jour la
+ * Renomme une photo : déplace le fichier dans le bucket puis met à jour la
  * référence en base (table `photos`, et `voitures.cover_photo` si besoin).
  */
 export async function renamePhoto(opts: {
@@ -79,12 +88,14 @@ export async function renamePhoto(opts: {
   from: string;
   to: string;
   isCover: boolean;
+  path?: string | null;
 }) {
-  const { photoId, voitureId, from, to, isCover } = opts;
+  const { photoId, voitureId, from, to, isCover, path } = opts;
   if (from === to) return { error: null as Err };
+  const folder = photoFolder(path);
 
   const moved = await call({
-    body: JSON.stringify({ op: "move", from, to }),
+    body: JSON.stringify({ op: "move", from, to, path: folder }),
     headers: { "Content-Type": "application/json" },
   });
   if (moved.error) return { error: moved.error };
@@ -93,7 +104,7 @@ export async function renamePhoto(opts: {
   if (updated.error) {
     // On remet le fichier à sa place pour ne pas casser la fiche.
     await call({
-      body: JSON.stringify({ op: "move", from: to, to: from }),
+      body: JSON.stringify({ op: "move", from: to, to: from, path: folder }),
       headers: { "Content-Type": "application/json" },
     });
     return { error: updated.error as Err };

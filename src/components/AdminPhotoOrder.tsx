@@ -311,6 +311,7 @@ export function AdminPhotoOrder() {
           voitureId={carId}
           prefix={uploadPrefix}
           existing={photos}
+          storagePath={storagePath}
           onUploaded={(added) => setPhotos((list) => [...list, ...added])}
         />
       )}
