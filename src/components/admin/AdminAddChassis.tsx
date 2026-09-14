@@ -164,13 +164,15 @@ export function AdminAddChassis() {
     try {
       const maxOrder = cars.reduce((m, c) => Math.max(m, c.ordre_affichage ?? 0), 0);
       const uploads: { filename: string; key: string }[] = [];
+      // Dossier du châssis dans le bucket public `voitures-photos`.
+      const storagePath = `bizzarrini/${prefix}/`;
 
       for (let i = 0; i < drafts.length; i++) {
         const d = drafts[i];
         setProgress(`Envoi de la photo ${i + 1} / ${drafts.length}…`);
         const blob = await canvasToJpeg(renderEdited(d.source, d.crop, d.rotation));
         const filename = `${prefix}-${String(i + 1).padStart(2, "0")}.jpg`;
-        const { error: upErr } = await uploadPhoto(filename, blob);
+        const { error: upErr } = await uploadPhoto(filename, blob, storagePath);
         if (upErr) throw new Error(`Envoi de « ${filename} » : ${upErr.message}`);
         uploads.push({ filename, key: d.key });
       }
@@ -187,6 +189,7 @@ export function AdminAddChassis() {
           chassis: chassis.trim(),
           cover_photo: cover,
           photo_prefix: prefix,
+          storage_path: storagePath,
           ordre_affichage: maxOrder + 1,
         })
         .select("id")
