@@ -18,6 +18,8 @@ type Props = {
   voitureId: string;
   prefix: string;
   existing: Photo[];
+  /** Dossier du châssis dans le bucket (`voitures.storage_path`). */
+  storagePath?: string | null;
   onUploaded: (photos: Photo[]) => void;
 };
 
@@ -27,7 +29,7 @@ type Item = {
   message?: string;
 };
 
-export function PhotoBatchUpload({ voitureId, prefix, existing, onUploaded }: Props) {
+export function PhotoBatchUpload({ voitureId, prefix, existing, storagePath, onUploaded }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [running, setRunning] = useState(false);
