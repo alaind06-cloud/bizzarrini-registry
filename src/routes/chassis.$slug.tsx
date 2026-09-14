@@ -517,9 +517,11 @@ function CarDetail() {
                     >
                       <img
                         src={photoUrl(ph.filename, { width: 400, path: voiture.storage_path })!}
+                        srcSet={photoSrcSet(ph.filename, { width: 400, path: voiture.storage_path })}
                         alt={t("car.docs.chassisCaption")}
                         loading="lazy"
                         decoding="async"
+
                         width={400}
                         height={400}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
