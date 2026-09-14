@@ -640,25 +640,13 @@ function CarDetail() {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {orderedDocs.map((ph) => (
                   <figure key={ph.id}>
-                    <button
-                      onClick={() => setLightboxIdx(orderedPhotos.indexOf(ph))}
-                      className="aspect-square w-full bg-surface-2 overflow-hidden group block"
-                    >
-                      <GalleryThumb
-                        filename={ph.filename}
-                        storagePath={voiture.storage_path}
-                        alt={t("car.docs.chassisCaption")}
-                        debug={false}
-                      />
-                    </button>
-                    {photoDebug && (
-                      <GalleryThumb
-                        filename={ph.filename}
-                        storagePath={voiture.storage_path}
-                        alt={t("car.docs.chassisCaption")}
-                        debug
-                      />
-                    )}
+                    <GalleryThumb
+                      filename={ph.filename}
+                      storagePath={voiture.storage_path}
+                      alt={t("car.docs.chassisCaption")}
+                      debug={photoDebug}
+                      onOpen={() => setLightboxIdx(orderedPhotos.indexOf(ph))}
+                    />
                     <figcaption className="mt-2 text-xs text-muted-foreground">{t("car.docs.chassisCaption")}</figcaption>
                   </figure>
                 ))}
