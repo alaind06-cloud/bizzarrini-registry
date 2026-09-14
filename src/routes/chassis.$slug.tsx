@@ -556,9 +556,11 @@ function CarDetail() {
                 >
                   <img
                     src={src}
+                    srcSet={photoSrcSet(ph.filename, { width: 400, path: voiture.storage_path })}
                     alt={voiture.titre}
                     loading="lazy"
                     decoding="async"
+
                     width={400}
                     height={400}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
