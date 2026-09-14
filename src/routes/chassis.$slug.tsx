@@ -108,6 +108,33 @@ function applyManualPin<T>(slug: string, list: T[]): T[] {
   return [...pinned, ...rest];
 }
 
+/**
+ * Une transformation peut échouer ponctuellement sur un réseau mobile.
+ * Dans ce cas, retenter une seule fois l'objet public Supabase plutôt que de
+ * masquer définitivement la photo et de laisser une tuile blanche.
+ */
+function fallbackToOriginalPhoto(
+  event: React.SyntheticEvent<HTMLImageElement>,
+  filename: string | null | undefined,
+  storagePath: string | null | undefined,
+) {
+  const image = event.currentTarget;
+  if (image.dataset.originalFallback === "true") {
+    image.style.display = "none";
+    return;
+  }
+
+  const original = photoUrl(filename, { path: storagePath });
+  if (!original) {
+    image.style.display = "none";
+    return;
+  }
+
+  image.dataset.originalFallback = "true";
+  image.removeAttribute("srcset");
+  image.src = original;
+}
+
 
 function CarDetail() {
   const { slug } = Route.useParams();
@@ -525,7 +552,7 @@ function CarDetail() {
                         width={400}
                         height={400}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
+                        onError={(e) => fallbackToOriginalPhoto(e, ph.filename, voiture.storage_path)}
                       />
 
                     </button>
@@ -564,7 +591,7 @@ function CarDetail() {
                     width={400}
                     height={400}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
+                    onError={(e) => fallbackToOriginalPhoto(e, ph.filename, voiture.storage_path)}
                   />
                 </button>
               );
