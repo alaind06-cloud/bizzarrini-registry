@@ -166,11 +166,13 @@ function GalleryThumb({
   storagePath,
   alt,
   debug,
+  onOpen,
 }: {
   filename: string;
   storagePath: string | null | undefined;
   alt: string;
   debug: boolean;
+  onOpen: () => void;
 }) {
   const src = photoUrl(filename, { width: 400, path: storagePath })!;
   const srcSet = photoSrcSet(filename, { width: 400, path: storagePath });
@@ -192,40 +194,47 @@ function GalleryThumb({
   };
 
   return (
-    <>
-      <img
-        // En diagnostic : chargement immédiat et sans srcset, pour isoler
-        // simultanément le lazy-loading et la sélection responsive.
-        src={src}
-        srcSet={debug ? undefined : srcSet}
-        alt={alt}
-        loading={debug ? "eager" : "lazy"}
-        decoding="async"
-        width={400}
-        height={400}
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        onLoad={(e) => {
-          if (!debug) return;
-          const img = e.currentTarget;
-          snapshot(img, img.dataset.originalFallback === "true" ? "fallback" : "loaded");
-        }}
-        onError={(e) => {
-          if (debug) snapshot(e.currentTarget, "error");
-          fallbackToOriginalPhoto(e, filename, storagePath, debug);
-        }}
-      />
+    <div>
+      <button
+        type="button"
+        onClick={onOpen}
+        className="aspect-square w-full bg-surface-2 overflow-hidden group block"
+      >
+        <img
+          // En diagnostic : chargement immédiat et sans srcset, pour isoler
+          // simultanément le lazy-loading et la sélection responsive.
+          src={src}
+          srcSet={debug ? undefined : srcSet}
+          alt={alt}
+          loading={debug ? "eager" : "lazy"}
+          decoding="async"
+          width={400}
+          height={400}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          onLoad={(e) => {
+            if (!debug) return;
+            const img = e.currentTarget;
+            snapshot(img, img.dataset.originalFallback === "true" ? "fallback" : "loaded");
+          }}
+          onError={(e) => {
+            if (debug) snapshot(e.currentTarget, "error");
+            fallbackToOriginalPhoto(e, filename, storagePath, debug);
+          }}
+        />
+      </button>
       {debug && (
-        <span className="mt-1 block break-all text-left font-mono text-[10px] leading-tight text-muted-foreground">
+        <p className="mt-1 break-all text-left font-mono text-[10px] leading-tight text-muted-foreground">
           <b>{state.status}</b> · nat {state.natural} · box {state.displayed}
           <br />
           src: {src}
           <br />
           current: {state.currentSrc || "—"}
-        </span>
+        </p>
       )}
-    </>
+    </div>
   );
 }
+
 
 
 
