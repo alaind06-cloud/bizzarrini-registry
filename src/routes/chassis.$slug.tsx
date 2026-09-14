@@ -117,16 +117,17 @@ function fallbackToOriginalPhoto(
   event: React.SyntheticEvent<HTMLImageElement>,
   filename: string | null | undefined,
   storagePath: string | null | undefined,
+  keepVisible = false,
 ) {
   const image = event.currentTarget;
   if (image.dataset.originalFallback === "true") {
-    image.style.display = "none";
+    if (!keepVisible) image.style.display = "none";
     return;
   }
 
   const original = photoUrl(filename, { path: storagePath });
   if (!original) {
-    image.style.display = "none";
+    if (!keepVisible) image.style.display = "none";
     return;
   }
 
@@ -134,6 +135,98 @@ function fallbackToOriginalPhoto(
   image.removeAttribute("srcset");
   image.src = original;
 }
+
+/**
+ * Mode diagnostic temporaire : `?photoDebug=1`.
+ * Affiche sous chaque vignette l'état réel de chargement, l'URL demandée,
+ * l'URL retenue par le navigateur et les dimensions. Lecture côté client
+ * uniquement pour ne pas altérer le rendu serveur ni les URLs normales.
+ */
+function usePhotoDebug() {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    try {
+      setOn(new URLSearchParams(window.location.search).get("photoDebug") === "1");
+    } catch {
+      setOn(false);
+    }
+  }, []);
+  return on;
+}
+
+type ThumbState = {
+  status: "loading" | "loaded" | "error" | "fallback";
+  currentSrc: string;
+  natural: string;
+  displayed: string;
+};
+
+function GalleryThumb({
+  filename,
+  storagePath,
+  alt,
+  debug,
+}: {
+  filename: string;
+  storagePath: string | null | undefined;
+  alt: string;
+  debug: boolean;
+}) {
+  const src = photoUrl(filename, { width: 400, path: storagePath })!;
+  const srcSet = photoSrcSet(filename, { width: 400, path: storagePath });
+  const [state, setState] = useState<ThumbState>({
+    status: "loading",
+    currentSrc: "",
+    natural: "—",
+    displayed: "—",
+  });
+
+  const snapshot = (img: HTMLImageElement, status: ThumbState["status"]) => {
+    const rect = img.getBoundingClientRect();
+    setState({
+      status,
+      currentSrc: img.currentSrc || img.src,
+      natural: `${img.naturalWidth}×${img.naturalHeight}`,
+      displayed: `${Math.round(rect.width)}×${Math.round(rect.height)}`,
+    });
+  };
+
+  return (
+    <>
+      <img
+        // En diagnostic : chargement immédiat et sans srcset, pour isoler
+        // simultanément le lazy-loading et la sélection responsive.
+        src={src}
+        srcSet={debug ? undefined : srcSet}
+        alt={alt}
+        loading={debug ? "eager" : "lazy"}
+        decoding="async"
+        width={400}
+        height={400}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        onLoad={(e) => {
+          if (!debug) return;
+          const img = e.currentTarget;
+          snapshot(img, img.dataset.originalFallback === "true" ? "fallback" : "loaded");
+        }}
+        onError={(e) => {
+          if (debug) snapshot(e.currentTarget, "error");
+          fallbackToOriginalPhoto(e, filename, storagePath, debug);
+        }}
+      />
+      {debug && (
+        <span className="mt-1 block break-all text-left font-mono text-[10px] leading-tight text-muted-foreground">
+          <b>{state.status}</b> · nat {state.natural} · box {state.displayed}
+          <br />
+          src: {src}
+          <br />
+          current: {state.currentSrc || "—"}
+        </span>
+      )}
+    </>
+  );
+}
+
 
 
 function CarDetail() {
