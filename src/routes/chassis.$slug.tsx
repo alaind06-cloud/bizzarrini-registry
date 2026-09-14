@@ -2,7 +2,7 @@ import { canonical } from "@/lib/seo";
 import { chassisToSlug, carSlug } from "@/lib/slug";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { supabase, photoUrl, SITE_MARQUE, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
+import { supabase, photoUrl, photoSrcSet, SITE_MARQUE, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { isMonochrome, hasManualOrder } from "@/lib/photo-order";
 import { useI18n, type Lang } from "@/lib/i18n";
@@ -517,9 +517,11 @@ function CarDetail() {
                     >
                       <img
                         src={photoUrl(ph.filename, { width: 400, path: voiture.storage_path })!}
+                        srcSet={photoSrcSet(ph.filename, { width: 400, path: voiture.storage_path })}
                         alt={t("car.docs.chassisCaption")}
                         loading="lazy"
                         decoding="async"
+
                         width={400}
                         height={400}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -554,9 +556,11 @@ function CarDetail() {
                 >
                   <img
                     src={src}
+                    srcSet={photoSrcSet(ph.filename, { width: 400, path: voiture.storage_path })}
                     alt={voiture.titre}
                     loading="lazy"
                     decoding="async"
+
                     width={400}
                     height={400}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

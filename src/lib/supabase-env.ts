@@ -60,8 +60,29 @@ export const photoUrl = (
     .split("/")
     .map((seg) => encodeURIComponent(seg))
     .join("/");
-  return `${PHOTOS_BASE_URL}/${encoded}/${encodeURIComponent(filename)}`;
+  const key = `${encoded}/${encodeURIComponent(filename)}`;
+
+  // Image Transformations Supabase : l'original reste intact dans le bucket,
+  // seul le rendu est redimensionné (et servi en WebP si le navigateur l'accepte).
+  const w = opts?.width;
+  if (typeof w === "number" && Number.isFinite(w) && w >= 32 && w <= 2500) {
+    const quality = Math.min(100, Math.max(20, Math.round(opts?.quality ?? 72)));
+    const base = PHOTOS_BASE_URL.replace("/object/public/", "/render/image/public/");
+    return `${base}/${key}?width=${Math.round(w)}&quality=${quality}&resize=contain`;
+  }
+  return `${PHOTOS_BASE_URL}/${key}`;
 };
+
+/** `srcSet` en densités (1x/2x) pour une vignette de galerie. */
+export const photoSrcSet = (
+  filename: string | null | undefined,
+  opts: { width: number; quality?: number; path?: string | null },
+) => {
+  const one = photoUrl(filename, opts);
+  const two = photoUrl(filename, { ...opts, width: opts.width * 2 });
+  return one && two ? `${one} 1x, ${two} 2x` : undefined;
+};
+
 /**
  * URL d'une photo de couverture publique servie via notre proxy
  * `/api/public/cover/...`, qui ajoute un `Cache-Control` immuable d'un an
