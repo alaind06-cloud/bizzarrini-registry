@@ -662,32 +662,16 @@ function CarDetail() {
           )}
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {orderedPress.map((ph) => {
-              const idx = orderedPhotos.indexOf(ph);
-              const src = photoUrl(ph.filename, { width: 400, path: voiture.storage_path })!;
-
-              return (
-                <button
-                  key={ph.id}
-                  onClick={() => setLightboxIdx(idx)}
-                  className="aspect-square bg-surface-2 overflow-hidden group"
-                >
-                  <img
-                    src={src}
-                    srcSet={photoSrcSet(ph.filename, { width: 400, path: voiture.storage_path })}
-                    alt={voiture.titre}
-                    loading="lazy"
-                    decoding="async"
-
-                    width={400}
-                    height={400}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => fallbackToOriginalPhoto(e, ph.filename, voiture.storage_path)}
-                  />
-                </button>
-              );
-
-            })}
+            {orderedPress.map((ph) => (
+              <GalleryThumb
+                key={ph.id}
+                filename={ph.filename}
+                storagePath={voiture.storage_path}
+                alt={voiture.titre}
+                debug={photoDebug}
+                onOpen={() => setLightboxIdx(orderedPhotos.indexOf(ph))}
+              />
+            ))}
           </div>
         </section>
       )}
