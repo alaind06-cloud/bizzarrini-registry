@@ -174,8 +174,14 @@ function GalleryThumb({
   debug: boolean;
   onOpen: () => void;
 }) {
-  const src = photoUrl(filename, { width: 400, path: storagePath })!;
-  const srcSet = photoSrcSet(filename, { width: 400, path: storagePath });
+  // Vignettes servies par le relais même-origine (`/api/public/cover`), qui
+  // met en cache un an en périphérie : c'est exactement le chemin déjà utilisé
+  // par la grille d'accueil, la seule page qui fonctionnait en 4G. Une seule
+  // variante 400 px, sans densité 2x : deux fois moins d'octets et de
+  // transformations à froid sur réseau mobile.
+  const src =
+    coverUrl(filename, { width: 400, path: storagePath }) ??
+    photoUrl(filename, { width: 400, path: storagePath })!;
   const [state, setState] = useState<ThumbState>({
     status: "loading",
     currentSrc: "",
