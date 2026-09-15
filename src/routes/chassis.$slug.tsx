@@ -2,7 +2,7 @@ import { canonical } from "@/lib/seo";
 import { chassisToSlug, carSlug } from "@/lib/slug";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { supabase, photoUrl, photoSrcSet, SITE_MARQUE, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
+import { supabase, photoUrl, coverUrl, SITE_MARQUE, type Voiture, type Photo, type VoitureDetail } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { isMonochrome, hasManualOrder } from "@/lib/photo-order";
 import { useI18n, type Lang } from "@/lib/i18n";
@@ -174,8 +174,14 @@ function GalleryThumb({
   debug: boolean;
   onOpen: () => void;
 }) {
-  const src = photoUrl(filename, { width: 400, path: storagePath })!;
-  const srcSet = photoSrcSet(filename, { width: 400, path: storagePath });
+  // Vignettes servies par le relais même-origine (`/api/public/cover`), qui
+  // met en cache un an en périphérie : c'est exactement le chemin déjà utilisé
+  // par la grille d'accueil, la seule page qui fonctionnait en 4G. Une seule
+  // variante 400 px, sans densité 2x : deux fois moins d'octets et de
+  // transformations à froid sur réseau mobile.
+  const src =
+    coverUrl(filename, { width: 400, path: storagePath }) ??
+    photoUrl(filename, { width: 400, path: storagePath })!;
   const [state, setState] = useState<ThumbState>({
     status: "loading",
     currentSrc: "",
@@ -201,10 +207,8 @@ function GalleryThumb({
         className="aspect-square w-full bg-surface-2 overflow-hidden group block"
       >
         <img
-          // En diagnostic : chargement immédiat et sans srcset, pour isoler
-          // simultanément le lazy-loading et la sélection responsive.
+          // En diagnostic : chargement immédiat, pour isoler le lazy-loading.
           src={src}
-          srcSet={debug ? undefined : srcSet}
           alt={alt}
           loading={debug ? "eager" : "lazy"}
           decoding="async"
@@ -410,8 +414,13 @@ function CarDetail() {
     );
   }
 
-  const cover = photoUrl(voiture.cover_photo, { width: 1000, quality: 72, path: voiture.storage_path });
-  const coverSmall = photoUrl(voiture.cover_photo, { width: 640, quality: 68, path: voiture.storage_path });
+  // Photo principale : même relais même-origine à cache long que l'accueil.
+  const cover =
+    coverUrl(voiture.cover_photo, { width: 1000, path: voiture.storage_path }) ??
+    photoUrl(voiture.cover_photo, { width: 1000, quality: 72, path: voiture.storage_path });
+  const coverSmall =
+    coverUrl(voiture.cover_photo, { width: 640, path: voiture.storage_path }) ??
+    photoUrl(voiture.cover_photo, { width: 640, quality: 68, path: voiture.storage_path });
 
   // Aperçu public (non connecté ou compte en attente) : contenu factuel indexable,
   // galerie complète et historique détaillé restant réservés aux membres validés.
