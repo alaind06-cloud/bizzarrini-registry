@@ -207,10 +207,8 @@ function GalleryThumb({
         className="aspect-square w-full bg-surface-2 overflow-hidden group block"
       >
         <img
-          // En diagnostic : chargement immédiat et sans srcset, pour isoler
-          // simultanément le lazy-loading et la sélection responsive.
+          // En diagnostic : chargement immédiat, pour isoler le lazy-loading.
           src={src}
-          srcSet={debug ? undefined : srcSet}
           alt={alt}
           loading={debug ? "eager" : "lazy"}
           decoding="async"
