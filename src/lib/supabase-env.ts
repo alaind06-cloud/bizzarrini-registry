@@ -38,11 +38,20 @@ const PHOTO_PATH = "bizzarrini";
 
 /**
  * Les photos du registre sont hébergées sur le bucket public Supabase Storage
- * `voitures-photos`. Surchargeable via `VITE_SUPABASE_PHOTOS_URL`.
+ * `voitures-photos`. Une éventuelle surcharge d'environnement n'est retenue que
+ * si elle pointe bien vers Supabase Storage : toute valeur héritée de l'ancienne
+ * infrastructure Cloudflare R2 est ignorée (source unique = Supabase).
  */
-export const PHOTOS_BASE_URL =
-  pick("VITE_SUPABASE_PHOTOS_URL", "SUPABASE_PHOTOS_URL") ??
+const PHOTOS_FALLBACK_URL =
   "https://darckkyqmzningzzbkhr.supabase.co/storage/v1/object/public/voitures-photos";
+
+const photosOverride = pick("VITE_SUPABASE_PHOTOS_URL", "SUPABASE_PHOTOS_URL");
+
+export const PHOTOS_BASE_URL =
+  photosOverride && /^https:\/\/[a-z0-9-]+\.supabase\.co\/storage\/v1\/object\/public\//.test(photosOverride)
+    ? photosOverride.replace(/\/+$/, "")
+    : PHOTOS_FALLBACK_URL;
+
 
 /**
  * URL publique d'une photo. Les fichiers sont rangés par châssis :

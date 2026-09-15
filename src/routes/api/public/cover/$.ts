@@ -35,18 +35,30 @@ export const Route = createFileRoute("/api/public/cover/$")({
         const wRaw = Number(new URL(request.url).searchParams.get("w"));
         const width = Number.isFinite(wRaw) && wRaw >= 64 && wRaw <= 2000 ? Math.round(wRaw) : null;
 
-        const upstream = width
+        const originUrl = `${PHOTOS_BASE_URL}/${encodedPath}`;
+        const renderUrl = width
           ? `${PHOTOS_BASE_URL.replace("/object/public/", "/render/image/public/")}/${encodedPath}?width=${width}&quality=58&resize=contain`
-          : `${PHOTOS_BASE_URL}/${encodedPath}`;
+          : null;
 
         const accept = request.headers.get("accept");
-        const res = await fetch(upstream, accept ? { headers: { accept } } : undefined);
-        if (!res.ok || !res.body) {
+        const init = accept ? { headers: { accept } } : undefined;
+
+        // La transformation Supabase échoue par intermittence à froid (404/5xx),
+        // surtout quand une galerie déclenche 20 à 40 requêtes en parallèle sur
+        // réseau mobile. On retente alors l'objet original plutôt que de renvoyer
+        // une erreur qui laisse une vignette vide.
+        let res = renderUrl ? await fetch(renderUrl, init).catch(() => null) : null;
+        if (!res || !res.ok || !res.body) {
+          res = await fetch(originUrl, init).catch(() => null);
+        }
+
+        if (!res || !res.ok || !res.body) {
           return new Response("Not found", {
-            status: res.status === 404 ? 404 : 502,
-            headers: { "Cache-Control": "public, max-age=60" },
+            status: res?.status === 404 ? 404 : 502,
+            headers: { "Cache-Control": "no-store" },
           });
         }
+
 
         return new Response(res.body, {
           status: 200,
