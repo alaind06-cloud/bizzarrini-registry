@@ -414,8 +414,13 @@ function CarDetail() {
     );
   }
 
-  const cover = photoUrl(voiture.cover_photo, { width: 1000, quality: 72, path: voiture.storage_path });
-  const coverSmall = photoUrl(voiture.cover_photo, { width: 640, quality: 68, path: voiture.storage_path });
+  // Photo principale : même relais même-origine à cache long que l'accueil.
+  const cover =
+    coverUrl(voiture.cover_photo, { width: 1000, path: voiture.storage_path }) ??
+    photoUrl(voiture.cover_photo, { width: 1000, quality: 72, path: voiture.storage_path });
+  const coverSmall =
+    coverUrl(voiture.cover_photo, { width: 640, path: voiture.storage_path }) ??
+    photoUrl(voiture.cover_photo, { width: 640, quality: 68, path: voiture.storage_path });
 
   // Aperçu public (non connecté ou compte en attente) : contenu factuel indexable,
   // galerie complète et historique détaillé restant réservés aux membres validés.
